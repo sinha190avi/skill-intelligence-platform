@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -9,6 +9,32 @@
   <link rel="stylesheet" href="progress.css">
 </head>
 <body>
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <img src="commit_conquer_clean.png" alt="Commit &amp; Conquer" style="height: 28px; width: auto; object-fit: contain;">
+      <button class="drawer-close" id="drawer-close-btn" aria-label="Close navigation">&#x2715;</button>
+    </div>
+    <nav class="drawer-nav-links">
+      <a href="dashboard.html">&#x1F3E0; Dashboard</a>
+      <a href="profile.html">&#x1F464; Profile</a>
+      <a href="assessments.html">&#x1F4CB; Assessments</a>
+      <a href="learning-path.html">&#x1F9ED; Learning Path</a>
+      <a href="courses.html">&#x1F4DA; Courses</a>
+      <a href="recommendations.html">&#x2728; Recommendations</a>
+      <a href="progress.html">&#x1F4CA; Progress</a>
+      <a href="ai-assistant.html">&#x1F916; AI Assistant</a>
+      <a href="leaderboard.html">&#x1F3C6; Leaderboard</a>
+      <a href="career.html">&#x1F4BC; Career</a>
+      <a href="community.html">&#x1F91D; Community</a>
+      <a href="certifications.html">&#x1F4DC; Certifications</a>
+      <a href="settings.html">&#x2699;&#xFE0F; Settings</a>
+    </nav>
+    <div class="drawer-footer">
+      <a href="ai-assistant.html" class="drawer-btn-secondary">&#x1F916; AI Copilot</a>
+      <a href="login.html" class="drawer-btn-primary">Sign Out</a>
+    </div>
+  </div>
 
   <div class="main-wrapper">
     
@@ -36,7 +62,7 @@
       </nav>
 
       <div class="topbar-actions">
-
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation menu" aria-expanded="false">&#x2630;</button>
         <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <kbd>⌘K</kbd>
@@ -393,5 +419,45 @@
     document.addEventListener('DOMContentLoaded', loadLiveProgress);
     window.addEventListener('si:data-changed', loadLiveProgress);
   </script>
+  <script>
+    (function() {
+      const toggle = document.getElementById('mobile-nav-toggle');
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const closeBtn = document.getElementById('drawer-close-btn');
+      if (!toggle || !drawer) return;
+      // Mark current page link as active
+      const links = drawer.querySelectorAll('.drawer-nav-links a');
+      links.forEach(link => {
+        if (link.getAttribute('href') === window.location.pathname.split('/').pop() ||
+            link.getAttribute('href') === window.location.href.split('/').pop()) {
+          link.classList.add('active');
+        }
+      });
+      toggle.addEventListener('click', function() {
+        const open = drawer.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+        drawer.setAttribute('aria-hidden', !open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+          drawer.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          drawer.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        });
+      }
+      // Close on backdrop click
+      drawer.addEventListener('click', function(e) {
+        if (e.target === drawer) {
+          drawer.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          drawer.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
+
