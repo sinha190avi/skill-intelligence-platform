@@ -1726,11 +1726,15 @@ function openOverviewModal() {
   const modal = document.getElementById('overview-modal');
   if (!modal) return;
   modal.classList.add('show');
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.visibility = 'visible';
+  modal.style.pointerEvents = 'auto';
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
   if (!typewriterCompleted && !typewriterSkipped) {
-    setTimeout(startTypewriter, 300);
+    setTimeout(startTypewriter, 150);
   }
 }
 
@@ -1738,15 +1742,15 @@ function closeOverviewModal() {
   const modal = document.getElementById('overview-modal');
   if (!modal) return;
   modal.classList.remove('show');
+  modal.style.display = 'none';
+  modal.style.opacity = '0';
+  modal.style.visibility = 'hidden';
+  modal.style.pointerEvents = 'none';
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
 
-async function demoLoginFromModal(btn) {
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = '⚡ Signing in…';
-  }
+
   try {
     const res = await SIAuth.demoLogin();
     window.location.href = res.redirect || 'dashboard.html';
@@ -1771,8 +1775,32 @@ function initOverviewAutoPopup() {
       closeOverviewModal();
     }
   });
-  // Auto popup on landing page load
-  setTimeout(openOverviewModal, 150);
+
+  // Anywhere on landing page where platform/dashboard is targeted, login is strictly required:
+  document.addEventListener('click', function(e) {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href) return;
+    if (href.startsWith('#') || href.startsWith('http://') || href.startsWith('https://')) return;
+    if (href === 'landing.html' || href === 'index.html' || href === 'login.html') return;
+
+    // Feature pages require authentication:
+    const isAuthed = (function() {
+      try {
+        const u = JSON.parse(sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user') || 'null');
+        return !!(u && (u.email || u.id) && u.email !== 'alex.morgan@enterprise.ai' && u.full_name !== 'Alex Morgan');
+      } catch (_) { return false; }
+    })();
+
+    if (!isAuthed) {
+      e.preventDefault();
+      window.location.href = 'login.html';
+    }
+  });
+
+  // Auto popup overview dialog immediately on landing page load:
+  setTimeout(openOverviewModal, 100);
 }
 
 if (document.readyState === 'loading') {
