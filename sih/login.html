@@ -461,12 +461,12 @@
 
     <div class="auth-card">
       <div class="auth-tabs" role="tablist">
-        <button class="auth-tab active" id="tab-otp" onclick="switchAuthTab('otp')" role="tab">⚡ Email OTP</button>
-        <button class="auth-tab" id="tab-login" onclick="switchAuthTab('login')" role="tab">🔑 Password</button>
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')" role="tab">🔑 Sign In</button>
         <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')" role="tab">✨ Register</button>
+        <button class="auth-tab" id="tab-otp" onclick="switchAuthTab('otp')" role="tab">⚡ Email OTP</button>
       </div>
 
-      <div class="auth-panel active" id="panel-otp">
+      <div class="auth-panel" id="panel-otp">
 
         <div id="otp-step-1">
           <form id="otp-send-form" onsubmit="handleSendOTP(event)">
@@ -534,7 +534,7 @@
         <div id="otp-banner" class="status-banner"></div>
       </div>
 
-      <div class="auth-panel" id="panel-login">
+      <div class="auth-panel active" id="panel-login">
         <form id="login-form" onsubmit="handlePasswordLogin(event)" novalidate>
           <div class="form-group">
             <label class="form-label" for="login-email">Work Email</label>
@@ -642,6 +642,9 @@
           </div>
           <button type="submit" class="btn-auth" id="btn-register-submit">Create My Account</button>
           <div id="register-banner" class="status-banner"></div>
+          <div style="text-align:center;margin-top:14px;font-size:12.5px;color:var(--text-muted);">
+            Already have an account? <a href="#" onclick="switchAuthTab('login'); return false;" style="color:var(--brand-cyan);font-weight:600;text-decoration:none;">Sign In &rarr;</a>
+          </div>
         </form>
       </div>
     </div>
@@ -688,6 +691,7 @@
       const _p = new URLSearchParams(window.location.search);
       if (_p.get('tab') === 'register') switchAuthTab('register');
       else if (_p.get('tab') === 'otp') switchAuthTab('otp');
+      else switchAuthTab('login');
 
       try {
         const res = await SIAuth.me();

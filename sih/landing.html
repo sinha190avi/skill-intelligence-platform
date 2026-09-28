@@ -924,7 +924,7 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
   <div class="nact">
     <button type="button" class="npill" onclick="openOverviewModal()" style="cursor:pointer;background:rgba(79,70,229,0.08);border:1px solid rgba(79,70,229,0.3);color:#4f46e5;font-family:inherit;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:5px;">✦ Platform Brief</button>
     <a href="login.html" class="nbgh">Log In</a>
-    <a href="login.html?tab=register" class="nbpr">Get Started &rarr;</a>
+    <a href="login.html" class="nbpr">Get Started &rarr;</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
@@ -946,7 +946,7 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
     <div class="mobile-actions">
       <button type="button" class="m-btn m-btn-copilot" onclick="openOverviewModal(); document.getElementById('mobile-menu').classList.remove('open'); document.getElementById('nav-toggle').classList.remove('active'); document.body.style.overflow='';" style="cursor:pointer;width:100%;border:none;">✦ Platform Brief &amp; Overview</button>
       <a href="login.html" class="m-btn m-btn-outline">Log In</a>
-      <a href="login.html?tab=register" class="m-btn m-btn-primary">Get Started Free &rarr;</a>
+      <a href="login.html" class="m-btn m-btn-primary">Get Started Free &rarr;</a>
     </div>
   </div>
 </div>
@@ -1300,7 +1300,7 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
         <div class="slabel">FAQ</div>
         <h2 class="stitle" style="font-size:clamp(34px,3.5vw,48px)">Frequently asked questions.</h2>
         <p class="ssub" style="margin-top:16px">Everything you need to know about Skill Intelligence.</p>
-        <div style="margin-top:32px"><a href="login.html?tab=register" class="bpri" style="font-size:13.5px;padding:11px 24px">Get Started Free &rarr;</a></div>
+        <div style="margin-top:32px"><a href="login.html" class="bpri" style="font-size:13.5px;padding:11px 24px">Get Started Free &rarr;</a></div>
       </div>
       <div class="faqlist">
         <div class="faqi op"><div class="faqq" onclick="tFaq(this)"><h5>How does the AI skill assessment work?</h5><div class="faqtgl">&minus;</div></div><div class="faqa">Our AI-proctored assessments test domain knowledge, applied reasoning, and hands-on proficiency across your selected skill tracks. Results are benchmarked against 4,200+ enterprise engineers nationwide to give you a verified competency score and peer percentile ranking.</div></div>
@@ -1759,24 +1759,27 @@ async function demoLoginFromModal(btn) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    openOverviewModal();
-  }, 450);
-
+function initOverviewAutoPopup() {
   const modal = document.getElementById('overview-modal');
   if (modal) {
     modal.addEventListener('click', function(e) {
       if (e.target === modal) closeOverviewModal();
     });
   }
-
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
       closeOverviewModal();
     }
   });
-});
+  // Auto popup on landing page load
+  setTimeout(openOverviewModal, 150);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initOverviewAutoPopup);
+} else {
+  initOverviewAutoPopup();
+}
 </script>
 <!-- Platform Overview & Summary Typed Dialogue Modal -->
 <div id="overview-modal" class="overview-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -1813,8 +1816,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <div class="footer-actions">
         <button type="button" class="btn-dialog-secondary" onclick="closeOverviewModal()">Explore Landing Page</button>
-        <button type="button" class="btn-dialog-demo" onclick="demoLoginFromModal(this)">⚡ 1-Click Demo</button>
-        <a href="login.html" class="btn-dialog-primary">🚀 Log In / Register Now &rarr;</a>
+        <a href="login.html" class="btn-dialog-primary">🚀 Get Started / Log In &rarr;</a>
       </div>
     </div>
   </div>
