@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Path | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="learning-path.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link active">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">◇ Structured Career Journey</div>
+          <h1>AI Engineer to Lead AI Architect Roadmap</h1>
+          <p>A rigorous, curated 4-stage engineering path covering foundational mathematics, deep learning internals, distributed GPU systems, and enterprise LLM production architectures.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-white" onclick="window.showToast('Learning Goal Updated', 'Target completion set for November 2026.', '🎯');">Set Target Date</button>
+        </div>
+      </section>
+
+      <div class="path-overview-bar">
+        <div>
+          <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Overall Journey Completion</div>
+          <div id="journey-completion-pct" style="font-family: var(--font-heading); font-size: 28px; font-weight: 800; color: var(--primary-500); margin: 4px 0;">62% Complete</div>
+          <div id="journey-modules-subtitle" style="font-size: 12.5px; color: var(--text-secondary);">11 of 18 Modules Finished • 74 Hours Invested</div>
+        </div>
+        <div style="width: min(400px, 100%);">
+          <div class="progress-bar-container" style="height: 12px;">
+            <div class="progress-bar-fill" id="journey-progress-bar" style="width: 62%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stages-container" id="stages-container">
+
+        <div class="stage-card completed open" id="stage-1">
+          <div class="stage-header" onclick="toggleStage('stage-1')">
+            <div class="stage-title-col">
+              <div class="stage-number-icon icon-completed">✓</div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="font-size: 16px;">Stage 1: Mathematical Foundations & High-Performance Python</h3>
+                  <span class="badge badge-emerald">100% Completed</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Linear algebra, multivariate calculus, optimization algorithms, and CPython profiling.</p>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-muted);">▼</span>
+          </div>
+
+          <div class="stage-body">
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-done"></span>
+                <div>
+                  <strong style="font-size: 13px;">Vector & Matrix Calculus for Deep Learning</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Jacobians, Hessians, and automatic differentiation engines</div>
+                </div>
+              </div>
+              <span class="badge badge-emerald">Completed</span>
+            </div>
+
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-done"></span>
+                <div>
+                  <strong style="font-size: 13px;">Advanced NumPy & Vectorized Computations</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Memory layouts, strides, broadcasting, and Cython compilation</div>
+                </div>
+              </div>
+              <span class="badge badge-emerald">Completed</span>
+            </div>
+
+            <div class="capstone-box">
+              <div>
+                <strong style="font-size: 13px; color: var(--text-main);">Capstone Project: Custom Micrograd Engine from Scratch</strong>
+                <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">Built a dynamically linked scalar autograd engine with reverse-mode backpropagation.</p>
+              </div>
+              <span class="badge badge-emerald">Graded 100/100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-card in-progress open" id="stage-2">
+          <div class="stage-header" onclick="toggleStage('stage-2')">
+            <div class="stage-title-col">
+              <div class="stage-number-icon icon-active">2</div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="font-size: 16px;">Stage 2: Deep Learning, CNNs & Transformer Architectures</h3>
+                  <span class="badge badge-indigo">In Progress • 65%</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">PyTorch training loops, multi-head attention, FlashAttention, and vision transformers.</p>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-muted);">▼</span>
+          </div>
+
+          <div class="stage-body">
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-done"></span>
+                <div>
+                  <strong style="font-size: 13px;">PyTorch Tensor Architecture & Autograd Internals</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Custom autograd Functions, hooks, and GPU memory profiling</div>
+                </div>
+              </div>
+              <span class="badge badge-emerald">Completed</span>
+            </div>
+
+            <div class="module-row" style="background: var(--bg-card); border: 1px solid var(--primary-500);">
+              <div class="module-left">
+                <span class="module-status-dot dot-active"></span>
+                <div>
+                  <strong style="font-size: 13px; color: var(--primary-500);">Multi-Head Self-Attention Implementation (PyTorch)</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Q, K, V projections, causal masking, and KV-caching</div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="window.showToast('Launching Module', 'Opening PyTorch Interactive Lab...', '🚀');">Resume Lab</button>
+            </div>
+
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-locked"></span>
+                <div>
+                  <strong style="font-size: 13px;">FlashAttention-2 & Custom GPU Kernel Optimization</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Tiling algorithms in SRAM and Triton kernel scripting</div>
+                </div>
+              </div>
+              <span class="badge badge-amber">Up Next</span>
+            </div>
+
+            <div class="capstone-box">
+              <div>
+                <strong style="font-size: 13px; color: var(--text-main);">Capstone Project: 1.5B Parameter Transformer Pretrained from Scratch</strong>
+                <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">Train a causal language model on 10B tokens with mixed precision and tensorboard logging.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.showToast('Workspace Created', 'Interactive GPU Jupyter environment launched.', '⚡');">Open Workspace</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-card in-progress" id="stage-3">
+          <div class="stage-header" onclick="toggleStage('stage-3')">
+            <div class="stage-title-col">
+              <div class="stage-number-icon icon-active">3</div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="font-size: 16px;">Stage 3: Distributed MLOps, ZeRO & Model Serving</h3>
+                  <span class="badge badge-cyan">20% Completed</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">DeepSpeed ZeRO stages 1-3, Tensor Parallelism with Megatron-LM, and Triton Inference Server.</p>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-muted);">▼</span>
+          </div>
+
+          <div class="stage-body">
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-done"></span>
+                <div>
+                  <strong style="font-size: 13px;">Distributed Data Parallel (DDP) & AllReduce Primitives</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Ring-AllReduce, NCCL backends, and bucket communication</div>
+                </div>
+              </div>
+              <span class="badge badge-emerald">Completed</span>
+            </div>
+
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-locked"></span>
+                <div>
+                  <strong style="font-size: 13px;">DeepSpeed ZeRO-3 Memory Optimization</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Partitioning parameters, gradients, and optimizer states across GPU nodes</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.showToast('Module Queued', 'Will unlock after Stage 2 completion.', '🔒');">Start</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-card locked" id="stage-4">
+          <div class="stage-header" onclick="toggleStage('stage-4')">
+            <div class="stage-title-col">
+              <div class="stage-number-icon icon-locked">🔒</div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="font-size: 16px;">Stage 4: Generative AI, RAG & LLM Enterprise System Design</h3>
+                  <span class="badge" style="background:var(--bg-elevated); color:var(--text-muted);">Locked (Requires Stage 2 & 3)</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Production retrieval systems, semantic routing, guardrails, and enterprise agent meshes.</p>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-muted);">▼</span>
+          </div>
+
+          <div class="stage-body">
+            <div class="module-row">
+              <div class="module-left">
+                <span class="module-status-dot dot-locked"></span>
+                <div>
+                  <strong style="font-size: 13px;">Enterprise Vector Indexing (HNSW, Qdrant & Milvus)</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Billion-scale vector search and hybrid rerankers</div>
+                </div>
+              </div>
+              <span class="badge" style="background:var(--bg-elevated); color:var(--text-muted);">Locked</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let stagesData = [];
+
+    async function loadLiveLearningPath() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getLearningPath();
+        if (res && res.status === 'success' && res.data) {
+          const oj = res.data.overall_journey;
+          stagesData = res.data.stages || [];
+
+          const pctEl = document.getElementById('journey-completion-pct');
+          if (pctEl) pctEl.textContent = `${oj.completion_pct}% Complete`;
+          const subEl = document.getElementById('journey-modules-subtitle');
+          if (subEl) subEl.textContent = `${oj.completed_modules} of ${oj.total_modules} Modules Finished • ${oj.hours_invested} Hours Invested`;
+          const barEl = document.getElementById('journey-progress-bar');
+          if (barEl) barEl.style.width = `${oj.completion_pct}%`;
+
+          const container = document.getElementById('stages-container');
+          if (container && stagesData.length > 0) {
+            container.innerHTML = stagesData.map((stg, sIdx) => {
+              const isOpen = stg.status === 'in_progress' || stg.status === 'completed' || sIdx <= 1;
+              const isDone = stg.status === 'completed' || stg.progress_pct === 100;
+              const isLocked = stg.status === 'locked';
+
+              return `
+                <div class="stage-card ${isDone ? 'completed' : (isLocked ? 'locked' : 'in-progress')} ${isOpen ? 'open' : ''}" id="stage-${stg.stage_number}">
+                  <div class="stage-header" onclick="toggleStage('stage-${stg.stage_number}')">
+                    <div class="stage-title-col">
+                      <div class="stage-number-icon ${isDone ? 'icon-completed' : (isLocked ? 'icon-locked' : '')}">
+                        ${isDone ? '✓' : (isLocked ? '🔒' : stg.stage_number)}
+                      </div>
+                      <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <h3 style="font-size: 16px;">${stg.title}</h3>
+                          <span class="badge badge-${isDone ? 'emerald' : (isLocked ? '' : 'cyan')}" style="${isLocked ? 'background:var(--bg-elevated);color:var(--text-muted);' : ''}">
+                            ${isDone ? '100% Completed' : (isLocked ? 'Locked' : `${stg.progress_pct}% In Progress`)}
+                          </span>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${stg.description}</p>
+                      </div>
+                    </div>
+                    <span style="font-size: 14px; color: var(--text-muted);">▼</span>
+                  </div>
+
+                  <div class="stage-body">
+                    ${(stg.modules || []).map(m => `
+                      <div class="module-row" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-subtle);">
+                        <div class="module-left" style="display: flex; align-items: center; gap: 12px;">
+                          <input type="checkbox" ${m.is_completed ? 'checked' : ''} onchange="toggleModule(${m.id}, '${m.title.replace(/'/g, "\\'")}', this)" style="cursor: pointer; width: 16px; height: 16px; accent-color: var(--primary-500);">
+                          <div>
+                            <strong style="font-size: 13.5px; ${m.is_completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${m.title}</strong>
+                            <div style="font-size: 11.5px; color: var(--text-muted);">${m.subtitle} &middot; ${m.duration_mins} mins</div>
+                          </div>
+                        </div>
+                        <span class="badge badge-${m.is_completed ? 'emerald' : 'secondary'}" style="font-size: 11px;">
+                          ${m.is_completed ? 'Completed ✓' : 'In Progress'}
+                        </span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Learning path load error:', err);
+      }
+    }
+
+    function toggleStage(stageId) {
+      const card = document.getElementById(stageId);
+      if (card) card.classList.toggle('open');
+    }
+
+    async function toggleModule(moduleId, title, checkbox) {
+      if (window.api) {
+        const res = await window.api.toggleModule(moduleId, title);
+        if (res && res.status === 'success') {
+          window.showToast(
+            res.data.is_completed ? 'Module Completed!' : 'Module Updated',
+            `"${title}" is now ${res.data.is_completed ? 'completed (+50 XP)' : 'in progress'}.`,
+            res.data.is_completed ? '✅' : '🔄'
+          );
+
+          await loadLiveLearningPath();
+          if (window.syncGlobalHeader) window.syncGlobalHeader();
+          return;
+        }
+      }
+      window.showToast('Module Updated', `Updated "${title}"`, '✅');
+    }
+
+    window.addEventListener('si:data-changed', loadLiveLearningPath);
+    document.addEventListener('DOMContentLoaded', loadLiveLearningPath);
+  </script>
+</body>
+</html>

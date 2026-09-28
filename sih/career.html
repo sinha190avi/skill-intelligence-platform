@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career & Job Board | Skill Intelligence</title>
+  <meta name="description" content="Discover AI engineering jobs perfectly matched to your verified skill profile and career readiness score.">
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <style>
+    .career-hero {
+      padding: 60px 0 40px;
+    }
+    .career-hero-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .career-hero-left { flex: 1; min-width: 280px; }
+    .career-hero-tag {
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-strong);
+      background: rgba(16,185,129,0.1);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand-emerald);
+      margin-bottom: 18px;
+    }
+    .career-hero h1 {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .career-hero h1 span {
+      background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .career-hero p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+    .career-readiness-card {
+      background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(56,189,248,0.08) 100%);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      min-width: 240px;
+      max-width: 280px;
+      text-align: center;
+    }
+    .readiness-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: conic-gradient(#10b981 0% 78%, rgba(16,185,129,0.15) 78% 100%);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+    .readiness-ring::after {
+      content: '';
+      position: absolute;
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: #070414;
+    }
+    .readiness-ring-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--brand-emerald);
+      font-family: var(--font-heading);
+    }
+    .readiness-label { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .readiness-sub { font-size: 12px; color: var(--text-muted); }
+
+    .career-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+    }
+    .career-filter-bar .filter-select {
+      padding: 9px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition-fast);
+    }
+    .career-filter-bar .filter-select:focus { border-color: var(--brand-emerald); }
+    .career-search {
+      flex: 1; min-width: 180px;
+      padding: 9px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+    }
+    .career-search::placeholder { color: var(--text-muted); }
+    .career-search:focus { border-color: var(--brand-emerald); }
+    .active-jobs-badge {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-emerald);
+      white-space: nowrap;
+    }
+
+    .career-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width:900px) { .career-stats-row { grid-template-columns: repeat(2,1fr); } }
+    .career-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .career-stat-card .val { font-size: 28px; font-weight: 900; font-family: var(--font-heading); }
+    .career-stat-card .lbl { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .job-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .job-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 3px; height: 100%;
+    }
+    .job-card.match-high::after { background: linear-gradient(180deg, #10b981, #38bdf8); }
+    .job-card.match-good::after { background: linear-gradient(180deg, #38bdf8, #4f46e5); }
+    .job-card.match-fair::after { background: linear-gradient(180deg, #f59e0b, #f43f5e); }
+    .job-card:hover {
+      border-color: var(--border-card-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .job-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .job-company-logo {
+      width: 48px; height: 48px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px solid var(--border-subtle);
+    }
+    .job-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; line-height: 1.3; }
+    .job-company { font-size: 12.5px; color: var(--text-muted); }
+
+    .job-match-pill {
+      margin-left: auto;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .job-match-pill.high { background: rgba(16,185,129,0.18); color: var(--brand-emerald); border: 1px solid rgba(16,185,129,0.35); }
+    .job-match-pill.good { background: rgba(56,189,248,0.15); color: var(--brand-cyan); border: 1px solid rgba(56,189,248,0.3); }
+    .job-match-pill.fair { background: rgba(245,158,11,0.15); color: var(--brand-amber); border: 1px solid rgba(245,158,11,0.3); }
+
+    .job-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .job-tag {
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
+      color: var(--brand-indigo-bright);
+    }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .job-meta-item { display: flex; align-items: center; gap: 5px; }
+
+    .job-skills-gap {
+      background: rgba(244,63,94,0.08);
+      border: 1px solid rgba(244,63,94,0.2);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+    .job-skills-gap .gap-title { color: var(--brand-rose); font-weight: 700; margin-bottom: 4px; }
+    .job-skills-gap .gap-items { color: var(--text-muted); }
+
+    .job-card-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .career-feature-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 28px;
+    }
+    @media (max-width:800px) { .career-feature-section { grid-template-columns: 1fr; } }
+    .career-feature-item { text-align: center; }
+    .career-feature-icon {
+      width: 56px; height: 56px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 14px;
+    }
+    .career-feature-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .career-feature-item p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+    @media (max-width: 640px) {
+      .jobs-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+      }
+      .job-card {
+        padding: 18px 16px;
+      }
+      .career-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 14px;
+      }
+      .career-search, .career-filter-bar .filter-select {
+        width: 100%;
+        min-width: 0;
+      }
+      .career-feature-section {
+        padding: 20px 16px;
+        gap: 20px;
+      }
+      .job-card-footer {
+        flex-direction: column;
+      }
+      .job-card-footer .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+
+    <header class="topbar">
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit &amp; Conquer" class="nav-brand-logo-img">
+      </a>
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link active">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="search-icon-btn search-trigger" title="Quick Search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot" style="display:none;"></span>
+          </button>
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none;border:none;color:var(--brand-cyan);font-size:11.5px;font-weight:600;cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div style="text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px;">Loading alerts…</div>
+            </div>
+            <div style="padding:8px 12px;text-align:center;border-top:1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size:11.5px;font-weight:700;color:var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header"><div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div></div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="career-hero">
+        <div class="career-hero-inner">
+          <div class="career-hero-left">
+            <div class="career-hero-tag">💼 AI Career Intelligence</div>
+            <h1>Jobs Matched to Your<br><span>Verified Skill Profile</span></h1>
+            <p>Our AI analyzes your assessment scores, competency matrix, and learning trajectory to surface the highest-match roles from 500+ enterprise organizations actively hiring AI talent.</p>
+          </div>
+          <div class="career-readiness-card">
+            <div class="readiness-ring">
+              <div class="readiness-ring-inner">78%</div>
+            </div>
+            <div class="readiness-label">Career Readiness Score</div>
+            <div class="readiness-sub">Target: Lead AI Architect</div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">22% gap to ideal profile</div>
+            <a href="recommendations.html" class="btn btn-primary btn-sm" style="width:100%;margin-top:14px;display:block;text-align:center;">Close the Gap →</a>
+          </div>
+        </div>
+
+        <div class="career-stats-row">
+          <div class="career-stat-card">
+            <div class="val" style="color:var(--brand-emerald);">847</div>
+            <div class="lbl">Matched Job Openings</div>
+          </div>
+          <div class="career-stat-card">
+            <div class="val" style="color:var(--brand-cyan);">142</div>
+            <div class="lbl">Companies Actively Hiring</div>
+          </div>
+          <div class="career-stat-card">
+            <div class="val" style="color:var(--brand-amber);">₹48L</div>
+            <div class="lbl">Avg. Salary Range (India)</div>
+          </div>
+          <div class="career-stat-card">
+            <div class="val" style="color:var(--brand-indigo-bright);">23</div>
+            <div class="lbl">High-Match Roles for You</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="career-filter-bar">
+        <input type="text" class="career-search" placeholder="🔍 Search jobs, companies, skills…" oninput="filterJobs(this.value)">
+        <select class="filter-select" onchange="sortJobs(this.value)" id="job-sort">
+          <option value="match">Sort: Highest Match</option>
+          <option value="salary">Sort: Salary</option>
+          <option value="date">Sort: Newest</option>
+        </select>
+        <select class="filter-select" id="job-type-filter" onchange="filterType(this.value)">
+          <option value="all">All Types</option>
+          <option value="fulltime">Full-Time</option>
+          <option value="remote">Remote</option>
+          <option value="contract">Contract</option>
+        </select>
+        <select class="filter-select" id="job-level-filter">
+          <option value="all">All Levels</option>
+          <option value="senior">Senior</option>
+          <option value="lead">Lead / Principal</option>
+          <option value="staff">Staff</option>
+        </select>
+        <div class="active-jobs-badge">🟢 23 High-Match Roles</div>
+      </div>
+
+      <div class="jobs-grid" id="jobs-grid">
+
+        <div class="job-card match-high">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(99,102,241,0.15);">🤖</div>
+            <div>
+              <div class="job-title">Lead AI Architect — LLM Systems</div>
+              <div class="job-company">Google DeepMind India • Bengaluru, Remote</div>
+            </div>
+            <span class="job-match-pill high">✦ 96% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">PyTorch</span>
+            <span class="job-tag">Transformers</span>
+            <span class="job-tag">CUDA</span>
+            <span class="job-tag">System Design</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹60–90L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 Hybrid</span>
+            <span class="job-meta-item">🗓 Posted 2d ago</span>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob('Lead AI Architect — LLM Systems'); return false;">Apply Now</a>
+            <button class="btn btn-secondary btn-sm" onclick="saveJob(this)">🔖 Save</button>
+          </div>
+        </div>
+
+        <div class="job-card match-high">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(56,189,248,0.15);">☁️</div>
+            <div>
+              <div class="job-title">Principal ML Engineer — GenAI Platform</div>
+              <div class="job-company">Microsoft Azure AI • Hyderabad, Remote</div>
+            </div>
+            <span class="job-match-pill high">✦ 92% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">MLOps</span>
+            <span class="job-tag">Kubernetes</span>
+            <span class="job-tag">RAG</span>
+            <span class="job-tag">LLMs</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹55–80L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 Remote</span>
+            <span class="job-meta-item">🗓 Posted 1d ago</span>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob('Principal ML Engineer'); return false;">Apply Now</a>
+            <button class="btn btn-secondary btn-sm" onclick="saveJob(this)">🔖 Save</button>
+          </div>
+        </div>
+
+        <div class="job-card match-good">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(16,185,129,0.15);">🧠</div>
+            <div>
+              <div class="job-title">Staff AI Engineer — Recommendation Systems</div>
+              <div class="job-company">Flipkart AI Labs • Bengaluru</div>
+            </div>
+            <span class="job-match-pill good">✦ 87% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">Deep Learning</span>
+            <span class="job-tag">Python</span>
+            <span class="job-tag">Vector DBs</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹42–65L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 On-site</span>
+            <span class="job-meta-item">🗓 Posted 4d ago</span>
+          </div>
+          <div class="job-skills-gap">
+            <div class="gap-title">⚠ 1 Skill Gap Detected</div>
+            <div class="gap-items">Collaborative Filtering — <a href="courses.html" style="color:var(--brand-cyan);font-weight:600;">Fill gap →</a></div>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob('Staff AI Engineer'); return false;">Apply Now</a>
+            <button class="btn btn-secondary btn-sm" onclick="saveJob(this)">🔖 Save</button>
+          </div>
+        </div>
+
+        <div class="job-card match-good">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(168,85,247,0.15);">⚡</div>
+            <div>
+              <div class="job-title">Senior AI Research Engineer</div>
+              <div class="job-company">NVIDIA AI Research • Pune</div>
+            </div>
+            <span class="job-match-pill good">✦ 84% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">CUDA Kernels</span>
+            <span class="job-tag">C++</span>
+            <span class="job-tag">Triton</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹50–75L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 Hybrid</span>
+            <span class="job-meta-item">🗓 Posted 5d ago</span>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob('Senior AI Research Engineer'); return false;">Apply Now</a>
+            <button class="btn btn-secondary btn-sm" onclick="saveJob(this)">🔖 Save</button>
+          </div>
+        </div>
+
+        <div class="job-card match-good">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(245,158,11,0.15);">🚀</div>
+            <div>
+              <div class="job-title">AI Platform Architect</div>
+              <div class="job-company">Infosys Topaz AI • Mumbai</div>
+            </div>
+            <span class="job-match-pill good">✦ 81% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">MLflow</span>
+            <span class="job-tag">Airflow</span>
+            <span class="job-tag">Spark</span>
+            <span class="job-tag">Kafka</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹35–55L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 Hybrid</span>
+            <span class="job-meta-item">🗓 Posted 1w ago</span>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob('AI Platform Architect'); return false;">Apply Now</a>
+            <button class="btn btn-secondary btn-sm" onclick="saveJob(this)">🔖 Save</button>
+          </div>
+        </div>
+
+        <div class="job-card match-fair">
+          <div class="job-card-top">
+            <div class="job-company-logo" style="background:rgba(244,63,94,0.12);">🔬</div>
+            <div>
+              <div class="job-title">Research Scientist — Foundation Models</div>
+              <div class="job-company">Sarvam AI • Bengaluru</div>
+            </div>
+            <span class="job-match-pill fair">✦ 74% Match</span>
+          </div>
+          <div class="job-tags">
+            <span class="job-tag">LLM Pre-training</span>
+            <span class="job-tag">RLHF</span>
+            <span class="job-tag">JAX</span>
+          </div>
+          <div class="job-meta">
+            <span class="job-meta-item">💰 ₹45–70L / year</span>
+            <span class="job-meta-item">🕐 Full-Time</span>
+            <span class="job-meta-item">📍 On-site</span>
+            <span class="job-meta-item">🗓 Posted 3d ago</span>
+          </div>
+          <div class="job-skills-gap">
+            <div class="gap-title">⚠ 2 Skill Gaps Detected</div>
+            <div class="gap-items">JAX / Flax, Pre-training at Scale — <a href="courses.html" style="color:var(--brand-cyan);font-weight:600;">View courses →</a></div>
+          </div>
+          <div class="job-card-footer">
+            <a href="#" class="btn btn-secondary btn-sm" style="flex:1;" onclick="applyJob('Research Scientist'); return false;">Apply Anyway</a>
+            <a href="learning-path.html" class="btn btn-primary btn-sm">Build Skills</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="career-feature-section">
+        <div class="career-feature-item">
+          <div class="career-feature-icon" style="background:rgba(16,185,129,0.15);">🎯</div>
+          <h4>Skill-Based Matching</h4>
+          <p>Our AI cross-references your verified assessment scores with each job's required competencies for precision role matching.</p>
+        </div>
+        <div class="career-feature-item">
+          <div class="career-feature-icon" style="background:rgba(99,102,241,0.15);">🤖</div>
+          <h4>Gap Analysis & Coaching</h4>
+          <p>For every near-match role, we identify exact skill gaps and auto-recommend courses, labs, and assessments to close them fast.</p>
+        </div>
+        <div class="career-feature-item">
+          <div class="career-feature-icon" style="background:rgba(245,158,11,0.15);">⚡</div>
+          <h4>Instant Verified Profile</h4>
+          <p>Send employers your verified skill certificate directly from the platform. Employers see your real assessment scores, not just a résumé.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+
+    let allJobs = [];
+
+    function matchClass(m) {
+      return m >= 90 ? 'match-high' : m >= 75 ? 'match-good' : 'match-fair';
+    }
+    function matchPillClass(m) {
+      return m >= 90 ? 'high' : m >= 75 ? 'good' : 'fair';
+    }
+
+    function renderJobs(jobs) {
+      const grid = document.getElementById('jobs-grid');
+      if (!jobs.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">No jobs found matching your search.</div>';
+        return;
+      }
+      grid.innerHTML = jobs.map(j => {
+        const skills = Array.isArray(j.skills) ? j.skills : (j.skills_tags || '').split(',').map(s => s.trim()).filter(Boolean);
+        const mc = matchClass(j.match_pct);
+        const mp = matchPillClass(j.match_pct);
+        const gapHtml = j.skill_gaps ? `
+          <div class="job-skills-gap">
+            <div class="gap-title">⚠ Skill Gap Detected</div>
+            <div class="gap-items">${j.skill_gaps} — <a href="courses.html" style="color:var(--brand-cyan);font-weight:600;">Fill gap →</a></div>
+          </div>` : '';
+        const appliedBtn = j.is_applied
+          ? `<button class="btn btn-secondary btn-sm" style="flex:1;color:var(--brand-emerald);border-color:var(--brand-emerald);" disabled>✓ Applied</button>`
+          : `<button class="btn btn-primary btn-sm" style="flex:1;" onclick="applyJob(${j.id}, this)">Apply Now</button>`;
+        const savedBtn = j.is_saved
+          ? `<button class="btn btn-secondary btn-sm" onclick="saveJob(${j.id}, this)" style="color:var(--brand-amber);">✓ Saved</button>`
+          : `<button class="btn btn-secondary btn-sm" onclick="saveJob(${j.id}, this)">🔖 Save</button>`;
+        return `
+          <div class="job-card ${mc}" data-job-id="${j.id}">
+            <div class="job-card-top">
+              <div class="job-company-logo" style="background:${j.company_bg || 'rgba(99,102,241,0.15)'};">${j.company_emoji || '🏢'}</div>
+              <div>
+                <div class="job-title">${j.title}</div>
+                <div class="job-company">${j.company} • ${j.location}</div>
+              </div>
+              <span class="job-match-pill ${mp}">✦ ${j.match_pct}% Match</span>
+            </div>
+            <div class="job-tags">${skills.map(s => `<span class="job-tag">${s}</span>`).join('')}</div>
+            <div class="job-meta">
+              <span class="job-meta-item">💰 ${j.salary_label}</span>
+              <span class="job-meta-item">🕐 ${j.job_type}</span>
+              <span class="job-meta-item">🗓 ${j.posted_label || 'Recently'}</span>
+            </div>
+            ${gapHtml}
+            <div class="job-card-footer">
+              ${appliedBtn}
+              ${savedBtn}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function applyJob(jobId, btn) {
+      btn.disabled = true; btn.textContent = 'Submitting…';
+      const res = await SICareer.apply(jobId);
+      if (res.status === 'success') {
+        btn.textContent = '✓ Applied';
+        btn.style.background = 'rgba(16,185,129,0.2)';
+        btn.style.color = 'var(--brand-emerald)';
+        btn.style.borderColor = 'var(--brand-emerald)';
+      } else {
+        btn.textContent = 'Apply Now'; btn.disabled = false;
+      }
+    }
+
+    async function saveJob(jobId, btn) {
+      const res = await SICareer.save(jobId);
+      if (res.status === 'success') {
+        btn.textContent = res.saved ? '✓ Saved' : '🔖 Save';
+        btn.style.color = res.saved ? 'var(--brand-amber)' : '';
+      }
+    }
+
+    async function filterJobs(q) {
+      const res = await SICareer.getJobs({ q });
+      if (res.status === 'success') renderJobs(res.data);
+    }
+
+    async function sortJobs(val) {
+      const res = await SICareer.getJobs({ sort: val });
+      if (res.status === 'success') renderJobs(res.data);
+    }
+
+    async function filterType(val) {
+      const type = val === 'all' ? '' : val;
+      const res = await SICareer.getJobs({ type });
+      if (res.status === 'success') renderJobs(res.data);
+    }
+
+    async function initCareer() {
+      const [jobsRes, statsRes] = await Promise.all([
+        SICareer.getJobs(),
+        SICareer.getStats()
+      ]);
+      if (jobsRes.status === 'success') {
+        allJobs = jobsRes.data;
+        renderJobs(allJobs);
+      } else {
+        document.getElementById('jobs-grid').innerHTML =
+          '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--brand-rose);">Failed to load jobs. Is the PHP server running at http://localhost/sih/sih/?</div>';
+      }
+      if (statsRes.status === 'success') {
+        const d = statsRes.data;
+        const statVals = document.querySelectorAll('.career-stat-card .val');
+        if (statVals[0]) statVals[0].textContent = d.total_jobs;
+        if (statVals[3]) statVals[3].textContent = d.high_match_count;
+        const readPct = d.readiness_pct || 78;
+        const ring = document.querySelector('.readiness-ring-inner');
+        if (ring) ring.textContent = readPct + '%';
+        const track = document.querySelector('.readiness-ring');
+        if (track) track.style.background = `conic-gradient(#10b981 0% ${readPct}%, rgba(16,185,129,0.15) ${readPct}% 100%)`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCareer);
+  </script>
+</body>
+</html>

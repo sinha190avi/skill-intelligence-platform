@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link active">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">⚙ Platform Configuration</div>
+          <h1>Account & Platform Preferences</h1>
+          <p>Customize your learning velocity goals, target career milestones, notification digest frequencies, and visual interface themes.</p>
+        </div>
+      </section>
+
+      <div class="settings-layout">
+
+        <div class="settings-nav">
+          <button class="settings-nav-btn active" onclick="switchSettingsTab('tab-general', this)">
+            <span>👤</span> Profile & Account
+          </button>
+          <button class="settings-nav-btn" onclick="switchSettingsTab('tab-appearance', this)">
+            <span>🎨</span> Appearance & Theme
+          </button>
+          <button class="settings-nav-btn" onclick="switchSettingsTab('tab-learning', this)">
+            <span>🎯</span> Learning Goals
+          </button>
+          <button class="settings-nav-btn" onclick="switchSettingsTab('tab-notifications', this)">
+            <span>🔔</span> Notifications
+          </button>
+          <button class="settings-nav-btn" onclick="switchSettingsTab('tab-data', this)">
+            <span>💽</span> Data & Cache
+          </button>
+        </div>
+
+        <div>
+
+          <div class="settings-panel" id="tab-general">
+            <h2 class="settings-section-title">Profile Information</h2>
+            <p class="settings-section-desc">Manage your public credentials and career identity across the platform.</p>
+
+            <form onsubmit="handleSaveSettings(event)">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="settings-full-name" class="form-control" value="Alex Morgan">
+                </div>
+                <div class="form-group">
+                  <label>Enterprise Email</label>
+                  <input type="email" id="settings-email" class="form-control" value="alex.morgan@enterprise.ai">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Professional Role / Specialization</label>
+                <input type="text" id="settings-role-title" class="form-control" value="Senior AI/ML Engineer (LLMs & Distributed Systems)">
+              </div>
+
+              <div class="form-group">
+                <label>Target Career Milestone</label>
+                <select id="settings-target-role" class="form-control">
+                  <option selected>Lead AI Architect</option>
+                  <option>Principal Machine Learning Engineer</option>
+                  <option>Head of Artificial Intelligence</option>
+                </select>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="settings-panel" id="tab-appearance" style="display: none;">
+            <h2 class="settings-section-title">Appearance & Theme</h2>
+            <p class="settings-section-desc">Choose how Skill Intelligence looks and feels on your devices.</p>
+
+            <div class="form-group">
+              <label>Interface Theme Mode</label>
+              <div class="theme-options-grid">
+                <div class="theme-card-option" id="opt-theme-light" onclick="selectThemeMode('light')">
+                  <span style="font-size: 24px;">☀️</span>
+                  <div>
+                    <strong style="font-size: 13.5px; display: block;">Crisp Light Mode</strong>
+                    <span style="font-size: 11px; color: var(--text-muted);">High-contrast clean daylight interface</span>
+                  </div>
+                </div>
+
+                <div class="theme-card-option" id="opt-theme-dark" onclick="selectThemeMode('dark')">
+                  <span style="font-size: 24px;">🌙</span>
+                  <div>
+                    <strong style="font-size: 13.5px; display: block;">Deep Navy Dark Mode</strong>
+                    <span style="font-size: 11px; color: var(--text-muted);">Reduced eye strain for nighttime engineering</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+              <button type="button" class="btn btn-primary" onclick="window.showToast('Theme Preference Saved', 'Your visual theme has been updated.', '🎨');">Apply Theme</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="tab-learning" style="display: none;">
+            <h2 class="settings-section-title">Learning Velocity Goals</h2>
+            <p class="settings-section-desc">Configure your weekly target commitment and assessment pace.</p>
+
+            <div class="form-group">
+              <label>Weekly Study Hours Target</label>
+              <select id="settings-study-hours" class="form-control">
+                <option value="5">5 Hours / Week (Casual)</option>
+                <option value="10">10 Hours / Week (Steady)</option>
+                <option value="15" selected>15 Hours / Week (Accelerated)</option>
+                <option value="25">25+ Hours / Week (Intensive Sprint)</option>
+              </select>
+            </div>
+
+            <div class="switch-row">
+              <div class="switch-label">
+                <strong>🔥 Daily Streak Protection Alert</strong>
+                <p>Send a reminder at 7:00 PM if daily module has not been logged</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-streak-alert" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+              <button type="button" class="btn btn-primary" onclick="saveLearningGoals()">Update Goals</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="tab-notifications" style="display: none;">
+            <h2 class="settings-section-title">Notifications & Alerts</h2>
+            <p class="settings-section-desc">Manage what updates and digests you receive.</p>
+
+            <div class="switch-row">
+              <div class="switch-label">
+                <strong>✨ AI Recommendation Alerts</strong>
+                <p>Notify when new course matches are computed for your profile</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-rec-alert" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="switch-row">
+              <div class="switch-label">
+                <strong>▣ Assessment Score Reports</strong>
+                <p>Receive verified benchmark certificates in email</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-reports-alert" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+              <button type="button" class="btn btn-primary" onclick="saveNotificationPrefs()">Save Preferences</button>
+            </div>
+          </div>
+
+          <div class="settings-panel" id="tab-data" style="display: none;">
+            <h2 class="settings-section-title">Data Storage & Session State</h2>
+            <p class="settings-section-desc">Manage local sandbox storage, reset course progress, or reseed platform state.</p>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+              <h4 style="color: var(--brand-rose); font-size: 14px; margin-bottom: 6px;">⚠️ Reset Platform Sandbox State</h4>
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px;">
+                Clear your local progress, completed assessments, and enrolled courses to reset the platform to initial seed state.
+              </p>
+              <button type="button" class="btn btn-secondary" style="border-color: var(--brand-rose); color: var(--brand-rose);" onclick="resetPlatformData()">Reset to Demo Defaults</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function loadLiveSettings() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getUser();
+        if (res && res.status === 'success' && res.data) {
+          const u = res.data.user;
+          const s = res.data.settings;
+
+          if (u) {
+            const n = document.getElementById('settings-full-name');
+            if (n) n.value = u.full_name;
+            const em = document.getElementById('settings-email');
+            if (em) em.value = u.email;
+            const r = document.getElementById('settings-role-title');
+            if (r) r.value = u.role_title;
+            const t = document.getElementById('settings-target-role');
+            if (t && u.target_role) t.value = u.target_role;
+          }
+
+          if (s) {
+            if (s.theme_mode) {
+              selectThemeMode(s.theme_mode, false);
+            }
+            const sh = document.getElementById('settings-study-hours');
+            if (sh && s.weekly_hours_target) sh.value = s.weekly_hours_target;
+            const sa = document.getElementById('settings-streak-alert');
+            if (sa) sa.checked = s.daily_streak_protection == 1;
+            const ra = document.getElementById('settings-rec-alert');
+            if (ra) ra.checked = s.rec_alerts == 1;
+            const rpa = document.getElementById('settings-reports-alert');
+            if (rpa) rpa.checked = s.assessment_reports == 1;
+          }
+        }
+      } catch (err) {
+        console.warn('Settings load error:', err);
+      }
+    }
+
+    function switchSettingsTab(tabId, btn) {
+      document.querySelectorAll('.settings-nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.settings-panel').forEach(p => p.style.display = 'none');
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.style.display = 'block';
+    }
+
+    async function selectThemeMode(mode, showFeedback = true) {
+      if (mode === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('si_theme_preference', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('si_theme_preference', 'light');
+      }
+      updateThemeCards();
+
+      if (window.api && showFeedback) {
+        await window.api.updateSettings({ theme_mode: mode });
+        window.showToast('Theme Updated', `Switched to ${mode} mode and saved to MySQL.`, mode === 'dark' ? '🌙' : '☀️');
+      }
+    }
+
+    function updateThemeCards() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('opt-theme-dark')?.classList.toggle('active', isDark);
+      document.getElementById('opt-theme-light')?.classList.toggle('active', !isDark);
+    }
+
+    async function handleSaveSettings(e) {
+      e.preventDefault();
+      const newName = document.getElementById('settings-full-name').value.trim();
+      const newEmail = document.getElementById('settings-email').value.trim();
+      const newRole = document.getElementById('settings-role-title').value.trim();
+      const newTarget = document.getElementById('settings-target-role').value.trim();
+
+      if (!newName) return;
+
+      if (window.api) {
+        const res = await window.api.updateUser({
+          full_name: newName,
+          email: newEmail,
+          role_title: newRole,
+          target_role: newTarget
+        });
+        if (res && res.status === 'success') {
+          if (window.syncGlobalHeader) window.syncGlobalHeader();
+        }
+      }
+
+      window.showToast('Settings Saved', 'Profile credentials updated and synced to database.', '✅');
+    }
+
+    async function saveLearningGoals() {
+      const hours = parseInt(document.getElementById('settings-study-hours').value, 10);
+      const streakProtection = document.getElementById('settings-streak-alert').checked ? 1 : 0;
+
+      if (window.api) {
+        await window.api.updateSettings({
+          weekly_hours_target: hours,
+          daily_streak_protection: streakProtection
+        });
+      }
+      window.showToast('Goals Saved', `Target set to ${hours} hours/week. Streak protection active.`, '🎯');
+    }
+
+    async function saveNotificationPrefs() {
+      const rec = document.getElementById('settings-rec-alert').checked ? 1 : 0;
+      const rep = document.getElementById('settings-reports-alert').checked ? 1 : 0;
+
+      if (window.api) {
+        await window.api.updateSettings({
+          rec_alerts: rec,
+          assessment_reports: rep
+        });
+      }
+      window.showToast('Preferences Saved', 'Notification toggles synced to database.', '🔔');
+    }
+
+    function resetPlatformData() {
+      if (confirm('Are you sure you want to reset all platform data to initial demo state?')) {
+        localStorage.removeItem('si_mock_db');
+        localStorage.removeItem('si_chat_history');
+        if (window.api && window.api.mock) {
+          window.api.mock.init();
+        }
+        window.showToast('Data Reset', 'Platform has been restored to factory seed state.', '🔄');
+        setTimeout(() => location.reload(), 900);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateThemeCards();
+      loadLiveSettings();
+    });
+    window.addEventListener('si:data-changed', loadLiveSettings);
+  </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Recommendations | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="recommendations.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link active">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">✦ AI-Powered Skill Gap Engine</div>
+          <h1>Personalized Recommendations for Alex Morgan</h1>
+          <p>Our machine learning engine analyzed your assessment results and mapped them against 8,500+ verified enterprise job profiles for <strong>Lead AI Architect</strong>.</p>
+        </div>
+        <div class="hero-actions">
+          <a href="ai-assistant.html" class="btn btn-white">Analyze with Copilot</a>
+        </div>
+      </section>
+
+      <div class="rec-layout">
+
+        <div>
+          <h2 style="font-size: 18px; margin-bottom: 16px;">Immediate Skill Gap Recommendations</h2>
+          <div id="recommendations-container">
+
+          <div class="recommendation-card" id="rec-card-1">
+            <div class="rec-top-row">
+              <div class="rec-title-group">
+                <span class="badge badge-indigo">Priority: Critical</span>
+                <h3 style="margin-top: 6px;">Distributed GPU Scheduling & Multi-Node Training</h3>
+              </div>
+              <span class="badge badge-purple">✦ 98% Role Match</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">Master Megatron-LM tensor slicing, Ring-AllReduce algorithms, and PyTorch FSDP to unlock large cluster operations.</p>
+            
+            <div class="rec-reason-box">
+              <span>💡</span>
+              <p><strong>Why Recommended:</strong> Bridges a 22% gap in your Systems Architecture score. Completing this will boost your target readiness to 86%.</p>
+            </div>
+
+            <div class="rec-footer">
+              <span style="font-size: 11.5px; color: var(--text-muted);">⏱ 18 Hours • 6 Labs</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="dismissRec('rec-card-1')">Dismiss</button>
+                <button class="btn btn-primary btn-sm" onclick="addToPath(this, 'Distributed GPU Scheduling')">Add to Learning Path</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendation-card" id="rec-card-2">
+            <div class="rec-top-row">
+              <div class="rec-title-group">
+                <span class="badge badge-amber">Priority: High</span>
+                <h3 style="margin-top: 6px;">Enterprise AI Governance, Security & Red Teaming</h3>
+              </div>
+              <span class="badge badge-emerald">✦ 94% Role Match</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">Learn prompt injection defense, differential privacy, hallucination guardrails, and compliance audits for enterprise deployments.</p>
+            
+            <div class="rec-reason-box">
+              <span>💡</span>
+              <p><strong>Why Recommended:</strong> Standard prerequisite for Architect-level roles in financial and enterprise AI sectors.</p>
+            </div>
+
+            <div class="rec-footer">
+              <span style="font-size: 11.5px; color: var(--text-muted);">⏱ 12 Hours • 4 Case Studies</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="dismissRec('rec-card-2')">Dismiss</button>
+                <button class="btn btn-primary btn-sm" onclick="addToPath(this, 'Enterprise AI Governance')">Add to Learning Path</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendation-card" id="rec-card-3">
+            <div class="rec-top-row">
+              <div class="rec-title-group">
+                <span class="badge badge-cyan">Priority: Recommended</span>
+                <h3 style="margin-top: 6px;">Triton Custom Kernels & FlashAttention-2</h3>
+              </div>
+              <span class="badge badge-purple">✦ 91% Role Match</span>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">Write GPU SRAM-optimized fused kernels to reduce inference costs by 3x on transformer models.</p>
+            
+            <div class="rec-reason-box">
+              <span>💡</span>
+              <p><strong>Why Recommended:</strong> Highly valued skill that compliments your 96% PyTorch mastery level.</p>
+            </div>
+
+            <div class="rec-footer">
+              <span style="font-size: 11.5px; color: var(--text-muted);">⏱ 22 Hours • 10 Labs</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm" onclick="dismissRec('rec-card-3')">Dismiss</button>
+                <button class="btn btn-primary btn-sm" onclick="addToPath(this, 'Triton Custom Kernels')">Add to Learning Path</button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Readiness Gap Summary</h3>
+                <p id="gap-role-title">Lead AI Architect Benchmark</p>
+              </div>
+              <span class="badge badge-purple" id="gap-readiness-badge">78%</span>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+              <div class="progress-bar-container" style="height: 10px;">
+                <div class="progress-bar-fill" id="gap-readiness-bar" style="width: 78%;"></div>
+              </div>
+            </div>
+
+            <div id="gap-competencies-desc" style="font-size: 12.5px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 18px;">
+              You have already fulfilled <strong>24 of 30</strong> required competencies. Addressing the top 2 recommended gaps will elevate your profile to <strong>90%+ Readiness</strong>.
+            </div>
+
+            <a href="learning-path.html" class="btn btn-primary btn-sm" style="width: 100%;">View Full Career Roadmap →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Recommended Assessments</h3>
+                <p>Validate before promotion</p>
+              </div>
+            </div>
+
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
+              <strong style="font-size: 13px; display: block;">System Design for LLMs</strong>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <span style="font-size: 11.5px; color: var(--text-muted);">30 min • 5 Questions</span>
+                <a href="assessments.html" class="btn btn-secondary btn-sm">Take Test</a>
+              </div>
+            </div>
+
+            <div style="padding: 12px 0;">
+              <strong style="font-size: 13px; display: block;">Distributed MLOps DeepSpeed</strong>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <span style="font-size: 11.5px; color: var(--text-muted);">25 min • 5 Questions</span>
+                <a href="assessments.html" class="btn btn-secondary btn-sm">Take Test</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let dbRecs = [];
+
+    async function loadLiveRecommendations() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getRecommendations();
+        if (res && res.status === 'success' && res.data) {
+          dbRecs = res.data.recommendations || [];
+          const gap = res.data.gap_analysis;
+
+          if (gap) {
+            const roleEl = document.getElementById('gap-role-title');
+            if (roleEl) roleEl.textContent = gap.target_role;
+            const badgeEl = document.getElementById('gap-readiness-badge');
+            if (badgeEl) badgeEl.textContent = `${gap.readiness_pct}%`;
+            const barEl = document.getElementById('gap-readiness-bar');
+            if (barEl) barEl.style.width = `${gap.readiness_pct}%`;
+            const descEl = document.getElementById('gap-competencies-desc');
+            if (descEl) {
+              descEl.innerHTML = `You have already fulfilled <strong>${gap.mastered_competencies} of ${gap.total_competencies}</strong> required competencies. Addressing the top 2 recommended gaps will elevate your profile to <strong>90%+ Readiness</strong>.`;
+            }
+          }
+
+          const container = document.getElementById('recommendations-container');
+          if (container && dbRecs.length > 0) {
+            container.innerHTML = dbRecs.map(r => `
+              <div class="recommendation-card" id="rec-card-${r.id}">
+                <div class="rec-top-row">
+                  <div class="rec-title-group">
+                    <span class="badge badge-${r.priority_tag.includes('Critical') ? 'indigo' : (r.priority_tag.includes('High') ? 'amber' : 'cyan')}">${r.priority_tag}</span>
+                    <h3 style="margin-top: 6px;">${r.title}</h3>
+                  </div>
+                  <span class="badge badge-purple">✦ ${r.match_pct}% Role Match</span>
+                </div>
+                <p style="font-size: 12.5px; color: var(--text-secondary);">${r.reason_text}</p>
+                
+                <div class="rec-reason-box">
+                  <span>💡</span>
+                  <p><strong>Category:</strong> ${r.category} &middot; Highly weighted toward Lead AI readiness</p>
+                </div>
+
+                <div class="rec-footer">
+                  <span style="font-size: 11.5px; color: var(--text-muted);">⏱ ${r.duration_hours} Hours • ${r.case_studies_count} Labs</span>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary btn-sm" onclick="dismissRec('rec-card-${r.id}', ${r.id}, '${r.title.replace(/'/g, "\\'")}')">Dismiss</button>
+                    ${r.status === 'enrolled' ? 
+                      `<button class="btn btn-secondary btn-sm" disabled style="color: var(--accent-emerald);">Added to Path ✓</button>` : 
+                      `<button class="btn btn-primary btn-sm" onclick="addToPath(this, '${r.title.replace(/'/g, "\\'")}', ${r.id})">Add to Learning Path</button>`
+                    }
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Recommendations load error:', err);
+      }
+    }
+
+    async function addToPath(btn, title, recId = 0) {
+      if (window.api) {
+        await window.api.addRecommendationToPath(recId, title);
+        if (window.syncGlobalHeader) window.syncGlobalHeader();
+      }
+      btn.textContent = 'Added to Path ✓';
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-secondary');
+      btn.disabled = true;
+      btn.style.color = 'var(--brand-emerald)';
+      window.showToast('Added to Learning Path', `"${title}" has been integrated into your roadmap. (+25 XP)`, '🗺️');
+      await loadLiveRecommendations();
+    }
+
+    async function dismissRec(cardId, recId = 0, title = '') {
+      if (window.api) {
+        await window.api.dismissRecommendation(recId, title);
+      }
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          card.style.display = 'none';
+          window.showToast('Recommendation Dismissed', 'We will update your queue.', '🗑️');
+        }, 250);
+      }
+    }
+
+    window.addEventListener('si:data-changed', loadLiveRecommendations);
+    document.addEventListener('DOMContentLoaded', loadLiveRecommendations);
+  </script>
+</body>
+</html>

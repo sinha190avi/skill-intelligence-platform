@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certifications | Skill Intelligence</title>
+  <meta name="description" content="Manage, showcase, and earn verified AI engineering certifications on the Skill Intelligence Platform.">
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <style>
+
+    .certs-hero {
+      padding: 56px 0 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .certs-hero-tag {
+      display: inline-block; padding: 5px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(245,158,11,0.5);
+      background: rgba(245,158,11,0.1);
+      font-size: 11.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--brand-amber); margin-bottom: 16px;
+    }
+    .certs-hero h1 {
+      font-size: 36px; font-weight: 900; line-height: 1.15; margin-bottom: 12px;
+    }
+    .certs-hero h1 span {
+      background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .certs-hero p { font-size: 14px; color: var(--text-muted); line-height: 1.65; max-width: 500px; }
+
+    .cert-xp-card {
+      background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(244,63,94,0.1));
+      border: 1px solid rgba(245,158,11,0.35);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      min-width: 220px;
+      text-align: center;
+    }
+    .cert-xp-card .xp-icon { font-size: 40px; margin-bottom: 10px; }
+    .cert-xp-card .xp-val { font-size: 32px; font-weight: 900; color: var(--brand-amber); font-family: var(--font-heading); }
+    .cert-xp-card .xp-lbl { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .cert-xp-card .xp-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; }
+
+    .cert-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    @media(max-width:800px){ .cert-stats { grid-template-columns: repeat(2,1fr); } }
+    .cert-stat {
+      background: var(--bg-card); border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg); padding: 18px; text-align: center;
+    }
+    .cert-stat .val { font-size: 26px; font-weight: 900; font-family: var(--font-heading); }
+    .cert-stat .lbl { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+    .cert-tabs {
+      display: flex;
+      gap: 8px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .cert-tab {
+      padding: 8px 20px; border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card); color: var(--text-muted);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .cert-tab:hover { border-color: var(--brand-amber); color: #fff; }
+    .cert-tab.active {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-color: transparent; color: #fff;
+      box-shadow: 0 4px 14px rgba(245,158,11,0.4);
+    }
+
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .cert-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 0;
+      box-shadow: var(--shadow-card);
+      transition: all var(--transition-normal);
+      overflow: hidden;
+    }
+    .cert-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: var(--border-card-hover); }
+
+    .cert-card-cover {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cert-card-cover.gold { background: linear-gradient(135deg, rgba(245,158,11,0.35) 0%, rgba(251,191,36,0.15) 100%); }
+    .cert-card-cover.platinum { background: linear-gradient(135deg, rgba(148,163,184,0.35) 0%, rgba(203,213,225,0.15) 100%); }
+    .cert-card-cover.emerald { background: linear-gradient(135deg, rgba(16,185,129,0.35) 0%, rgba(52,211,153,0.15) 100%); }
+    .cert-card-cover.indigo { background: linear-gradient(135deg, rgba(99,102,241,0.35) 0%, rgba(139,92,246,0.15) 100%); }
+    .cert-card-cover.cyan { background: linear-gradient(135deg, rgba(56,189,248,0.35) 0%, rgba(96,165,250,0.15) 100%); }
+    .cert-card-cover.rose { background: linear-gradient(135deg, rgba(244,63,94,0.25) 0%, rgba(251,113,133,0.12) 100%); }
+
+    .cert-cover-icon { font-size: 40px; }
+    .cert-cover-watermark {
+      position: absolute; right: 16px; bottom: 8px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; opacity: 0.35;
+    }
+    .cert-verified-seal {
+      position: absolute; top: 12px; right: 12px;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(4px);
+    }
+
+    .cert-card-body { padding: 20px; }
+    .cert-issuer { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .cert-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .cert-meta-row {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .cert-meta-item { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+
+    .cert-progress-row {
+      margin-bottom: 14px;
+    }
+    .cert-progress-label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .cert-progress-label strong { color: #fff; }
+
+    .cert-card-footer {
+      display: flex; gap: 10px;
+    }
+
+    .cert-in-progress .cert-verified-seal {
+      animation: pulseRing 1s ease-in-out infinite;
+    }
+    @keyframes pulseRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(56,189,248,0); }
+    }
+
+    .earn-certs-section {
+      margin-bottom: 40px;
+    }
+    .earn-certs-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .earn-certs-section p { font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .earn-certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .earn-cert-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .earn-cert-card:hover { border-color: var(--brand-amber); transform: translateY(-3px); }
+    .earn-cert-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .earn-cert-icon {
+      width: 44px; height: 44px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .earn-cert-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .earn-cert-issuer { font-size: 11.5px; color: var(--text-muted); }
+    .earn-cert-info { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; margin-bottom: 14px; }
+    .earn-cert-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .earn-cert-meta span { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+
+    @media (max-width: 768px) {
+      .certs-hero {
+        padding: 28px 0 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .certs-hero h1 { font-size: 26px; }
+      .cert-xp-card { width: 100%; min-width: 0; }
+      .certs-grid { grid-template-columns: 1fr !important; gap: 16px; }
+      .cert-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
+      .cert-tab { flex-shrink: 0; }
+      .cert-card-footer { flex-direction: column; }
+      .cert-card-footer .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+
+    <header class="topbar">
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit &amp; Conquer" class="nav-brand-logo-img">
+      </a>
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link active">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="search-icon-btn search-trigger" title="Quick Search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot" style="display:none;"></span>
+          </button>
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none;border:none;color:var(--brand-cyan);font-size:11.5px;font-weight:600;cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div style="text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px;">Loading alerts…</div>
+            </div>
+            <div style="padding:8px 12px;text-align:center;border-top:1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size:11.5px;font-weight:700;color:var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header"><div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div></div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="certs-hero">
+        <div>
+          <div class="certs-hero-tag">🏅 Verified Credentials</div>
+          <h1>Your <span>Certifications</span> &amp;<br>Professional Credentials</h1>
+          <p>Every certificate on this platform is cryptographically verified and shareable with one click. Employers can validate credentials in real time via your public profile URL.</p>
+        </div>
+        <div class="cert-xp-card">
+          <div class="xp-icon">🏆</div>
+          <div class="xp-val">6</div>
+          <div class="xp-lbl">Verified Certificates Earned</div>
+          <div class="xp-sub">3 more in progress</div>
+          <a href="#earn-certs" class="btn btn-primary btn-sm" style="margin-top:16px;width:100%;text-align:center;display:block;">Earn More →</a>
+        </div>
+      </section>
+
+      <div class="cert-stats">
+        <div class="cert-stat">
+          <div class="val" style="color:var(--brand-amber);">6</div>
+          <div class="lbl">Earned Certificates</div>
+        </div>
+        <div class="cert-stat">
+          <div class="val" style="color:var(--brand-cyan);">3</div>
+          <div class="lbl">In Progress</div>
+        </div>
+        <div class="cert-stat">
+          <div class="val" style="color:var(--brand-emerald);">Top 5%</div>
+          <div class="lbl">Credential Rank</div>
+        </div>
+        <div class="cert-stat">
+          <div class="val" style="color:var(--brand-indigo-bright);">1,200</div>
+          <div class="lbl">XP from Certs</div>
+        </div>
+      </div>
+
+      <div class="cert-tabs">
+        <button class="cert-tab active" onclick="filterCerts('all', this)">All (9)</button>
+        <button class="cert-tab" onclick="filterCerts('earned', this)">✅ Earned (6)</button>
+        <button class="cert-tab" onclick="filterCerts('progress', this)">⏳ In Progress (3)</button>
+        <button class="cert-tab" onclick="filterCerts('platform', this)">Platform Certs</button>
+        <button class="cert-tab" onclick="filterCerts('external', this)">External Certs</button>
+      </div>
+
+      <div class="certs-grid" id="certs-grid">
+
+        <div class="cert-card" data-status="earned" data-type="platform">
+          <div class="cert-card-cover gold">
+            <div class="cert-cover-icon">🤖</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">VERIFIED CREDENTIAL</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Skill Intelligence Platform</div>
+            <div class="cert-name">Advanced Transformer Architectures &amp; Optimization</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Aug 15, 2026</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Scored 94% • Top 5% of candidates • ID: SIP-2026-TRF-8821</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('Transformer Architectures')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('Transformer Architectures')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card" data-status="earned" data-type="external">
+          <div class="cert-card-cover platinum">
+            <div class="cert-cover-icon">☁️</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">AWS CERTIFIED</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Amazon Web Services</div>
+            <div class="cert-name">AWS Certified Machine Learning Specialty</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Feb 10, 2026</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Score: 892 / 1000 • Valid until: Feb 2029</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('AWS ML Specialty')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('AWS ML Specialty')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card" data-status="earned" data-type="external">
+          <div class="cert-card-cover emerald">
+            <div class="cert-cover-icon">🧠</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">DEEPLEARNING.AI</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">DeepLearning.AI</div>
+            <div class="cert-name">Deep Learning Specialization (5-Course)</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Dec 2025</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">All 5 courses passed • Distinction honor</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('Deep Learning Specialization')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('Deep Learning Specialization')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card" data-status="earned" data-type="external">
+          <div class="cert-card-cover indigo">
+            <div class="cert-cover-icon">☸️</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">CNCF</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Cloud Native Computing Foundation</div>
+            <div class="cert-name">Certified Kubernetes Administrator (CKA)</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Sep 2025</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Performance-based exam • Valid until Sep 2027</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('CKA')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('CKA')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card" data-status="earned" data-type="platform">
+          <div class="cert-card-cover cyan">
+            <div class="cert-cover-icon">⚡</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">VERIFIED CREDENTIAL</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Skill Intelligence Platform</div>
+            <div class="cert-name">Advanced Python for AI Engineering</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Sep 10, 2026</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Scored 94% • Top 5% of 4,200 candidates</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('Advanced Python')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('Advanced Python')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card" data-status="earned" data-type="platform">
+          <div class="cert-card-cover rose">
+            <div class="cert-cover-icon">🎯</div>
+            <div class="cert-verified-seal">✅</div>
+            <div class="cert-cover-watermark">VERIFIED CREDENTIAL</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Skill Intelligence Platform</div>
+            <div class="cert-name">MLOps Practitioner — Kubeflow &amp; Triton</div>
+            <div class="cert-meta-row">
+              <span class="cert-meta-item">📅 Earned: Jul 2026</span>
+              <span class="cert-meta-item"><span class="badge badge-emerald">Verified</span></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Scored 76% • Top 25% benchmark</div>
+            <div class="cert-card-footer">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert('MLOps Practitioner')">📥 Download</button>
+              <button class="btn btn-secondary btn-sm" onclick="shareCert('MLOps Practitioner')">↗ Share</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card cert-in-progress" data-status="progress" data-type="platform">
+          <div class="cert-card-cover" style="background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(99,102,241,0.1));">
+            <div class="cert-cover-icon">🔬</div>
+            <div class="cert-verified-seal" style="background:rgba(56,189,248,0.2);">⏳</div>
+            <div class="cert-cover-watermark">IN PROGRESS</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Skill Intelligence Platform</div>
+            <div class="cert-name">System Design for Generative AI Applications</div>
+            <div class="cert-progress-row">
+              <div class="cert-progress-label">
+                <span>Course Progress</span>
+                <strong>65%</strong>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill cyan" style="width:65%;"></div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">14 Hours remaining • Est. completion: Oct 5, 2026</div>
+            <div class="cert-card-footer">
+              <a href="learning-path.html" class="btn btn-primary btn-sm" style="flex:1;">Continue Learning</a>
+              <button class="btn btn-secondary btn-sm" onclick="if(window.showToast)window.showToast('Reminder Set','You will be reminded to continue this course tomorrow.','⏰')">⏰ Remind</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card cert-in-progress" data-status="progress" data-type="external">
+          <div class="cert-card-cover" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(244,63,94,0.08));">
+            <div class="cert-cover-icon">🏗️</div>
+            <div class="cert-verified-seal" style="background:rgba(245,158,11,0.2);">⏳</div>
+            <div class="cert-cover-watermark">GOOGLE CLOUD</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Google Cloud</div>
+            <div class="cert-name">Professional Machine Learning Engineer</div>
+            <div class="cert-progress-row">
+              <div class="cert-progress-label">
+                <span>Prep Course Progress</span>
+                <strong>38%</strong>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill amber" style="width:38%;"></div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Exam scheduled: Nov 2026 • Practice tests available</div>
+            <div class="cert-card-footer">
+              <a href="courses.html" class="btn btn-primary btn-sm" style="flex:1;">Resume Prep</a>
+              <button class="btn btn-secondary btn-sm" onclick="if(window.showToast)window.showToast('Practice Test','Starting practice exam simulation.','📝')">📝 Practice</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card cert-in-progress" data-status="progress" data-type="platform">
+          <div class="cert-card-cover" style="background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(99,102,241,0.1));">
+            <div class="cert-cover-icon">🌐</div>
+            <div class="cert-verified-seal" style="background:rgba(168,85,247,0.2);">⏳</div>
+            <div class="cert-cover-watermark">IN PROGRESS</div>
+          </div>
+          <div class="cert-card-body">
+            <div class="cert-issuer">Skill Intelligence Platform</div>
+            <div class="cert-name">FlashAttention-2 &amp; Custom CUDA Kernels</div>
+            <div class="cert-progress-row">
+              <div class="cert-progress-label">
+                <span>Hands-on Lab Progress</span>
+                <strong>12%</strong>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width:12%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Advanced course • 22 Hours total • Labs in GPU sandbox</div>
+            <div class="cert-card-footer">
+              <a href="courses.html" class="btn btn-primary btn-sm" style="flex:1;">Start Labs</a>
+              <button class="btn btn-secondary btn-sm" onclick="if(window.showToast)window.showToast('Course Bookmarked','This course is in your learning queue.','📚')">📚 Queue</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="earn-certs-section" id="earn-certs">
+        <h2>Earn New Certifications</h2>
+        <p>Recommended based on your skill profile and career target: Lead AI Architect</p>
+        <div class="earn-certs-grid" id="earn-certs-grid">
+          <div class="earn-cert-card">
+            <div class="earn-cert-header">
+              <div class="earn-cert-icon" style="background:rgba(244,63,94,0.15);">🎯</div>
+              <div>
+                <div class="earn-cert-name">RLHF &amp; LLM Alignment Practitioner</div>
+                <div class="earn-cert-issuer">Skill Intelligence Platform</div>
+              </div>
+            </div>
+            <div class="earn-cert-info">Master reward modeling, PPO, DPO, and RLAIF techniques for production-grade language model alignment.</div>
+            <div class="earn-cert-meta">
+              <span>⏱ 20 hrs</span>
+              <span>⭐ 4.8</span>
+              <span>🎓 +300 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="startCert('RLHF Alignment')">Start Certification Path</button>
+          </div>
+          <div class="earn-cert-card">
+            <div class="earn-cert-header">
+              <div class="earn-cert-icon" style="background:rgba(56,189,248,0.15);">🗄️</div>
+              <div>
+                <div class="earn-cert-name">Vector Databases &amp; Multimodal RAG</div>
+                <div class="earn-cert-issuer">Skill Intelligence Platform</div>
+              </div>
+            </div>
+            <div class="earn-cert-info">Build production-grade semantic search pipelines with Qdrant, Milvus, HNSW indexing, and reranking.</div>
+            <div class="earn-cert-meta">
+              <span>⏱ 16 hrs</span>
+              <span>⭐ 4.9</span>
+              <span>🎓 +250 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="startCert('Vector DBs RAG')">Start Certification Path</button>
+          </div>
+          <div class="earn-cert-card">
+            <div class="earn-cert-header">
+              <div class="earn-cert-icon" style="background:rgba(245,158,11,0.15);">⚡</div>
+              <div>
+                <div class="earn-cert-name">GPU Architecture &amp; Kernel Optimization</div>
+                <div class="earn-cert-issuer">Skill Intelligence Platform</div>
+              </div>
+            </div>
+            <div class="earn-cert-info">Write high-performance CUDA kernels with Triton, profile GPU bottlenecks, and optimize tensor operations at the metal level.</div>
+            <div class="earn-cert-meta">
+              <span>⏱ 22 hrs</span>
+              <span>⭐ 4.9</span>
+              <span>🎓 +400 XP</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="startCert('GPU Kernels')">Start Certification Path</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    let allCerts = [];
+
+    const coverColorMap = {
+      gold:     'linear-gradient(135deg, rgba(245,158,11,0.35), rgba(251,191,36,0.15))',
+      platinum: 'linear-gradient(135deg, rgba(148,163,184,0.35), rgba(203,213,225,0.15))',
+      emerald:  'linear-gradient(135deg, rgba(16,185,129,0.35), rgba(52,211,153,0.15))',
+      indigo:   'linear-gradient(135deg, rgba(99,102,241,0.35), rgba(139,92,246,0.15))',
+      cyan:     'linear-gradient(135deg, rgba(56,189,248,0.35), rgba(96,165,250,0.15))',
+      rose:     'linear-gradient(135deg, rgba(244,63,94,0.25), rgba(251,113,133,0.12))'
+    };
+
+    function renderCerts(certs) {
+      const grid = document.getElementById('certs-grid');
+      if (!certs.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">No certifications found for this filter.</div>';
+        return;
+      }
+      grid.innerHTML = certs.map(c => {
+        const isEarned = c.status === 'earned';
+        const bg = coverColorMap[c.cover_color] || coverColorMap['indigo'];
+        const seal = isEarned ? '✅' : '⏳';
+        const watermark = isEarned ? 'VERIFIED CREDENTIAL' : 'IN PROGRESS';
+        const progressHtml = !isEarned ? `
+          <div class="cert-progress-row">
+            <div class="cert-progress-label"><span>Progress</span><strong>${c.progress_pct}%</strong></div>
+            <div class="progress-bar-container"><div class="progress-bar-fill cyan" style="width:${c.progress_pct}%;"></div></div>
+          </div>` : '';
+        const scoreHtml = isEarned && c.score_pct ? `<div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Scored ${c.score_pct}% • ID: ${c.cert_id_code || 'SIP-VERIFIED'}</div>` : '';
+        const earnedLabel = isEarned && c.earned_label ? `<div style="font-size:11px;color:var(--text-muted);">📅 Earned: ${c.earned_label}</div>` : '';
+        const footerHtml = isEarned
+          ? `<button class="btn btn-primary btn-sm" style="flex:1;" onclick="downloadCert(${c.cert_id})">📥 Download</button>
+             <button class="btn btn-secondary btn-sm" onclick="shareCert(${c.cert_id})">↗ Share</button>`
+          : `<a href="learning-path.html" class="btn btn-primary btn-sm" style="flex:1;">Continue Learning</a>
+             <button class="btn btn-secondary btn-sm" onclick="if(window.showToast)window.showToast('Reminder Set','Will remind you to continue this course tomorrow.','⏰')">⏰ Remind</button>`;
+
+        return `
+          <div class="cert-card ${!isEarned ? 'cert-in-progress' : ''}" data-status="${isEarned ? 'earned' : 'progress'}" data-type="${c.cert_type}">
+            <div class="cert-card-cover" style="background:${bg};">
+              <div class="cert-cover-icon">${c.icon_emoji || '🏅'}</div>
+              <div class="cert-verified-seal">${seal}</div>
+              <div class="cert-cover-watermark">${watermark}</div>
+            </div>
+            <div class="cert-card-body">
+              <div class="cert-issuer">${c.issuer}</div>
+              <div class="cert-name">${c.cert_name}</div>
+              <div class="cert-meta-row">${earnedLabel}${isEarned ? '<span class="badge badge-emerald">Verified</span>' : ''}</div>
+              ${scoreHtml}${progressHtml}
+              <div class="cert-card-footer">${footerHtml}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function filterCerts(type, btn) {
+      document.querySelectorAll('.cert-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const apiFilter = type === 'all' ? 'all' : type === 'earned' ? 'earned' : type === 'progress' ? 'progress' : type === 'platform' ? 'platform' : 'external';
+      const res = await SICertifications.getList(apiFilter);
+      if (res.status === 'success') {
+        allCerts = res.data;
+        renderCerts(allCerts);
+      }
+    }
+
+    async function downloadCert(certId) {
+      if (window.showToast) window.showToast('Downloading Certificate', 'PDF is being prepared for download.', '📥');
+    }
+
+    async function shareCert(certId) {
+      await SICertifications.share(certId);
+    }
+
+    async function startCert(certId) {
+      await SICertifications.startPath(certId);
+
+      const res = await SICertifications.getCatalog();
+      if (res.status === 'success') renderCatalog(res.data);
+    }
+
+    async function renderCatalog(certs) {
+      const grid = document.getElementById('earn-certs-grid');
+      if (!grid || !certs.length) return;
+      grid.innerHTML = certs.slice(0, 3).map(c => `
+        <div class="earn-cert-card">
+          <div class="earn-cert-header">
+            <div class="earn-cert-icon" style="background:rgba(99,102,241,0.15);">${c.icon_emoji || '🎯'}</div>
+            <div><div class="earn-cert-name">${c.cert_name}</div><div class="earn-cert-issuer">${c.issuer}</div></div>
+          </div>
+          <div class="earn-cert-info">${c.description || ''}</div>
+          <div class="earn-cert-meta">
+            <span>⏱ ${c.total_hours} hrs</span>
+            <span>🎓 +${c.xp_reward} XP</span>
+            <span>📊 ${c.difficulty}</span>
+          </div>
+          <button class="btn btn-primary btn-sm" style="width:100%;" onclick="startCert(${c.id})">Start Certification Path</button>
+        </div>`).join('');
+    }
+
+    async function loadStats() {
+      const res = await SICertifications.getStats();
+      if (res.status !== 'success') return;
+      const d = res.data;
+      const statVals = document.querySelectorAll('.cert-stat .val');
+      if (statVals[0]) statVals[0].textContent = d.earned_count;
+      if (statVals[1]) statVals[1].textContent = d.progress_count;
+      if (statVals[3]) statVals[3].textContent = d.xp_from_certs.toLocaleString();
+      const xpVal = document.querySelector('.cert-xp-card .xp-val');
+      if (xpVal) xpVal.textContent = d.earned_count;
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const [certRes, catalogRes] = await Promise.all([
+        SICertifications.getList('all'),
+        SICertifications.getCatalog()
+      ]);
+      if (certRes.status === 'success') { allCerts = certRes.data; renderCerts(allCerts); }
+      else {
+        document.getElementById('certs-grid').innerHTML =
+          '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--brand-rose);">Failed to load certifications. Is PHP running?</div>';
+      }
+      if (catalogRes.status === 'success') renderCatalog(catalogRes.data);
+      loadStats();
+    });
+  </script>
+</body>
+</html>

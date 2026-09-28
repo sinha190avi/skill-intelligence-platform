@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Intelligence | AI-Powered Engineering Assessment Platform</title>
+<meta name="description" content="India's AI-powered skill assessment and career intelligence platform for enterprise engineers. Benchmark your skills, get verified, and reach your target role.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --fh:'Space Grotesk',sans-serif;
+  --fb:'Inter',sans-serif;
+  --fm:'Fira Code',monospace;
+  --acc:#d97706;
+  --acc2:#b45309;
+  --ind:#4f46e5;
+  --cyn:#0284c7;
+  --em:#10b981;
+  --bg-page:#f4f6fa;
+  --cb:#ffffff;
+  --cborder:#e2e8f0;
+  --cbt:#edf2f7;
+  --cshadow:0 4px 20px -2px rgba(15,23,42,0.05), 0 2px 6px -1px rgba(15,23,42,0.02);
+  --cshadow-hover:0 20px 35px -4px rgba(15,23,42,0.08), 0 8px 16px -2px rgba(15,23,42,0.03);
+  --tp:#0f172a;
+  --ts:#475569;
+  --tm:#64748b;
+  --sa:#f8fafc;
+  --r:16px;
+  --rs:10px;
+  --nav:rgba(255,255,255,0.94);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--fb);color:var(--tp);min-height:100vh;background-color:#fafbfd;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+.grid-bg-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(to right,rgba(15,23,42,0.045) 1px,transparent 1px),linear-gradient(to bottom,rgba(15,23,42,0.045) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(85% 70% at 50% 40%,#000 45%,rgba(0,0,0,0) 100%);mask-image:radial-gradient(85% 70% at 50% 40%,#000 45%,rgba(0,0,0,0) 100%)}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:1;display:block}
+
+nav{position:sticky;top:0;z-index:100;background:var(--nav);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:64px}
+.nbrand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nmark{width:34px;height:34px;background:linear-gradient(135deg,#4f46e5,#6366f1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:14px;color:#fff;
+  box-shadow:0 2px 10px rgba(79,70,229,.3)}
+.nname{font-family:var(--fh);font-weight:700;font-size:16px;color:#0f172a;letter-spacing:-0.03em}
+.nlinks{display:flex;align-items:center;gap:4px}
+.nlinks a{color:#475569;font-size:13.5px;font-weight:500;text-decoration:none;padding:6px 12px;border-radius:8px;transition:color .15s,background .15s}
+.nlinks a:hover{color:#0f172a;background:#f1f5f9}
+.nact{display:flex;align-items:center;gap:10px}
+.nbgh{color:#334155;font-size:13px;font-weight:600;text-decoration:none;padding:7px 15px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;transition:all .15s}
+.nbgh:hover{color:#0f172a;border-color:#94a3b8;background:#f8fafc}
+.nbpr{background:#0f172a;color:#fff;font-size:13px;font-weight:700;text-decoration:none;padding:8px 18px;border-radius:999px;font-family:var(--fh);transition:all .15s;box-shadow:0 2px 8px rgba(15,23,42,0.15)}
+.nbpr:hover{background:#1e293b;transform:translateY(-1px)}
+.npill{color:#4f46e5;font-size:12.5px;font-weight:600;text-decoration:none;padding:6px 13px;border-radius:999px;border:1px solid rgba(79,70,229,0.35);background:rgba(79,70,229,0.06);transition:all .15s}
+.npill:hover{background:rgba(79,70,229,0.12)}
+
+.nav-toggle{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:38px;height:38px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer;padding:0;z-index:102;transition:all .2s}
+.nav-toggle:hover{background:#f1f5f9;border-color:#94a3b8}
+.nav-toggle .bar{width:20px;height:2px;background-color:#0f172a;border-radius:2px;transition:all .25s ease}
+.nav-toggle.active .bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.active .bar:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-toggle.active .bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:99;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.mobile-menu.open{opacity:1;pointer-events:auto}
+.mobile-menu-inner{background:#ffffff;border-bottom:1px solid #e2e8f0;box-shadow:0 24px 38px rgba(15,23,42,0.14);padding:24px 20px 30px;max-height:calc(100vh - 64px);overflow-y:auto;transform:translateY(-16px);transition:transform .25s cubic-bezier(0.16,1,0.3,1)}
+.mobile-menu.open .mobile-menu-inner{transform:translateY(0)}
+.mobile-links{display:flex;flex-direction:column;gap:4px;padding-bottom:18px;border-bottom:1px solid #e2e8f0}
+.mobile-links a{font-family:var(--fh);font-size:16px;font-weight:600;color:#1e293b;text-decoration:none;padding:12px 14px;border-radius:10px;transition:all .15s;display:flex;align-items:center;justify-content:space-between}
+.mobile-links a:hover,.mobile-links a:active{background:#f8fafc;color:#4f46e5;transform:translateX(4px)}
+.mobile-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.m-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:12px;font-family:var(--fh);font-size:14.5px;font-weight:700;text-decoration:none;text-align:center;transition:all .15s}
+.m-btn-copilot{background:rgba(79,70,229,0.08);color:#4f46e5;border:1px solid rgba(79,70,229,0.25)}
+.m-btn-copilot:hover{background:rgba(79,70,229,0.14)}
+.m-btn-outline{background:#ffffff;color:#0f172a;border:1px solid #cbd5e1}
+.m-btn-outline:hover{background:#f8fafc;border-color:#94a3b8}
+.m-btn-primary{background:#0f172a;color:#ffffff;box-shadow:0 4px 14px rgba(15,23,42,0.18)}
+.m-btn-primary:hover{background:#1e293b}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 60px;position:relative;z-index:1}
+section{position:relative;z-index:1}
+.slabel{font-family:var(--fm);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4f46e5;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.slabel::before{content:'';width:24px;height:2px;background:#4f46e5}
+.stitle{font-family:var(--fh);font-weight:800;line-height:1.08;letter-spacing:-0.04em;color:#0f172a}
+.ssub{font-size:15px;line-height:1.7;color:var(--ts);font-weight:400;max-width:540px;letter-spacing:-0.01em}
+.sdiv{border:none;border-top:1px solid #e2e8f0;margin:0}
+
+.hero{min-height:85vh;display:flex;align-items:center;padding:70px 0 60px;position:relative}
+.hpill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;background:#ffffff;border:1px solid #e2e8f0;font-family:var(--fm);font-size:12px;color:#475569;margin-bottom:28px;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.hdot{width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 10px rgba(16,185,129,.5);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+.htitle{font-family:var(--fh);font-weight:800;font-size:clamp(52px,7vw,84px);line-height:1.0;letter-spacing:-0.05em;margin-bottom:24px}
+.htw{color:#0f172a;display:block}
+.hta{color:#4f46e5;display:block}
+.hdesc{font-size:clamp(15px,1.5vw,17px);line-height:1.7;color:var(--ts);max-width:560px;margin-bottom:36px;font-weight:400;letter-spacing:-0.01em}
+.hact{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:56px}
+.bpri{display:inline-flex;align-items:center;gap:8px;background:#0f172a;color:#fff;font-family:var(--fh);font-size:14.5px;font-weight:700;padding:13px 28px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;transition:all .15s;box-shadow:0 4px 18px rgba(15,23,42,0.18)}
+.bpri:hover{background:#1e293b;transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,23,42,0.25)}
+.bout{display:inline-flex;align-items:center;gap:8px;background:#ffffff;color:#0f172a;font-family:var(--fh);font-size:14.5px;font-weight:600;padding:12px 26px;border-radius:999px;border:1px solid #cbd5e1;text-decoration:none;transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+.bout:hover{border-color:#94a3b8;background:#f8fafc}
+.bgh{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#64748b;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px;border:none;text-decoration:none;transition:color .15s}
+.bgh:hover{color:#0f172a}
+.hcalls{position:absolute;top:50%;right:0;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px}
+.hcall{background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 20px;max-width:240px;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
+.hclab{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4f46e5;margin-bottom:6px}
+.hctxt{font-size:13px;color:#334155;line-height:1.45}
+.hstats{display:flex;gap:48px;border-top:1px solid #e2e8f0;padding-top:32px;flex-wrap:wrap}
+.hsn{font-family:var(--fh);font-size:36px;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px;color:#0f172a}
+.hsl{font-size:13px;color:#64748b;font-weight:500}
+
+.pstrip{background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:18px 0;position:relative;z-index:1}
+.pstrip-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pstrip-label{font-family:var(--fm);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;white-space:nowrap;padding-right:16px;border-right:1px solid #e2e8f0}
+.pstrip-logos{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1}
+.pbadge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;transition:all .2s;text-decoration:none}
+.pbadge:hover{background:#f1f5f9;border-color:#cbd5e1;transform:translateY(-1px)}
+.pbadge-icon{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.pbadge-text{font-family:var(--fh);font-size:12px;font-weight:700;letter-spacing:-0.01em;color:#1e293b}
+.pbadge-sub{font-family:var(--fm);font-size:9px;color:#64748b;letter-spacing:.04em;margin-top:1px}
+.igot-badge{border-color:rgba(249,115,22,.3);background:rgba(249,115,22,.06)}
+.igot-badge .pbadge-icon{background:linear-gradient(135deg,#ea580c,#f97316)}
+.igot-badge .pbadge-text{color:#ea580c}
+.igot-badge:hover{border-color:rgba(249,115,22,.5);background:rgba(249,115,22,.12)}
+
+.fcsec{padding:90px 0}
+.fcgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fc{background:#ffffff;border:1px solid #e2e8f0;border-radius:var(--r);padding:30px;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--cshadow)}
+.fc:hover{border-color:#cbd5e1;transform:translateY(-3px);box-shadow:var(--cshadow-hover)}
+.fcico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;background:#f8fafc;border:1px solid #e2e8f0}
+.fctag{font-family:var(--fm);font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:12px}
+.fc h3{font-family:var(--fh);font-size:19px;font-weight:700;letter-spacing:-0.03em;color:#0f172a;margin-bottom:10px}
+.fc p{font-size:14px;color:#475569;line-height:1.65;margin-bottom:20px}
+.fcl{font-family:var(--fh);font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:gap .15s}
+.fcl:hover{gap:9px}
+.fca .fcl{color:#d97706}.fca{border-bottom:3px solid #f59e0b}
+.fci .fcl{color:#4f46e5}.fci{border-bottom:3px solid #6366f1}
+.fce .fcl{color:#059669}.fce{border-bottom:3px solid #10b981}
+
+.sbar{background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:52px 0}
+.sbarl{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#64748b;text-align:center;margin-bottom:36px}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.sitem{text-align:center;padding:0 24px;border-right:1px solid #e2e8f0}
+.sitem:last-child{border-right:none}
+.snum{font-family:var(--fh);font-size:52px;font-weight:800;letter-spacing:-0.05em;line-height:1;margin-bottom:8px}
+.sa{color:#d97706}.si{color:#4f46e5}.se{color:#059669}.sc{color:#0284c7}
+.sdesc{font-size:13px;color:#64748b;font-weight:500}
+
+.stgsec{padding:100px 0}
+.stghdr{max-width:660px;margin-bottom:60px}
+.stggrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.stgc{background:#ffffff;border:1px solid #e2e8f0;border-radius:var(--r);padding:28px 24px 32px;position:relative;transition:all .2s;box-shadow:var(--cshadow)}
+.stgc:hover{transform:translateY(-4px);border-color:#cbd5e1;box-shadow:var(--cshadow-hover)}
+.stgc:hover::after{content:'';position:absolute;bottom:0;left:24px;right:24px;height:3px;background:#4f46e5;border-radius:0 0 3px 3px}
+.stgn{font-family:var(--fm);font-size:11px;font-weight:600;color:#64748b;margin-bottom:14px;letter-spacing:.08em}
+.stgi{width:40px;height:40px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:20px}
+.stgc h4{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:-0.025em;color:#0f172a;margin-bottom:10px}
+.stgc p{font-size:13px;color:#475569;line-height:1.6}
+
+.stpsec{padding:100px 0;background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0}
+.stphdr{margin-bottom:72px}
+.stptrk{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.stptrk::before{content:'';position:absolute;top:22px;left:10%;right:10%;height:2px;background:#e2e8f0;z-index:0}
+.stpitem{text-align:center;padding:0 12px;position:relative;z-index:1}
+.stpcir{width:44px;height:44px;border-radius:50%;background:#ffffff;border:2px solid #cbd5e1;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-family:var(--fm);font-size:11px;font-weight:700;color:#64748b;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.stpact .stpcir{border-color:#4f46e5;color:#4f46e5;box-shadow:0 0 16px rgba(79,70,229,.25)}
+.stptit{font-family:var(--fh);font-size:14.5px;font-weight:700;color:#0f172a;letter-spacing:-0.02em;margin-bottom:8px}
+.stpdsc{font-size:12.5px;color:#64748b;line-height:1.55}
+
+.whysec{padding:100px 0}
+.whyin{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.whytit{font-size:clamp(38px,4vw,56px);color:#0f172a}
+.whydsc{font-size:15px;color:#475569;line-height:1.7;margin-top:20px;font-weight:400}
+.whygrd{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.whyc{background:#ffffff;border:1px solid #e2e8f0;border-radius:var(--rs);padding:22px;transition:all .2s;box-shadow:0 2px 10px rgba(15,23,42,0.03)}
+.whyc:hover{border-color:#cbd5e1;transform:translateY(-2px);box-shadow:0 12px 24px rgba(15,23,42,0.06)}
+.whyca{border-color:rgba(245,158,11,.4);background:#fffbeb}
+.whyci{width:36px;height:36px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px}
+.whyc h5{font-family:var(--fh);font-size:14.5px;font-weight:700;letter-spacing:-0.02em;color:#0f172a;margin-bottom:6px}
+.whyc p{font-size:12.5px;color:#475569;line-height:1.55}
+
+.engsec{padding:100px 0;background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0}
+.engin{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
+.etags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.etag{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid #e2e8f0;font-size:12.5px;font-weight:500;color:#334155;background:#ffffff;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+.etag .dot{width:6px;height:6px;border-radius:50%}
+.da{background:#f59e0b}.di{background:#4f46e5}.de{background:#10b981}
+.flist{list-style:none}
+.fli{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #e2e8f0;cursor:pointer;transition:all .15s}
+.fli:hover .flt{color:#0f172a}
+.fln{font-family:var(--fm);font-size:11px;color:#64748b;margin-right:16px;flex-shrink:0}
+.flt{font-family:var(--fh);font-size:17px;font-weight:700;color:#475569;letter-spacing:-0.03em;flex:1}
+.flia .flt{color:#0f172a}
+.flin{width:8px;height:8px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
+.flia .flin{background:#4f46e5;box-shadow:0 0 10px rgba(79,70,229,.6)}
+
+.igot-sec{padding:100px 0;background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;position:relative;z-index:1}
+.igot-sec::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(249,115,22,.03) 0%,transparent 50%,rgba(99,102,241,.03) 100%);pointer-events:none}
+.igot-header{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;margin-bottom:64px;flex-wrap:wrap}
+.igot-title-block{max-width:620px}
+.igot-logo-block{display:flex;align-items:center;gap:12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:var(--r);padding:16px 22px;flex-shrink:0;box-shadow:0 4px 12px rgba(234,88,12,0.06)}
+.igot-emblem{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#ea580c,#f97316);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(234,88,12,.3)}
+.igot-logo-name{font-family:var(--fh);font-size:17px;font-weight:800;letter-spacing:-0.02em;color:#c2410c;line-height:1.2}
+.igot-logo-sub{font-size:11px;color:#ea580c;font-family:var(--fm);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.igot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:48px}
+.igot-card{background:#ffffff;border:1px solid #fed7aa;border-radius:var(--r);padding:24px;position:relative;transition:all .2s;box-shadow:0 2px 10px rgba(234,88,12,0.04)}
+.igot-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(234,88,12,0.1);border-color:#f97316}
+.igot-card-num{font-family:var(--fm);font-size:10px;color:#ea580c;letter-spacing:.1em;margin-bottom:14px;font-weight:600}
+.igot-card-icon{font-size:24px;margin-bottom:14px}
+.igot-card h5{font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:-0.025em;color:#0f172a;margin-bottom:8px}
+.igot-card p{font-size:13px;color:#475569;line-height:1.55}
+.igot-card-tag{display:inline-flex;align-items:center;gap:4px;margin-top:14px;padding:3px 8px;border-radius:4px;background:#ffedd5;border:1px solid #fed7aa;font-family:var(--fm);font-size:9.5px;color:#c2410c;font-weight:600;letter-spacing:.04em}
+.igot-bottom{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:28px 32px;background:#fff7ed;border:1px solid #fed7aa;border-radius:var(--r);flex-wrap:wrap}
+.igot-bottom-text{font-size:14px;color:#334155;line-height:1.6;max-width:580px}
+.igot-bottom-text strong{color:#c2410c;font-family:var(--fh)}
+.igot-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:999px;background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;font-family:var(--fh);font-size:13.5px;font-weight:700;text-decoration:none;transition:all .15s;box-shadow:0 4px 16px rgba(234,88,12,.3);letter-spacing:-0.01em}
+.igot-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(234,88,12,.45)}
+
+.igot-steps-track{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-bottom:48px;position:relative}
+.igot-steps-line{position:absolute;top:20px;left:10%;right:10%;height:2px;background:#fed7aa}
+.igot-step-col{text-align:center;padding:0 8px;position:relative;z-index:1}
+.igot-step-cir{width:40px;height:40px;border-radius:50%;background:#fff7ed;border:1px solid #fed7aa;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Fira Code',monospace;font-size:11px;font-weight:700;color:#c2410c}
+.igot-step-cir-act{border:2px solid #ea580c;color:#9a3412;box-shadow:0 0 16px rgba(234,88,12,.25)}
+
+.tstsec{padding:100px 0}
+.tsthdr{margin-bottom:60px}
+.tsttabs{display:flex;gap:8px;margin-bottom:48px}
+.tsttab{padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:#ffffff;border:1px solid #cbd5e1;color:#64748b;cursor:pointer;transition:all .15s}
+.tsttab.on{background:#eef2ff;border-color:#818cf8;color:#4f46e5}
+.tstgrd{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tstc{background:#ffffff;border:1px solid #e2e8f0;border-radius:var(--r);padding:26px;box-shadow:0 4px 20px -2px rgba(15,23,42,0.05);transition:all .2s}
+.tstc:hover{border-color:#cbd5e1;box-shadow:0 20px 35px -4px rgba(15,23,42,0.08);transform:translateY(-2px)}
+.tstc blockquote{font-size:13.5px;color:#334155;line-height:1.65;margin-bottom:20px;font-style:italic}
+.tsta{display:flex;align-items:center;gap:10px}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.ava{background:linear-gradient(135deg,#d97706,#f59e0b)}.avi{background:linear-gradient(135deg,#4f46e5,#818cf8)}.ave{background:linear-gradient(135deg,#059669,#10b981)}.avt{background:linear-gradient(135deg,#0d9488,#2dd4bf)}
+.aname{font-family:var(--fh);font-size:13.5px;font-weight:700;color:#0f172a;letter-spacing:-0.01em}
+.arole{font-size:11.5px;color:#64748b;margin-top:1px}
+
+.ctasec{padding:90px 0;background:#ffffff;border-top:1px solid #e2e8f0}
+.ctacard{background:linear-gradient(135deg,#3730a3 0%,#4f46e5 50%,#6366f1 100%);border-radius:24px;padding:56px 64px;color:#fff;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(79,70,229,0.25)}
+.ctain{display:flex;align-items:center;justify-content:space-between;gap:48px;flex-wrap:wrap;position:relative;z-index:2}
+.ctatit{font-size:clamp(34px,3.5vw,48px);max-width:560px;color:#fff}
+.ctaact{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.ctapri{background:#ffffff;color:#0f172a;font-family:var(--fh);font-size:14.5px;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;transition:all .15s;box-shadow:0 4px 18px rgba(0,0,0,0.15);display:inline-flex;align-items:center;gap:8px}
+.ctapri:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.ctaout{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#fff;font-family:var(--fh);font-size:14.5px;font-weight:600;padding:12px 26px;border-radius:999px;text-decoration:none;backdrop-filter:blur(8px);transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.ctaout:hover{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.5)}
+
+.faqsec{padding:100px 0;background:#f8fafc}
+.faqin{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.faqlist{display:flex;flex-direction:column;gap:0}
+.faqi{border-bottom:1px solid #e2e8f0;padding:22px 0;cursor:pointer}
+.faqq{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faqq h5{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:-0.02em;color:#0f172a}
+.faqtgl{width:26px;height:26px;border-radius:50%;background:#ffffff;border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;color:#64748b;transition:all .2s}
+.faqi.op .faqtgl{background:#4f46e5;color:#ffffff;border-color:#4f46e5}
+.faqa{font-size:14px;color:#475569;line-height:1.65;margin-top:12px;display:none}
+.faqi.op .faqa{display:block}
+
+footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64px 0 40px;position:relative;z-index:1}
+.ftin{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ftbt{font-size:13.5px;color:#94a3b8;line-height:1.7;margin-top:12px;max-width:260px}
+.ftc h6{font-family:var(--fh);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#cbd5e1;margin-bottom:16px}
+.ftc a{display:block;font-size:13.5px;color:#94a3b8;text-decoration:none;margin-bottom:10px;transition:color .15s}
+.ftc a:hover{color:#ffffff}
+.ftbot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #1e293b;padding-top:28px;flex-wrap:wrap;gap:12px}
+.ftcopy{font-size:12.5px;color:#64748b}
+.ftlks{display:flex;gap:20px}
+.ftlks a{font-size:12.5px;color:#94a3b8;text-decoration:none;transition:color .15s}
+.ftlks a:hover{color:#ffffff}
+
+.rv{opacity:0;transform:translateY(28px);transition:opacity .5s ease,transform .5s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.sc>*{opacity:0;transform:translateY(20px);transition:opacity .4s ease,transform .4s ease}
+.sc.vis>*:nth-child(1){opacity:1;transform:none;transition-delay:0s}
+.sc.vis>*:nth-child(2){opacity:1;transform:none;transition-delay:.08s}
+.sc.vis>*:nth-child(3){opacity:1;transform:none;transition-delay:.16s}
+.sc.vis>*:nth-child(4){opacity:1;transform:none;transition-delay:.24s}
+.sc.vis>*:nth-child(5){opacity:1;transform:none;transition-delay:.32s}
+
+@media (max-width: 1120px) {
+  nav { padding: 0 32px; }
+  .wrap { padding: 0 32px; }
+  .hcalls { display: none; }
+  .fcgrid { grid-template-columns: repeat(2, 1fr); }
+  .whyin, .engin, .faqin { grid-template-columns: 1fr; gap: 48px; }
+  .stggrid { grid-template-columns: repeat(2, 1fr); }
+  .igot-grid { grid-template-columns: repeat(2, 1fr); }
+  .tstgrd { grid-template-columns: repeat(2, 1fr); }
+  .ftin { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+@media (max-width: 900px) {
+  nav { padding: 0 20px; height: 60px; }
+  .wrap { padding: 0 20px; }
+  .nlinks { display: none; }
+  .nav-toggle { display: flex; }
+  .mobile-menu { display: block; top: 60px; }
+  .nact .npill, .nact .nbgh { display: none; }
+  .nact .nbpr { padding: 7px 14px; font-size: 12.5px; }
+
+  .hero { min-height: auto; padding: 48px 0 36px; }
+  .htitle { font-size: clamp(36px, 6.5vw, 56px); }
+  .hdesc { font-size: 15px; }
+  .hstats { gap: 32px; }
+
+  .stptrk {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-left: 20px;
+  }
+  .stptrk::before {
+    top: 22px;
+    bottom: 22px;
+    left: 41px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .stpitem {
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    gap: 18px;
+    padding: 0;
+  }
+  .stpcir {
+    margin: 0;
+    flex-shrink: 0;
+  }
+  .stpitem > div:not(.stpcir) {
+    flex: 1;
+  }
+
+  .igot-steps-track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 20px;
+  }
+  .igot-steps-line {
+    top: 20px;
+    bottom: 20px;
+    left: 39px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .igot-step-col {
+    display: flex !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 16px !important;
+    padding: 0 !important;
+  }
+  .igot-step-cir {
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 0;
+  }
+  .sitem {
+    padding: 0 16px;
+    border-right: none;
+  }
+  .sitem:nth-child(odd) {
+    border-right: 1px solid #e2e8f0;
+  }
+
+  .igot-header { flex-direction: column; gap: 24px; }
+  .igot-logo-block { max-width: 100%; }
+  .ctacard { padding: 44px 32px; }
+  .ctain { flex-direction: column; align-items: flex-start; gap: 28px; }
+  .ftin { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+
+@media (max-width: 640px) {
+  nav { padding: 0 16px; height: 56px; }
+  .wrap { padding: 0 16px; }
+  .mobile-menu { top: 56px; }
+  .mobile-menu-inner { padding: 20px 16px 24px; }
+  .nbrand img { height: 28px; }
+
+  .hero { padding: 32px 0 28px; }
+  .hpill {
+    font-size: 11px;
+    padding: 6px 12px;
+    margin-bottom: 18px;
+    white-space: normal;
+    line-height: 1.45;
+    text-align: left;
+    display: inline-flex;
+  }
+  .htitle {
+    font-size: clamp(30px, 8.8vw, 42px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hdesc {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .hact {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .bpri, .bout, .bgh {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 20px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .hstats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 12px;
+    padding-top: 20px;
+  }
+  .hsn { font-size: 26px; }
+  .hsl { font-size: 11.5px; }
+
+  .pstrip { padding: 14px 0; }
+  .pstrip-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .pstrip-label { border-right: none; padding-right: 0; font-size: 10px; }
+  .pstrip-logos {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+  }
+  .pstrip-logos::-webkit-scrollbar { display: none; }
+  .pbadge { flex-shrink: 0; padding: 6px 12px; }
+
+  .fcsec, .stgsec, .stpsec, .whysec, .engsec, .igot-sec, .tstsec, .ctasec, .faqsec {
+    padding: 50px 0;
+  }
+  .stghdr, .stphdr, .tsthdr { margin-bottom: 36px; }
+  .slabel { font-size: 10.5px; margin-bottom: 10px; }
+  .stitle { font-size: 27px !important; }
+  .ssub { font-size: 13.5px; line-height: 1.6; }
+
+  .fcgrid { grid-template-columns: 1fr; gap: 14px; }
+  .fc { padding: 22px 18px; }
+
+  .sbar { padding: 32px 0; }
+  .sbarl { margin-bottom: 20px; }
+  .sgrid { grid-template-columns: repeat(2, 1fr); gap: 18px 0; }
+  .sitem { padding: 0 8px; }
+  .snum { font-size: 32px; }
+  .sdesc { font-size: 11.5px; }
+
+  .stggrid { grid-template-columns: 1fr; gap: 12px; }
+  .stgc { padding: 20px 16px; }
+
+  .stptrk { padding-left: 10px; gap: 18px; }
+  .stptrk::before { left: 29px; }
+  .stpcir { width: 38px; height: 38px; font-size: 10px; }
+  .stptit { font-size: 14px; margin-bottom: 4px; }
+  .stpdsc { font-size: 12px; }
+
+  .whygrd { grid-template-columns: 1fr; gap: 12px; }
+  .whyc { padding: 18px 16px; }
+
+  .flt { font-size: 14.5px; }
+  .fli { padding: 13px 0; }
+
+  .igot-grid { grid-template-columns: 1fr; gap: 12px; }
+  .igot-card { padding: 18px 16px; }
+  .igot-steps-track { padding-left: 10px; gap: 16px; }
+  .igot-steps-line { left: 27px; }
+  .igot-step-cir { width: 34px !important; height: 34px !important; }
+  .igot-bottom { padding: 18px 16px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .igot-bottom-text { font-size: 13px; }
+  .igot-bottom > div { width: 100%; flex-direction: column; }
+  .igot-btn, .igot-bottom .bout { width: 100%; justify-content: center; text-align: center; }
+
+  .tsttabs {
+    overflow-x: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 28px;
+  }
+  .tsttabs::-webkit-scrollbar { display: none; }
+  .tsttab { flex-shrink: 0; padding: 6px 14px; font-size: 12px; }
+  .tstgrd { grid-template-columns: 1fr; gap: 14px; }
+  .tstc { padding: 18px 16px; }
+
+  .ctacard { padding: 28px 18px; border-radius: 18px; }
+  .ctatit { font-size: 24px !important; }
+  .ctaact { flex-direction: column; width: 100%; gap: 10px; }
+  .ctapri, .ctaout { width: 100%; justify-content: center; }
+
+  .faqi { padding: 16px 0; }
+  .faqq h5 { font-size: 14px; }
+  .faqa { font-size: 13px; }
+
+  footer { padding: 44px 0 28px; }
+  .ftin { grid-template-columns: 1fr; gap: 28px; margin-bottom: 28px; }
+  .ftbot { flex-direction: column; align-items: flex-start; gap: 14px; padding-top: 18px; }
+  .ftlks { gap: 16px; }
+}
+
+@media (max-width: 380px) {
+  .htitle { font-size: 28px; }
+  .hstats { grid-template-columns: 1fr; gap: 14px; }
+  .sgrid { grid-template-columns: 1fr; gap: 14px; }
+  .sitem:nth-child(odd) { border-right: none; }
+  .sitem { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; }
+  .sitem:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+<div id="grid-bg-overlay" class="grid-bg-overlay"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<nav>
+  <a href="landing.html" class="nbrand">
+    <img src="commit_conquer_clean.png" alt="Commit &amp; Conquer" style="height: 32px; width: auto; object-fit: contain;">
+  </a>
+  <div class="nlinks">
+    <a href="assessments.html">Assessments</a>
+    <a href="courses.html">Learning Paths</a>
+    <a href="community.html">Community</a>
+    <a href="career.html">Career</a>
+    <a href="leaderboard.html">Leaderboard</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="nact">
+    <a href="ai-assistant.html" class="npill">AI Copilot</a>
+    <a href="login.html" class="nbgh">Log In</a>
+    <a href="login.html" class="nbpr">Get Started &rarr;</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu-inner">
+    <div class="mobile-links">
+      <a href="assessments.html"><span>Assessments</span><span>&rarr;</span></a>
+      <a href="courses.html"><span>Learning Paths</span><span>&rarr;</span></a>
+      <a href="community.html"><span>Community</span><span>&rarr;</span></a>
+      <a href="career.html"><span>Career</span><span>&rarr;</span></a>
+      <a href="leaderboard.html"><span>Leaderboard</span><span>&rarr;</span></a>
+      <a href="#faq"><span>FAQ</span><span>&rarr;</span></a>
+    </div>
+    <div class="mobile-actions">
+      <a href="ai-assistant.html" class="m-btn m-btn-copilot">🤖 AI Copilot</a>
+      <a href="login.html" class="m-btn m-btn-outline">Log In</a>
+      <a href="login.html" class="m-btn m-btn-primary">Get Started Free &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap" style="width:100%">
+    <div class="hpill"><span class="hdot"></span>India's AI-powered enterprise skill intelligence platform</div>
+    <h1 class="htitle">
+      <span class="htw">Master Skills.</span>
+      <span class="htw">Get Verified.</span>
+      <span class="hta">Reach Your Role.</span>
+    </h1>
+    <p class="hdesc">Skill Intelligence connects enterprise engineers with AI-powered assessments, personalized learning paths, and verified credentials &mdash; built to accelerate your path to Lead AI Architect, Principal Engineer, and beyond.</p>
+    <div class="hact">
+      <a href="login.html" class="bpri">Start Assessing Free &rarr;</a>
+      <a href="assessments.html" class="bout">Explore Assessments</a>
+      <a href="community.html" class="bgh">Join Community</a>
+    </div>
+    <div class="hstats sc">
+      <div><div class="hsn" style="color:var(--acc)">4,200+</div><div class="hsl">Engineers Benchmarked</div></div>
+      <div><div class="hsn" style="color:#818cf8">240+</div><div class="hsl">Verified Skill Tracks</div></div>
+      <div><div class="hsn" style="color:#34d399">94.2%</div><div class="hsl">Assessment Accuracy</div></div>
+      <div><div class="hsn" style="color:var(--cyn)">Top 5%</div><div class="hsl">Avg Benchmark Rank</div></div>
+    </div>
+  </div>
+  <div class="hcalls">
+    <div class="hcall"><div class="hclab">For Engineers</div><div class="hctxt">Get assessed, verified, and matched to your target role with AI precision.</div></div>
+    <div class="hcall"><div class="hclab">For Enterprises</div><div class="hctxt">Discover top-tier, benchmark-verified AI engineers for your teams.</div></div>
+  </div>
+</section>
+
+<div class="pstrip">
+  <div class="wrap">
+    <div class="pstrip-inner">
+      <span class="pstrip-label">Integrated with</span>
+      <div class="pstrip-logos">
+        <a href="https://igot.gov.in" target="_blank" class="pbadge igot-badge">
+          <div class="pbadge-icon">🏛️</div>
+          <div><div class="pbadge-text">iGOT Karmayogi</div><div class="pbadge-sub">GOV.IN ECOSYSTEM</div></div>
+        </a>
+        <div class="pbadge">
+          <div class="pbadge-icon" style="background:rgba(99,102,241,.25);font-size:11px">🎓</div>
+          <div><div class="pbadge-text">NPTEL</div><div class="pbadge-sub">COURSE CREDITS</div></div>
+        </div>
+        <div class="pbadge">
+          <div class="pbadge-icon" style="background:rgba(16,185,129,.2);font-size:11px">📜</div>
+          <div><div class="pbadge-text">NCVET</div><div class="pbadge-sub">CERTIFICATION</div></div>
+        </div>
+        <div class="pbadge">
+          <div class="pbadge-icon" style="background:rgba(56,189,248,.2);font-size:11px">🤝</div>
+          <div><div class="pbadge-text">NIC</div><div class="pbadge-sub">DATA INFRA</div></div>
+        </div>
+        <div class="pbadge">
+          <div class="pbadge-icon" style="background:rgba(168,85,247,.2);font-size:11px">⚡</div>
+          <div><div class="pbadge-text">DigiLocker</div><div class="pbadge-sub">CREDENTIALS</div></div>
+        </div>
+        <div class="pbadge">
+          <div class="pbadge-icon" style="background:rgba(245,158,11,.2);font-size:11px">🔗</div>
+          <div><div class="pbadge-text">DOPT</div><div class="pbadge-sub">GOVT. CERTIFIED</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="fcsec">
+  <div class="wrap">
+    <div class="fcgrid sc">
+      <div class="fc fca">
+        <div class="fctag">For Engineers</div>
+        <div class="fcico">&#x1F9E0;</div>
+        <h3>We Benchmark Your AI Skills</h3>
+        <p>Take industry-standard assessments, earn verified competency scores, and get ranked against 4,200+ enterprise AI engineers nationwide.</p>
+        <a href="assessments.html" class="fcl">Assess My Skills &rarr;</a>
+      </div>
+      <div class="fc fci">
+        <div class="fctag">For Enterprises</div>
+        <div class="fcico">&#x1F3E2;</div>
+        <h3>We Surface Verified Talent</h3>
+        <p>Access a curated pipeline of benchmark-verified AI engineers, filtered by competency level, specialization, and role readiness.</p>
+        <a href="career.html" class="fcl">Explore Talent &rarr;</a>
+      </div>
+      <div class="fc fce">
+        <div class="fctag">For Students</div>
+        <div class="fcico">&#x1F393;</div>
+        <h3>Engineering Intelligence Ecosystem</h3>
+        <p>A guided learning community for AI engineers &mdash; from fundamentals to distributed GPU clusters, with AI-powered recommendations at every step.</p>
+        <a href="community.html" class="fcl">Join Community &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<div class="sbar">
+  <div class="wrap">
+    <div class="sbarl">Platform at a Glance</div>
+    <div class="sgrid sc">
+      <div class="sitem"><div class="snum sa">4,200+</div><div class="sdesc">Engineers Benchmarked</div></div>
+      <div class="sitem"><div class="snum si">240+</div><div class="sdesc">Skill Assessment Tracks</div></div>
+      <div class="sitem"><div class="snum se">50+</div><div class="sdesc">Enterprise Partners</div></div>
+      <div class="sitem"><div class="snum sc">&#x20B9;25Cr+</div><div class="sdesc">Salary Uplift Unlocked</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="sdiv">
+
+<section class="stgsec">
+  <div class="wrap">
+    <div class="stghdr rv">
+      <div class="slabel">Who We Serve</div>
+      <h2 class="stitle" style="font-size:clamp(36px,4vw,54px)">Built for every stage<br>of the AI career journey.</h2>
+      <p class="ssub" style="margin-top:16px">Whether you're a student with a model idea or a lead engineer targeting principal-level &mdash; Skill Intelligence has a path for you.</p>
+    </div>
+    <div class="stggrid sc">
+      <div class="stgc"><div class="stgn">01</div><div class="stgi">&#x1F393;</div><h4>AI/ML Students</h4><p>Turn your coursework into verifiable skills. Build a professional benchmark profile before graduation.</p></div>
+      <div class="stgc"><div class="stgn">02</div><div class="stgi">&#x1F4A1;</div><h4>Junior Engineers</h4><p>Identify skill gaps, follow structured learning paths, and accelerate your progression to senior roles.</p></div>
+      <div class="stgc"><div class="stgn">03</div><div class="stgi">&#x26A1;</div><h4>Senior AI Engineers</h4><p>Benchmark against top 5% nationwide. Get AI-diagnosed gaps and expert recommendations for leadership roles.</p></div>
+      <div class="stgc"><div class="stgn">04</div><div class="stgi">&#x1F3DB;&#xFE0F;</div><h4>Enterprise Hiring Teams</h4><p>Discover verified, high-potential engineers with proven competency scores &mdash; not just resumes.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="stpsec">
+  <div class="wrap">
+    <div class="stphdr rv">
+      <div class="slabel">How It Works</div>
+      <h2 class="stitle" style="font-size:clamp(36px,4vw,54px)">From assessment to<br>your target role in 5 steps.</h2>
+    </div>
+    <div class="stptrk sc">
+      <div class="stpitem"><div class="stpcir">01</div><div class="stptit">Create Your Profile</div><div class="stpdsc">Set up your engineer profile with your current role, specializations, and target career goal.</div></div>
+      <div class="stpitem"><div class="stpcir">02</div><div class="stptit">Take Assessments</div><div class="stpdsc">Complete AI-proctored, industry-standard assessments across your technology stack.</div></div>
+      <div class="stpitem stpact"><div class="stpcir">03</div><div class="stptit">Get AI Diagnostics</div><div class="stpdsc">Receive a neural career audit &mdash; verified strengths, skill gaps, and ETA to your target role.</div></div>
+      <div class="stpitem"><div class="stpcir">04</div><div class="stptit">Follow Learning Path</div><div class="stpdsc">Get curated courses, labs, and projects aligned to your exact competency gaps.</div></div>
+      <div class="stpitem"><div class="stpcir">05</div><div class="stptit">Earn &amp; Grow</div><div class="stpdsc">Earn verified credentials, climb the leaderboard, and unlock enterprise career opportunities.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="whysec">
+  <div class="wrap">
+    <div class="whyin">
+      <div class="rv">
+        <div class="slabel">Why Skill Intelligence</div>
+        <h2 class="stitle whytit">Everything you need to assess and grow.</h2>
+        <p class="whydsc">Skill Intelligence is the only platform combining AI-powered skill benchmarking, personalized learning infrastructure, and a verified engineer community in one place.</p>
+      </div>
+      <div class="whygrd sc">
+        <div class="whyc"><div class="whyci">&#x1F52C;</div><h5>Verified Assessments</h5><p>Every assessment is AI-proctored and benchmarked against 4,200+ engineers.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F3AF;</div><h5>Personalized AI Path</h5><p>Your learning plan is generated from your exact diagnostic gaps, not generic curricula.</p></div>
+        <div class="whyc whyca"><div class="whyci">&#x26A1;</div><h5>AI Career Diagnostics</h5><p>Neural role-fit scoring, ETA to readiness, and instant skill audit simulations.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F91D;</div><h5>Engineer Community</h5><p>A thriving network of AI engineers, mentors, and operators helping each other level up.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F4CA;</div><h5>Progress Analytics</h5><p>Track skill velocity, assessment history, streak analytics, and benchmark percentile.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F510;</div><h5>Enterprise-Grade Security</h5><p>Your verified profile and credentials are cryptographically secured and shareable.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F3C6;</div><h5>Live Leaderboards</h5><p>Compete nationally, earn Karma XP, and rise through benchmark tiers.</p></div>
+        <div class="whyc"><div class="whyci">&#x1F4C4;</div><h5>AI Dossier Export</h5><p>Generate a certified AI engineer portfolio with one click &mdash; shareable and printable.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="engsec">
+  <div class="wrap">
+    <div class="engin">
+      <div class="rv">
+        <div class="slabel">For AI Engineers</div>
+        <h2 class="stitle" style="font-size:clamp(36px,4vw,52px)">Built Especially for<br><span style="color:var(--acc)">Enterprise<br>AI Engineers.</span></h2>
+        <p class="ssub" style="margin-top:18px;font-size:14px">Engineering at scale isn't easy. Skill Intelligence gives engineers access to benchmark assessments, AI diagnostics, expert learning paths, mentorship connections, and a community of ambitious builders &mdash; all in one platform.</p>
+        <div class="etags">
+          <div class="etag"><span class="dot da"></span> AI-First Platform</div>
+          <div class="etag"><span class="dot di"></span> India-Focused</div>
+          <div class="etag"><span class="dot de"></span> Enterprise-Grade</div>
+        </div>
+      </div>
+      <ul class="flist">
+        <li class="fli flia"><span class="fln">01</span><span class="flt">Skill Assessments</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">02</span><span class="flt">AI Learning Paths</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">03</span><span class="flt">Career Diagnostics</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">04</span><span class="flt">Engineer Networking</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">05</span><span class="flt">Mentorship Access</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">06</span><span class="flt">Mock Interviews</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">07</span><span class="flt">Live Leaderboard</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">08</span><span class="flt">Tech Showcases</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">09</span><span class="flt">Business &amp; Leadership Skills</span><span class="flin"></span></li>
+        <li class="fli"><span class="fln">10</span><span class="flt">AI Dossier &amp; Resume Builder</span><span class="flin"></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="igot-sec" id="igot">
+  <div class="wrap">
+    <div class="igot-header rv">
+      <div class="igot-title-block">
+        <div class="slabel">Government Integration</div>
+        <h2 class="stitle" style="font-size:clamp(34px,4vw,52px)">Powered by the<br><span style="color:#fb923c">iGOT Karmayogi</span><br>Ecosystem.</h2>
+        <p class="ssub" style="margin-top:18px;font-size:14px">Skill Intelligence is deeply integrated with India's national capacity building platform &mdash; Mission Karmayogi. Your assessments, competencies, and certifications sync directly with the iGOT ecosystem, making your verified skills recognizable across government and enterprise.</p>
+      </div>
+      <div class="igot-logo-block">
+        <div class="igot-emblem">&#x1F3DB;&#xFE0F;</div>
+        <div>
+          <div class="igot-logo-name">iGOT Karmayogi</div>
+          <div class="igot-logo-sub">Mission Karmayogi &bull; Gov.in</div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);font-family:'Fira Code',monospace;font-size:9px;color:#fb923c;letter-spacing:.04em">&#x2714; DOPT VERIFIED</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);font-family:'Fira Code',monospace;font-size:9px;color:#34d399;letter-spacing:.04em">&#x2714; NCVET ALIGNED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="igot-grid sc">
+      <div class="igot-card">
+        <div class="igot-card-num">01 &mdash; COMPETENCY FRAMEWORK</div>
+        <div class="igot-card-icon">&#x1F4CB;</div>
+        <h5>iCBF Competency Alignment</h5>
+        <p>Every Skill Intelligence assessment is mapped to the iGOT Competency Based Framework (iCBF) &mdash; the government's standard for 2.0 crore+ civil servants and enterprise professionals.</p>
+        <span class="igot-card-tag">&#x26A1; AUTO-MAPPED</span>
+      </div>
+      <div class="igot-card">
+        <div class="igot-card-num">02 &mdash; COURSE CATALOG</div>
+        <div class="igot-card-icon">&#x1F4DA;</div>
+        <h5>iGOT Course Credit Sync</h5>
+        <p>Courses completed on Skill Intelligence are automatically credited to your iGOT Karmayogi profile. Earn dual recognition &mdash; both on our platform and in the national learning registry.</p>
+        <span class="igot-card-tag">&#x1F501; LIVE SYNC</span>
+      </div>
+      <div class="igot-card">
+        <div class="igot-card-num">03 &mdash; CREDENTIAL BRIDGE</div>
+        <div class="igot-card-icon">&#x1F510;</div>
+        <h5>DigiLocker Certificate Vault</h5>
+        <p>All verified certifications are issued directly to your DigiLocker account via the iGOT API &mdash; secure, government-recognized, and instantly shareable with employers and institutions.</p>
+        <span class="igot-card-tag">&#x1F4CB; DIGILOCKER</span>
+      </div>
+      <div class="igot-card">
+        <div class="igot-card-num">04 &mdash; SPV RECOGNITION</div>
+        <div class="igot-card-icon">&#x1F3DB;&#xFE0F;</div>
+        <h5>Civil Servant Pathway</h5>
+        <p>Government employees on Mission Karmayogi can use Skill Intelligence assessments to fulfil their SPV (Special Purpose Vehicle) annual learning mandates and role-based competency requirements.</p>
+        <span class="igot-card-tag">&#x1F3DB;&#xFE0F; MISSION KARMAYOGI</span>
+      </div>
+    </div>
+
+    <div class="igot-steps-track">
+      <div class="igot-steps-line"></div>
+      <div class="igot-step-col">
+        <div class="igot-step-cir">01</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:#0f172a;margin-bottom:4px">Register on SIH</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">Link your iGOT Gov.in account via OAuth</div>
+        </div>
+      </div>
+      <div class="igot-step-col">
+        <div class="igot-step-cir">02</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:#0f172a;margin-bottom:4px">Take Assessments</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">Complete skill tracks mapped to iCBF roles</div>
+        </div>
+      </div>
+      <div class="igot-step-col">
+        <div class="igot-step-cir igot-step-cir-act">03</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:#0f172a;margin-bottom:4px">Auto-Sync</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">Scores push to iGOT profile in real-time</div>
+        </div>
+      </div>
+      <div class="igot-step-col">
+        <div class="igot-step-cir">04</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:#0f172a;margin-bottom:4px">Earn Credentials</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">Dual-certified on SIH + DigiLocker</div>
+        </div>
+      </div>
+      <div class="igot-step-col">
+        <div class="igot-step-cir">05</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:#0f172a;margin-bottom:4px">Fulfil SPV Mandate</div>
+          <div style="font-size:12px;color:#64748b;line-height:1.5">Annual Karmayogi learning hours met</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="igot-bottom">
+      <p class="igot-bottom-text">
+        <strong>Mission Karmayogi &times; Skill Intelligence</strong> &mdash; India's first AI-powered skill assessment platform natively integrated with the national civil servant capacity building ecosystem. Your skills, verified by AI. Recognised by Government.
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <a href="https://igot.gov.in" target="_blank" class="igot-btn">Explore iGOT &#x1F3DB;&#xFE0F;</a>
+        <a href="login.html" class="bout" style="font-size:13px;padding:10px 22px">Link My Account</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="tstsec">
+  <div class="wrap">
+    <div class="tsthdr rv">
+      <div class="slabel">Social Proof</div>
+      <h2 class="stitle" style="font-size:clamp(34px,4vw,52px)">Trusted by engineers,<br>teams &amp; students.</h2>
+    </div>
+    <div class="tsttabs">
+      <div class="tsttab on" onclick="switchTab(this)">Engineers</div>
+      <div class="tsttab" onclick="switchTab(this)">Enterprises</div>
+      <div class="tsttab" onclick="switchTab(this)">Students</div>
+    </div>
+    <div class="tstgrd sc">
+      <div class="tstc"><blockquote>"Skill Intelligence connected me with my target role within 6 weeks. The AI diagnostics told me exactly what to fix."</blockquote><div class="tsta"><div class="av ava">AM</div><div><div class="aname">Alex Morgan</div><div class="arole">Senior AI Engineer &mdash; <span style="color:var(--acc)">ENGINEER</span></div></div></div></div>
+      <div class="tstc"><blockquote>"The quality of engineers on Skill Intelligence is exceptional. Every verified profile comes with proven benchmark scores &mdash; not just a resume."</blockquote><div class="tsta"><div class="av avi">PS</div><div><div class="aname">Priya Sharma</div><div class="arole">VP Engineering &mdash; <span style="color:#818cf8">ENTERPRISE</span></div></div></div></div>
+      <div class="tstc"><blockquote>"As a student, Skill Intelligence gave me a structured path and the confidence to show my skills against experienced engineers."</blockquote><div class="tsta"><div class="av ave">RV</div><div><div class="aname">Rahul Verma</div><div class="arole">Final Year B.Tech &mdash; <span style="color:#34d399">STUDENT</span></div></div></div></div>
+      <div class="tstc"><blockquote>"I found my mentor and my first enterprise opportunity through Skill Intelligence. The only platform built for serious engineers."</blockquote><div class="tsta"><div class="av avt">SK</div><div><div class="aname">Sneha Kumar</div><div class="arole">ML Engineer &mdash; <span style="color:#2dd4bf">ENGINEER</span></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="ctasec">
+  <div class="wrap">
+    <div class="ctacard">
+      <div class="ctain">
+        <div>
+          <h2 class="stitle ctatit">Start benchmarking your AI skills today.</h2>
+          <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-top:10px;max-width:520px;line-height:1.6">Join 4,200+ engineers across India getting verified, upskilled, and placed into tier-1 AI roles.</p>
+        </div>
+        <div class="ctaact">
+          <a href="login.html" class="ctapri">Join as Engineer &rarr;</a>
+          <a href="assessments.html" class="ctaout">Explore Assessments</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sdiv">
+
+<section class="faqsec" id="faq">
+  <div class="wrap">
+    <div class="faqin">
+      <div class="rv">
+        <div class="slabel">FAQ</div>
+        <h2 class="stitle" style="font-size:clamp(34px,3.5vw,48px)">Frequently asked questions.</h2>
+        <p class="ssub" style="margin-top:16px">Everything you need to know about Skill Intelligence.</p>
+        <div style="margin-top:32px"><a href="login.html" class="bpri" style="font-size:13.5px;padding:11px 24px">Get Started Free &rarr;</a></div>
+      </div>
+      <div class="faqlist">
+        <div class="faqi op"><div class="faqq" onclick="tFaq(this)"><h5>How does the AI skill assessment work?</h5><div class="faqtgl">&minus;</div></div><div class="faqa">Our AI-proctored assessments test domain knowledge, applied reasoning, and hands-on proficiency across your selected skill tracks. Results are benchmarked against 4,200+ enterprise engineers nationwide to give you a verified competency score and peer percentile ranking.</div></div>
+        <div class="faqi"><div class="faqq" onclick="tFaq(this)"><h5>What is the AI Career Diagnostics panel?</h5><div class="faqtgl">+</div></div><div class="faqa">The AI Career Diagnostics panel runs a neural evaluation of your verified skills against your target role requirements. It produces an overall readiness score (0&ndash;100%), identifies your top strengths and high-priority gaps, and estimates time-to-readiness.</div></div>
+        <div class="faqi"><div class="faqq" onclick="tFaq(this)"><h5>Are certifications industry-recognized?</h5><div class="faqtgl">+</div></div><div class="faqa">Yes. Our certifications are recognized by our network of 50+ enterprise partners across India's top AI and tech companies. Each certificate includes a unique verification ID and shareable URL.</div></div>
+        <div class="faqi"><div class="faqq" onclick="tFaq(this)"><h5>Is Skill Intelligence free to use?</h5><div class="faqtgl">+</div></div><div class="faqa">Core features including profile creation, basic skill assessments, and community access are free. Advanced features like AI Career Diagnostics, full benchmark analytics, personalized AI learning paths, and dossier export are available under enterprise and professional plans.</div></div>
+        <div class="faqi"><div class="faqq" onclick="tFaq(this)"><h5>How does the leaderboard ranking work?</h5><div class="faqtgl">+</div></div><div class="faqa">Your rank is computed from weighted assessment scores, Karma XP (earned through endorsements, streak, and community activity), and verified competency breadth. Rankings are refreshed weekly and segmented nationally and by specialization track.</div></div>
+        <div class="faqi"><div class="faqq" onclick="tFaq(this)"><h5>Can enterprises use Skill Intelligence to hire?</h5><div class="faqtgl">+</div></div><div class="faqa">Absolutely. Enterprises access a verified talent pool filtered by benchmark score, role-readiness percentage, specialization (LLMs, MLOps, Vector DBs, etc.), and location. Our enterprise dashboard provides direct candidate matching and outreach tools.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ftin">
+      <div>
+        <a href="landing.html" class="nbrand" style="margin-bottom:12px;display:inline-flex"><div class="nmark">SI</div><span class="nname">Skill Intelligence</span></a>
+        <p class="ftbt">India's AI-powered enterprise skill assessment and career intelligence platform. Benchmark. Verify. Grow.</p>
+      </div>
+      <div class="ftc">
+        <h6>Platform</h6>
+        <a href="assessments.html">Assessments</a>
+        <a href="learning-path.html">Learning Paths</a>
+        <a href="courses.html">Courses</a>
+        <a href="profile.html">My Profile</a>
+        <a href="progress.html">Analytics</a>
+      </div>
+      <div class="ftc">
+        <h6>Community</h6>
+        <a href="community.html">Discussion Board</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="career.html">Career Board</a>
+        <a href="certifications.html">Certifications</a>
+        <a href="ai-assistant.html">AI Copilot</a>
+      </div>
+      <div class="ftc">
+        <h6>Company</h6>
+        <a href="#">About Us</a>
+        <a href="#">For Enterprises</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="settings.html">Settings</a>
+      </div>
+    </div>
+    <div class="ftbot">
+      <span class="ftcopy">&copy; 2026 Skill Intelligence Platform. All rights reserved.</span>
+      <div class="ftlks"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let s = 0, l = 0;
+  let d = Math.min(window.devicePixelRatio || 1, 2);
+  let c = [];
+  const m = '37, 99, 235';
+  const u = '10, 10, 10';
+  const mouse = { x: -9999, y: -9999 };
+  let rafId = 0;
+  const density = 60;
+
+  const resize = () => {
+    s = window.innerWidth;
+    l = window.innerHeight;
+    d = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = s * d;
+    canvas.height = l * d;
+    canvas.style.width = `${s}px`;
+    canvas.style.height = `${l}px`;
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+
+    const count = Math.max(28, Math.floor((s * l) / (18000 - 120 * density)));
+    c = Array.from({ length: count }, () => ({
+      x: Math.random() * s,
+      y: Math.random() * l,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r: 1.6 * Math.random() + 1,
+      glow: Math.random() > 0.82,
+    }));
+  };
+
+  const render = () => {
+    ctx.clearRect(0, 0, s, l);
+
+    for (let e = 0; e < c.length; e++) {
+      const t = c[e];
+      t.x += t.vx;
+      t.y += t.vy;
+
+      if (mouse.x > 0 && mouse.y > 0) {
+        const dx = t.x - mouse.x;
+        const dy = t.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 140 && dist > 0) {
+          const repel = (140 - dist) / 140;
+          t.x += (dx / dist) * repel * 0.8;
+          t.y += (dy / dist) * repel * 0.8;
+        }
+      }
+
+      if (t.x < 0 || t.x > s) t.vx *= -1;
+      if (t.y < 0 || t.y > l) t.vy *= -1;
+      t.x = Math.max(0, Math.min(s, t.x));
+      t.y = Math.max(0, Math.min(l, t.y));
+    }
+
+    for (let e = 0; e < c.length; e++) {
+      for (let t = e + 1; t < c.length; t++) {
+        const a = c[e], b = c[t];
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (dist < 130) {
+          const alpha = (1 - dist / 130) * 0.14;
+          ctx.strokeStyle = `rgba(${u}, ${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    if (mouse.x > 0 && mouse.y > 0) {
+      for (let e of c) {
+        const dist = Math.hypot(e.x - mouse.x, e.y - mouse.y);
+        if (dist < 180) {
+          const alpha = (1 - dist / 180) * 0.4;
+          ctx.strokeStyle = `rgba(${m}, ${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(e.x, e.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (let e of c) {
+      if (e.glow) {
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r + 3, 0, 2 * Math.PI);
+        ctx.fillStyle = `rgba(${m}, 0.12)`;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r, 0, 2 * Math.PI);
+      ctx.fillStyle = e.glow ? `rgba(${m}, 0.9)` : `rgba(${u}, 0.35)`;
+      ctx.fill();
+    }
+
+    rafId = requestAnimationFrame(render);
+  };
+
+  resize();
+  render();
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseleave', () => {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(rafId);
+    else rafId = requestAnimationFrame(render);
+  });
+})();
+
+function tFaq(el){const i=el.closest('.faqi'),op=i.classList.contains('op');
+  document.querySelectorAll('.faqi').forEach(x=>{x.classList.remove('op');x.querySelector('.faqtgl').textContent='+'});
+  if(!op){i.classList.add('op');el.querySelector('.faqtgl').textContent='\u2212'}}
+
+document.querySelectorAll('.fli').forEach(i=>i.addEventListener('click',()=>{
+  document.querySelectorAll('.fli').forEach(x=>x.classList.remove('flia'));i.classList.add('flia')}));
+
+function switchTab(el){document.querySelectorAll('.tsttab').forEach(t=>t.classList.remove('on'));el.classList.add('on')}
+
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv,.sc').forEach(el=>obs.observe(el));
+
+(function() {
+  const toggleBtn = document.getElementById('nav-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (!toggleBtn || !mobileMenu) return;
+
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    toggleBtn.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const willOpen = !mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open', willOpen);
+    toggleBtn.classList.toggle('active', willOpen);
+    toggleBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    document.body.style.overflow = willOpen ? 'hidden' : '';
+  });
+
+  mobileMenu.addEventListener('click', (e) => {
+    if (e.target === mobileMenu) closeMenu();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900 && mobileMenu.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+
+
+.assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.assessment-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.assessment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--brand-indigo-bright);
+}
+
+.assessment-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.assessment-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(79, 70, 229, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #4f46e5;
+  border: 1px solid rgba(79, 70, 229, 0.22);
+}
+
+.assessment-card h3 {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.assessment-card p {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  min-height: 54px;
+}
+
+.assessment-meta-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.assessment-footer-row {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quiz-box {
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin: 18px 0;
+  border: 1px solid #e2e8f0;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.quiz-option:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.quiz-option.selected {
+  border-color: #4f46e5;
+  background: rgba(79, 70, 229, 0.08);
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+@media (max-width: 1200px) {
+  .assessment-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .assessment-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .assessment-card { padding: 18px 16px; }
+  .assessment-card p { min-height: auto; }
+  .assessment-footer-row { flex-direction: column; align-items: stretch; gap: 10px; }
+  .assessment-footer-row .btn { width: 100%; text-align: center; justify-content: center; }
+  .quiz-box { padding: 14px; }
+  .quiz-option { padding: 12px 14px; font-size: 13px; }
+}
+

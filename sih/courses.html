@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses Catalog | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="courses.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link active">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">▤ Enterprise Course Directory</div>
+          <h1>Explore Advanced AI & Engineering Courses</h1>
+          <p>Over 120+ specialized deep-dive masterclasses, verified interactive labs, and industry capstones designed to accelerate your engineering journey.</p>
+        </div>
+        <div class="hero-actions">
+          <a href="recommendations.html" class="btn btn-white">View AI Recommendations</a>
+        </div>
+      </section>
+
+      <div class="course-filter-bar">
+        <div class="category-pills">
+          <button class="pill-btn active" onclick="filterCourses('all', this)">All Courses (6)</button>
+          <button class="pill-btn" onclick="filterCourses('genai', this)">Generative AI & LLMs</button>
+          <button class="pill-btn" onclick="filterCourses('deeplearning', this)">Deep Learning & PyTorch</button>
+          <button class="pill-btn" onclick="filterCourses('mlops', this)">MLOps & Kubernetes</button>
+          <button class="pill-btn" onclick="filterCourses('arch', this)">System Architecture</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="course-search-box" oninput="handleCourseSearch(this.value)" placeholder="Search courses..." style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 8px 14px; border-radius: var(--radius-md); font-size: 12.5px; color: var(--text-main); outline: none; width: 180px;">
+          <select id="course-sort-select" onchange="handleSortCourses(this.value)" style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 8px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 600; color: var(--text-main); outline: none; cursor: pointer;">
+            <option value="match">Sort: Highest Role Match</option>
+            <option value="rating">Sort: Highest Rated</option>
+            <option value="duration">Sort: Longest Duration</option>
+            <option value="reviews">Sort: Most Reviews</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="course-grid" id="course-grid-container">
+
+        <div class="course-card" data-cat="genai">
+          <div class="course-cover">
+            <span>🤖</span>
+            <span class="course-match-tag">✦ 98% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">Generative AI</span>
+            <h3>System Design for Generative AI Applications</h3>
+            <p>Architect low-latency enterprise RAG pipelines, vector caching layers, semantic routers, and multi-agent coordination frameworks.</p>
+            <div class="course-meta">
+              <span>⏱ 14 Hours • 8 Labs</span>
+              <span>⭐ 4.9 (1,240 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('System Design for Generative AI Applications', 'Generative AI', '14 Hours', '4.9', 'Architect low-latency enterprise RAG pipelines, vector caching layers, semantic routers, and multi-agent coordination frameworks.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('System Design for Generative AI Applications')">Enroll Now</button>
+          </div>
+        </div>
+
+        <div class="course-card" data-cat="mlops">
+          <div class="course-cover cyan">
+            <span>☸️</span>
+            <span class="course-match-tag">✦ 94% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">MLOps & Cloud</span>
+            <h3>Production Kubernetes for AI Workloads</h3>
+            <p>Deploy high-throughput PyTorch model inference clusters with GPU device partitioning, Triton Server, and queue-depth autoscaling.</p>
+            <div class="course-meta">
+              <span>⏱ 18 Hours • 12 Labs</span>
+              <span>⭐ 4.8 (890 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('Production Kubernetes for AI Workloads', 'MLOps & Cloud', '18 Hours', '4.8', 'Deploy high-throughput PyTorch model inference clusters with GPU device partitioning, Triton Server, and queue-depth autoscaling.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('Production Kubernetes for AI Workloads')">Enroll Now</button>
+          </div>
+        </div>
+
+        <div class="course-card" data-cat="deeplearning">
+          <div class="course-cover purple">
+            <span>⚡</span>
+            <span class="course-match-tag">✦ 95% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">Deep Learning</span>
+            <h3>FlashAttention-2 & Custom Triton CUDA Kernels</h3>
+            <p>Master GPU memory hierarchy, SRAM tiling, fused operators, and write high-performance custom kernels using OpenAI Triton.</p>
+            <div class="course-meta">
+              <span>⏱ 22 Hours • 10 Labs</span>
+              <span>⭐ 4.9 (610 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('FlashAttention-2 & Custom Triton CUDA Kernels', 'Deep Learning', '22 Hours', '4.9', 'Master GPU memory hierarchy, SRAM tiling, fused operators, and write high-performance custom kernels using OpenAI Triton.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('FlashAttention-2 & Custom Triton CUDA Kernels')">Enroll Now</button>
+          </div>
+        </div>
+
+        <div class="course-card" data-cat="arch">
+          <div class="course-cover emerald">
+            <span>🗄️</span>
+            <span class="course-match-tag">✦ 92% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">System Architecture</span>
+            <h3>Vector Databases & Multimodal RAG Systems</h3>
+            <p>Scale dense embeddings across Qdrant & Milvus clusters with HNSW quantization, cross-encoder reranking, and multimodal indexing.</p>
+            <div class="course-meta">
+              <span>⏱ 16 Hours • 6 Labs</span>
+              <span>⭐ 4.9 (1,050 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('Vector Databases & Multimodal RAG Systems', 'System Architecture', '16 Hours', '4.9', 'Scale dense embeddings across Qdrant & Milvus clusters with HNSW quantization, cross-encoder reranking, and multimodal indexing.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('Vector Databases & Multimodal RAG Systems')">Enroll Now</button>
+          </div>
+        </div>
+
+        <div class="course-card" data-cat="genai">
+          <div class="course-cover amber">
+            <span>🎯</span>
+            <span class="course-match-tag">✦ 89% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">Generative AI</span>
+            <h3>RLHF & Direct Preference Optimization (DPO)</h3>
+            <p>Align language models using reward modeling, PPO algorithms, DPO loss functions, and synthetic preference data generation pipelines.</p>
+            <div class="course-meta">
+              <span>⏱ 20 Hours • 7 Labs</span>
+              <span>⭐ 4.8 (730 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('RLHF & Direct Preference Optimization (DPO)', 'Generative AI', '20 Hours', '4.8', 'Align language models using reward modeling, PPO algorithms, DPO loss functions, and synthetic preference data generation pipelines.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('RLHF & Direct Preference Optimization (DPO)')">Enroll Now</button>
+          </div>
+        </div>
+
+        <div class="course-card" data-cat="deeplearning">
+          <div class="course-cover">
+            <span>🧠</span>
+            <span class="course-match-tag">✦ 97% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">Deep Learning</span>
+            <h3>Deep Learning & Neural Architectures in PyTorch</h3>
+            <p>Comprehensive mastery of backpropagation, tensor mechanics, CNNs, Transformers, and custom loss functions with PyTorch 2.x.</p>
+            <div class="course-meta">
+              <span>⏱ 24 Hours • 15 Labs</span>
+              <span>⭐ 5.0 (2,400 reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('Deep Learning & Neural Architectures in PyTorch', 'Deep Learning', '24 Hours', '5.0', 'Comprehensive mastery of backpropagation, tensor mechanics, CNNs, Transformers, and custom loss functions with PyTorch 2.x.')">Preview</button>
+            <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('Deep Learning & Neural Architectures in PyTorch')">Enroll Now</button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="course-modal">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <span class="badge badge-indigo" id="modal-course-cat">Category</span>
+          <h2 id="modal-course-title" style="margin-top: 6px; font-size: 19px;">Course Title</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeCourseModal()">✕</button>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <p id="modal-course-desc" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">Description text...</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: var(--bg-elevated); padding: 14px; border-radius: var(--radius-md); margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">Duration</div>
+            <strong id="modal-course-duration">14 Hours</strong>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">Rating</div>
+            <strong id="modal-course-rating">⭐ 4.9</strong>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">Certificate</div>
+            <strong>Verified AI Credential</strong>
+          </div>
+        </div>
+
+        <h4 style="font-size: 14px; margin-bottom: 8px;">What You Will Learn</h4>
+        <ul style="font-size: 13px; color: var(--text-secondary); padding-left: 20px; line-height: 1.6;">
+          <li>Production-ready architectural patterns with real code repositories</li>
+          <li>Hands-on GPU development environments pre-configured in cloud labs</li>
+          <li>End-of-course capstone portfolio project for industry verification</li>
+        </ul>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+        <button class="btn btn-secondary" onclick="closeCourseModal()">Close</button>
+        <button class="btn btn-primary" id="modal-enroll-btn" onclick="confirmModalEnroll()">Enroll in Course</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let currentSelectedCourse = '';
+    let currentSelectedCourseId = 0;
+    let dbCourses = [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let sortMode = 'match';
+
+    async function loadLiveCourses() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getCourses();
+        if (res && res.status === 'success' && res.data && res.data.length > 0) {
+          dbCourses = res.data;
+          renderCourses();
+        }
+      } catch (err) {
+        console.warn('Courses load error:', err);
+      }
+    }
+
+    function renderCourses() {
+      const container = document.getElementById('course-grid-container');
+      if (!container) return;
+
+      let filtered = dbCourses.filter(c => {
+        const matchesCat = activeCategory === 'all' || c.category === activeCategory;
+        const matchesSearch = searchQuery === '' || 
+          c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          c.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      if (sortMode === 'match') {
+        filtered.sort((a, b) => (b.match_pct || 0) - (a.match_pct || 0));
+      } else if (sortMode === 'rating') {
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      } else if (sortMode === 'duration') {
+        filtered.sort((a, b) => (b.duration_hours || 0) - (a.duration_hours || 0));
+      } else if (sortMode === 'reviews') {
+        filtered.sort((a, b) => (b.reviews_count || 0) - (a.reviews_count || 0));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);">
+            <span style="font-size: 32px; display: block; margin-bottom: 8px;">🔍</span>
+            <strong style="font-size: 16px; color: #fff;">No Courses Found</strong>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Try searching for a different keyword or resetting filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => `
+        <div class="course-card" data-cat="${c.category}">
+          <div class="course-cover ${c.category === 'mlops' ? 'cyan' : (c.category === 'deeplearning' ? 'purple' : '')}">
+            <span>${c.icon_emoji || '🤖'}</span>
+            <span class="course-match-tag">✦ ${c.match_pct}% Match</span>
+          </div>
+          <div class="course-body">
+            <span class="course-category">${c.category.toUpperCase()}</span>
+            <h3>${c.title}</h3>
+            <p>${c.description}</p>
+            <div class="course-meta">
+              <span>⏱ ${c.duration_hours} Hours • ${c.labs_count} Labs</span>
+              <span>⭐ ${c.rating} (${c.reviews_count} reviews)</span>
+            </div>
+          </div>
+          <div class="course-footer">
+            <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openCourseModal('${c.title.replace(/'/g, "\\'")}', '${c.category}', '${c.duration_hours} Hours', '${c.rating}', '${c.description.replace(/'/g, "\\'")}', ${c.id})">Preview</button>
+            ${c.is_enrolled ? 
+              `<button class="btn btn-secondary btn-sm" style="flex: 1; opacity: 0.9; border-color: var(--brand-emerald); color: var(--brand-emerald);" disabled>Enrolled ✓ (${c.enrollment_progress}%)</button>` : 
+              `<button class="btn btn-primary btn-sm" style="flex: 1;" onclick="enrollCourse('${c.title.replace(/'/g, "\\'")}', ${c.id}, this)">Enroll Now</button>`
+            }
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCourses(cat, btn) {
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = cat;
+      renderCourses();
+    }
+
+    function handleCourseSearch(val) {
+      searchQuery = val.trim();
+      renderCourses();
+    }
+
+    function handleSortCourses(val) {
+      sortMode = val;
+      renderCourses();
+    }
+
+    function openCourseModal(title, cat, duration, rating, desc, id = 0) {
+      currentSelectedCourse = title;
+      currentSelectedCourseId = id;
+      document.getElementById('modal-course-title').textContent = title;
+      document.getElementById('modal-course-cat').textContent = cat.toUpperCase();
+      document.getElementById('modal-course-duration').textContent = duration;
+      document.getElementById('modal-course-rating').textContent = `⭐ ${rating}`;
+      document.getElementById('modal-course-desc').textContent = desc;
+
+      const course = dbCourses.find(c => c.id === id);
+      const enrollBtn = document.getElementById('modal-enroll-btn');
+      if (enrollBtn && course) {
+        if (course.is_enrolled) {
+          enrollBtn.textContent = 'Enrolled ✓ (Active)';
+          enrollBtn.disabled = true;
+          enrollBtn.className = 'btn btn-secondary';
+        } else {
+          enrollBtn.textContent = 'Enroll in Course';
+          enrollBtn.disabled = false;
+          enrollBtn.className = 'btn btn-primary';
+        }
+      }
+
+      document.getElementById('course-modal').classList.add('active');
+    }
+
+    function closeCourseModal() {
+      document.getElementById('course-modal').classList.remove('active');
+    }
+
+    async function confirmModalEnroll() {
+      await enrollCourse(currentSelectedCourse, currentSelectedCourseId);
+      closeCourseModal();
+    }
+
+    async function enrollCourse(title, courseId = 0, btn = null) {
+      if (window.api) {
+        const res = await window.api.enrollCourse(courseId, title);
+        if (res && res.status === 'success') {
+          if (btn) {
+            btn.textContent = 'Enrolled ✓ (0%)';
+            btn.className = 'btn btn-secondary btn-sm';
+            btn.disabled = true;
+            btn.style.color = 'var(--brand-emerald)';
+            btn.style.borderColor = 'var(--brand-emerald)';
+          }
+          await loadLiveCourses();
+          if (window.syncGlobalHeader) window.syncGlobalHeader();
+          window.showToast('Successfully Enrolled!', `You are now enrolled in "${title}". (+50 Karma XP)`, '🎓');
+          return;
+        }
+      }
+      window.showToast('Enrolled!', `You are enrolled in "${title}".`, '🎓');
+    }
+
+    window.addEventListener('si:data-changed', loadLiveCourses);
+    document.addEventListener('DOMContentLoaded', loadLiveCourses);
+  </script>
+</body>
+</html>

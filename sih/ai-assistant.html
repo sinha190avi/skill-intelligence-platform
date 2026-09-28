@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Copilot Assistant | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="ai-assistant.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link active">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <div class="chat-wrapper">
+        
+
+        <div class="chat-header">
+          <div class="chat-status-left">
+            <div class="bot-avatar">🤖</div>
+            <div class="bot-info">
+              <h3>Skill Intelligence Copilot</h3>
+              <p>Online • SI-Reasoning v4.2 Active</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary btn-sm" onclick="clearChat()">Clear Conversation</button>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages-container">
+
+          <div class="message-row assistant">
+            <div class="message-bubble">
+              <p>Hello <strong>Alex</strong>! 👋 I am your personalized Skill Intelligence Copilot.</p>
+              <p style="margin-top: 8px;">I have full context on your profile (Senior AI/ML Engineer), your target role (<strong>Lead AI Architect</strong>, 78% Readiness), and your active streak (<strong>14 Days</strong> 🔥).</p>
+              <p style="margin-top: 8px;">How can I accelerate your learning today? You can ask me to explain algorithms, review code, or design study roadmaps.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 0 24px 10px;">
+          <div class="typing-indicator" id="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">Copilot is generating response...</span>
+          </div>
+        </div>
+
+        <div class="prompt-chips-row">
+          <button class="chip-btn" onclick="sendPrompt('Analyze my top skill gaps for Lead AI Architect')">🎯 Analyze My Skill Gaps</button>
+          <button class="chip-btn" onclick="sendPrompt('Explain FlashAttention-2 vs Standard Attention in PyTorch')">⚡ Explain FlashAttention-2</button>
+          <button class="chip-btn" onclick="sendPrompt('Generate a 30-day study plan for Distributed MLOps')">📅 30-Day Study Plan</button>
+          <button class="chip-btn" onclick="sendPrompt('What skill assessment should I take next?')">📝 Next Assessment</button>
+        </div>
+
+        <form class="chat-input-area" onsubmit="handleUserSubmit(event)">
+          <input type="text" class="chat-input-box" id="user-input-box" placeholder="Ask anything about PyTorch, Transformers, MLOps, System Design..." autocomplete="off">
+          <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 12px 24px;">Send ➔</button>
+        </form>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const BOT_FALLBACK = {
+      gaps: `
+        <p>📊 <strong>Skill Gap Analysis for Lead AI Architect:</strong></p>
+        <p style="margin-top: 6px;">Based on your current 78% readiness score, your top 2 priority areas are:</p>
+        <ul style="margin: 8px 0; padding-left: 20px;">
+          <li><strong>Distributed GPU Scheduling (Gap: -26%):</strong> DeepSpeed ZeRO-3 memory partitioning and Megatron-LM tensor parallelism.</li>
+          <li><strong>Enterprise AI Governance & Red Teaming (Gap: -18%):</strong> Safety guardrails, prompt injection mitigation, and audit compliance.</li>
+        </ul>
+        <p style="margin-top: 6px;">💡 <em>Recommendation:</em> Start with <a href="courses.html" style="font-weight:700; color:var(--primary-500);">Production Kubernetes for AI Workloads</a> to bridge this gap by +12% this month.</p>
+      `,
+      default: `
+        <p>In enterprise AI architecture, balancing GPU cluster utilization, memory sharding (ZeRO / Megatron), and sub-10ms latency requires end-to-end telemetry from hardware kernels up to orchestration.</p>
+        <p style="margin-top: 8px;">Feel free to ask me to drill deeper into specific code examples or architecture diagrams!</p>
+      `
+    };
+
+    async function loadChatHistory() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getChatMessages();
+        if (res && res.status === 'success' && res.data && res.data.length > 0) {
+          const container = document.getElementById('chat-messages-container');
+          if (container) {
+            container.innerHTML = '';
+            res.data.forEach(m => {
+              appendMessage(m.message_html, m.sender);
+            });
+            scrollChat();
+          }
+        }
+      } catch (err) {
+        console.warn('Chat history load error:', err);
+      }
+    }
+
+    function sendPrompt(text) {
+      document.getElementById('user-input-box').value = text;
+      handleUserSubmit(new Event('submit'));
+    }
+
+    async function handleUserSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('user-input-box');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessage(text, 'user');
+      input.value = '';
+
+      const indicator = document.getElementById('typing-indicator');
+      indicator.style.display = 'flex';
+      scrollChat();
+
+      if (window.api) {
+        try {
+          const res = await window.api.sendChatMessage(text);
+          indicator.style.display = 'none';
+          if (res && res.status === 'success' && res.data) {
+            appendMessage(res.data.reply, 'assistant');
+            scrollChat();
+            return;
+          }
+        } catch (err) {
+          console.warn('Chat send error:', err);
+        }
+      }
+
+      setTimeout(() => {
+        indicator.style.display = 'none';
+        let reply = BOT_FALLBACK.default;
+        const lower = text.toLowerCase();
+        if (lower.includes('gap') || lower.includes('architect')) reply = BOT_FALLBACK.gaps;
+        appendMessage(reply, 'assistant');
+        scrollChat();
+      }, 700);
+    }
+
+    function appendMessage(htmlContent, sender) {
+      const container = document.getElementById('chat-messages-container');
+      const row = document.createElement('div');
+      row.className = `message-row ${sender}`;
+      row.innerHTML = `<div class="message-bubble">${htmlContent}</div>`;
+      container.appendChild(row);
+      scrollChat();
+    }
+
+    function scrollChat() {
+      const container = document.getElementById('chat-messages-container');
+      if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    function clearChat() {
+      const container = document.getElementById('chat-messages-container');
+      container.innerHTML = `
+        <div class="message-row assistant">
+          <div class="message-bubble">
+            <p>Chat cleared. Ready for your next engineering question!</p>
+          </div>
+        </div>
+      `;
+      window.showToast('Chat Cleared', 'Conversation view reset.', '🧹');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadChatHistory();
+      const prefill = sessionStorage.getItem('si_copilot_prefill');
+      if (prefill) {
+        sessionStorage.removeItem('si_copilot_prefill');
+        setTimeout(() => {
+          sendPrompt(prefill);
+        }, 300);
+      }
+    });
+  </script>
+</body>
+</html>

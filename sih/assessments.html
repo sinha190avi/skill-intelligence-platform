@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Assessments | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="assessments.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link active">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">▣ Standardized Skill Validation</div>
+          <h1>AI Skill Assessments & Certifications</h1>
+          <p>Validate your competencies with timed coding challenges, architecture design scenarios, and theoretical deep-dives benchmarked across industry peers.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-white" onclick="startLiveQuiz('System Design for Large Language Models')">Start Quick Assessment</button>
+        </div>
+      </section>
+
+      <div class="tab-header">
+        <button class="tab-btn active" onclick="filterAssessments('all', this)">All Tests (6)</button>
+        <button class="tab-btn" onclick="filterAssessments('aiml', this)">AI & Deep Learning</button>
+        <button class="tab-btn" onclick="filterAssessments('mlops', this)">MLOps & Cloud</button>
+        <button class="tab-btn" onclick="filterAssessments('arch', this)">System Architecture</button>
+      </div>
+
+      <div class="assessment-grid">
+        
+
+        <div class="assessment-card" data-cat="arch">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">📐</div>
+              <span class="badge badge-purple">Advanced</span>
+            </div>
+            <h3>System Design for Large Language Models</h3>
+            <p>Evaluate your ability to design low-latency RAG architectures, semantic caches, and distributed LLM serving clusters.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 30 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 80%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 96%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('System Design for Large Language Models')">Start Test</button>
+          </div>
+        </div>
+
+        <div class="assessment-card" data-cat="aiml">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">🧠</div>
+              <span class="badge badge-indigo">Expert</span>
+            </div>
+            <h3>Transformer Architectures & Attention</h3>
+            <p>Deep dive into FlashAttention-2, KV-cache scaling, rotary positional embeddings (RoPE), and mixture-of-experts routing.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 25 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 85%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 98%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('Transformer Architectures & Attention')">Start Test</button>
+          </div>
+        </div>
+
+        <div class="assessment-card" data-cat="mlops">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">⚙️</div>
+              <span class="badge badge-emerald">Intermediate</span>
+            </div>
+            <h3>Distributed GPU Training with DeepSpeed</h3>
+            <p>Test your knowledge of ZeRO stages 1-3, gradient accumulation, pipeline parallelism, and NCCL communication tuning.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 30 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 75%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 92%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('Distributed GPU Training with DeepSpeed')">Start Test</button>
+          </div>
+        </div>
+
+        <div class="assessment-card" data-cat="arch">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">🗄️</div>
+              <span class="badge badge-cyan">Advanced</span>
+            </div>
+            <h3>Vector Databases & Semantic Retrieval</h3>
+            <p>HNSW vs IVF indexing, cosine vs dot-product similarity search, hybrid reranking, and metadata filtering at scale.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 20 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 80%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 94%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('Vector Databases & Semantic Retrieval')">Start Test</button>
+          </div>
+        </div>
+
+        <div class="assessment-card" data-cat="aiml">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">🐍</div>
+              <span class="badge badge-amber">Mastery</span>
+            </div>
+            <h3>Advanced Python & AsyncIO Concurrency</h3>
+            <p>Event loops, Cython performance extensions, memory profiling with tracemalloc, and custom GIL-free concurrency.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 25 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 80%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 99%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('Advanced Python & AsyncIO Concurrency')">Start Test</button>
+          </div>
+        </div>
+
+        <div class="assessment-card" data-cat="mlops">
+          <div>
+            <div class="assessment-header-row">
+              <div class="assessment-icon">☸️</div>
+              <span class="badge badge-purple">Advanced</span>
+            </div>
+            <h3>Production Kubernetes for AI Serving</h3>
+            <p>KServe model mesh, GPU device plugins, horizontal pod autoscaling based on queue depth, and canary rollouts.</p>
+            <div class="assessment-meta-chips">
+              <span>⏱ 30 Mins</span>
+              <span>📝 5 Questions</span>
+              <span>🎯 Pass: 80%</span>
+            </div>
+          </div>
+          <div class="assessment-footer-row">
+            <span style="font-size: 11.5px; color: var(--text-muted);">Top score: 91%</span>
+            <button class="btn btn-primary btn-sm" onclick="startLiveQuiz('Production Kubernetes for AI Serving')">Start Test</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card" style="margin-top: 32px;">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h3>Completed Assessment History</h3>
+            <p>Your verified scorecard and percentiles</p>
+          </div>
+        </div>
+
+        <table class="data-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Assessment Name</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Percentile</th>
+              <th>Completed Date</th>
+              <th>Certificate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Advanced Python for AI</strong></td>
+              <td><strong style="color: var(--accent-emerald);">94%</strong></td>
+              <td><span class="badge badge-emerald">Passed</span></td>
+              <td>Top 5%</td>
+              <td>Sep 10, 2026</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="window.showToast('Certificate Downloaded', 'Verification certificate saved as PDF.', '📄');">Download PDF</button></td>
+            </tr>
+            <tr>
+              <td><strong>Transformer Architectures</strong></td>
+              <td><strong style="color: var(--primary-500);">88%</strong></td>
+              <td><span class="badge badge-indigo">Passed</span></td>
+              <td>Top 12%</td>
+              <td>Sep 02, 2026</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="window.showToast('Certificate Downloaded', 'Verification certificate saved as PDF.', '📄');">Download PDF</button></td>
+            </tr>
+            <tr>
+              <td><strong>Distributed MLOps</strong></td>
+              <td><strong style="color: var(--accent-amber);">76%</strong></td>
+              <td><span class="badge badge-amber">Competent</span></td>
+              <td>Top 25%</td>
+              <td>Aug 26, 2026</td>
+              <td><button class="btn btn-secondary btn-sm" onclick="window.showToast('Certificate Downloaded', 'Verification certificate saved as PDF.', '📄');">Download PDF</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="quiz-title" style="font-size: 18px;">Live Skill Assessment</h2>
+          <span style="font-size: 12px; color: var(--primary-500);" id="quiz-timer">⏱ Time Remaining: 14:59</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeQuizModal()">✕</button>
+      </div>
+
+      <div id="quiz-body">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">
+          <span id="quiz-step-indicator">Question 1 of 4</span>
+          <span id="quiz-percent-indicator">25% Completed</span>
+        </div>
+        <div class="progress-bar-container" style="margin-bottom: 20px;">
+          <div class="progress-bar-fill" id="quiz-progress-bar" style="width: 25%;"></div>
+        </div>
+
+        <h3 id="question-text" style="font-size: 15.5px; font-weight: 700; line-height: 1.4; margin-bottom: 18px;">Question text here</h3>
+
+        <div id="options-container">
+
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; border-top: 1px solid var(--border-subtle); padding-top: 18px;">
+          <button class="btn btn-secondary" id="quiz-prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+          <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+      </div>
+
+      <div id="quiz-results" style="display: none; text-align: center; padding: 20px 0;">
+        <div style="font-size: 54px; margin-bottom: 12px;">🎉</div>
+        <h2 style="font-size: 24px; margin-bottom: 6px;">Assessment Complete!</h2>
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">Your score has been verified and registered on your skill matrix.</p>
+        
+        <div style="background: var(--bg-elevated); border-radius: var(--radius-lg); padding: 24px; max-width: 380px; margin: 0 auto 24px;">
+          <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Final Verified Score</div>
+          <div id="final-score-val" style="font-family: var(--font-heading); font-size: 48px; font-weight: 800; color: var(--accent-emerald); margin: 6px 0;">100%</div>
+          <span class="badge badge-emerald">Mastery Rank • Top 3%</span>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 12px;">
+          <button class="btn btn-secondary" onclick="closeQuizModal()">Return to Assessments</button>
+          <a href="profile.html" class="btn btn-primary">View in Skill Matrix →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let dbAssessments = [];
+    let currentQuestions = [];
+    let currentQ = 0;
+    let selectedAnswers = {};
+    let activeTestTitle = '';
+    let activeAssessmentId = 1;
+
+    async function loadLiveAssessments() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getAssessments();
+        if (res && res.status === 'success' && res.data) {
+          dbAssessments = res.data.assessments || [];
+
+          const history = res.data.history || [];
+          const tbody = document.querySelector('#history-table tbody');
+          if (tbody && history.length > 0) {
+            tbody.innerHTML = history.map(h => `
+              <tr>
+                <td><strong>${h.assessment_title}</strong></td>
+                <td><strong style="color: ${h.status === 'Passed' ? 'var(--accent-emerald)' : 'var(--brand-rose)'};">${h.score_pct}%</strong></td>
+                <td><span class="badge badge-${h.status === 'Passed' ? 'emerald' : 'rose'}">${h.status}</span></td>
+                <td>${h.benchmark_percentile || 'Top 10%'}</td>
+                <td>${h.time_ago || 'Recently'}</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="window.showToast('Certificate Downloaded', 'Verification certificate saved as PDF.', '📄');">Download PDF</button></td>
+              </tr>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Assessments load error:', err);
+      }
+    }
+
+    function filterAssessments(cat, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.assessment-card').forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function startLiveQuiz(title) {
+      activeTestTitle = title;
+      currentQ = 0;
+      selectedAnswers = {};
+
+      const matched = dbAssessments.find(a => a.title.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(a.title.toLowerCase()));
+      if (matched && matched.questions && matched.questions.length > 0) {
+        activeAssessmentId = matched.id;
+        currentQuestions = matched.questions;
+      } else {
+        activeAssessmentId = 1;
+        currentQuestions = [
+          {
+            q: "In high-throughput vLLM serving, what fundamental problem does PagedAttention solve compared to standard contiguous memory allocation?",
+            options: [
+              "Eliminates floating-point quantization errors",
+              "Prevents KV-cache memory fragmentation and enables dynamic page sharing across parallel requests",
+              "Directly bypasses CUDA kernels using CPU SIMD registers",
+              "Replaces multi-head attention with quadratic dot-product memory"
+            ],
+            correct: 1
+          },
+          {
+            q: "When partitioning a 70B parameter model across 4x A100 (80GB) GPUs using Megatron-LM Tensor Parallelism, which layer components are split along column and row dimensions?",
+            options: [
+              "Self-attention QKV projections are split by column, Output dense projection is split by row",
+              "MLP layers are kept unpartitioned on GPU 0 while attention runs on GPU 1-3",
+              "LayerNorm weights are duplicated while embeddings are discarded",
+              "Only bias vectors are partitioned across the NVLink fabric"
+            ],
+            correct: 0
+          },
+          {
+            q: "In DeepSpeed ZeRO Stage 3 (ZeRO-3), which components of the training state are partitioned across all distributed data-parallel worker nodes?",
+            options: [
+              "Only optimizer states (moments)",
+              "Optimizer states and first-order gradients only",
+              "Optimizer states, gradients, and model parameters",
+              "Only activation checkpoint caches"
+            ],
+            correct: 2
+          }
+        ];
+      }
+
+      document.getElementById('quiz-title').textContent = title;
+      document.getElementById('quiz-body').style.display = 'block';
+      document.getElementById('quiz-results').style.display = 'none';
+      document.getElementById('quiz-modal').classList.add('active');
+      renderQuestion();
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quiz-modal').classList.remove('active');
+    }
+
+    function renderQuestion() {
+      const qData = currentQuestions[currentQ];
+      document.getElementById('quiz-step-indicator').textContent = `Question ${currentQ + 1} of ${currentQuestions.length}`;
+      const progress = ((currentQ + 1) / currentQuestions.length) * 100;
+      document.getElementById('quiz-percent-indicator').textContent = `${Math.round(progress)}% Completed`;
+      document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+
+      document.getElementById('question-text').textContent = qData.q;
+      const optsCont = document.getElementById('options-container');
+      optsCont.innerHTML = qData.options.map((opt, idx) => `
+        <div class="quiz-option ${selectedAnswers[currentQ] === idx ? 'selected' : ''}" onclick="selectOption(${idx})">
+          <span style="font-weight:700; width: 20px;">${String.fromCharCode(65 + idx)}.</span>
+          <span>${opt}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('quiz-prev-btn').disabled = currentQ === 0;
+      document.getElementById('quiz-next-btn').textContent = currentQ === currentQuestions.length - 1 ? 'Submit Assessment' : 'Next Question';
+    }
+
+    function selectOption(idx) {
+      selectedAnswers[currentQ] = idx;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (selectedAnswers[currentQ] === undefined) {
+        window.showToast('Please Select an Answer', 'Choose an option to continue.', '⚠️');
+        return;
+      }
+
+      if (currentQ < currentQuestions.length - 1) {
+        currentQ++;
+        renderQuestion();
+      } else {
+        submitQuiz();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQ > 0) {
+        currentQ--;
+        renderQuestion();
+      }
+    }
+
+    async function submitQuiz() {
+      let finalScore = 0;
+      let finalStatus = 'Passed';
+      let finalPercentile = 'Top 5%';
+      let xpEarned = 150;
+
+      if (window.api) {
+        const subRes = await window.api.submitAssessment(activeAssessmentId, selectedAnswers);
+        if (subRes && subRes.status === 'success' && subRes.data) {
+          finalScore = subRes.data.score_pct;
+          finalStatus = subRes.data.status;
+          finalPercentile = subRes.data.benchmark_percentile;
+          xpEarned = subRes.data.xp_earned;
+        } else {
+
+          let correct = 0;
+          currentQuestions.forEach((q, i) => { if (selectedAnswers[i] === q.correct) correct++; });
+          finalScore = Math.round((correct / currentQuestions.length) * 100);
+          finalStatus = finalScore >= 75 ? 'Passed' : 'Failed';
+        }
+      }
+
+      document.getElementById('quiz-body').style.display = 'none';
+      document.getElementById('quiz-results').style.display = 'block';
+      const scoreVal = document.getElementById('final-score-val');
+      if (scoreVal) scoreVal.textContent = `${finalScore}%`;
+
+      const tbody = document.querySelector('#history-table tbody');
+      if (tbody) {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td><strong>${activeTestTitle}</strong></td>
+          <td><strong style="color: ${finalStatus === 'Passed' ? 'var(--accent-emerald)' : 'var(--brand-rose)'};">${finalScore}%</strong></td>
+          <td><span class="badge badge-${finalStatus === 'Passed' ? 'emerald' : 'rose'}">${finalStatus}</span></td>
+          <td>${finalPercentile}</td>
+          <td>Just now</td>
+          <td><button class="btn btn-secondary btn-sm" onclick="window.showToast('Certificate Downloaded', 'Verification certificate saved as PDF.', '📄');">Download PDF</button></td>
+        `;
+        tbody.insertBefore(newRow, tbody.firstChild);
+      }
+
+      if (window.syncGlobalHeader) {
+        window.syncGlobalHeader();
+      }
+
+      window.showToast('Assessment Completed!', `You scored ${finalScore}% on ${activeTestTitle}. Added +${xpEarned} XP!`, '🏆');
+    }
+
+    window.addEventListener('si:data-changed', loadLiveAssessments);
+    document.addEventListener('DOMContentLoaded', loadLiveAssessments);
+  </script>
+</body>
+</html>

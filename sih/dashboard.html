@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Skill Intelligence</title>
+  <meta name="description" content="Skill Intelligence Platform – Track your AI Engineering journey, skill competencies, and career readiness.">
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+
+    <header class="topbar">
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link active">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none;border:none;color:var(--brand-cyan);font-size:11.5px;font-weight:600;cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item"><h4>Assessment Completed!</h4><p>You scored 94% on Advanced Python for AI.</p><span class="time">10 mins ago</span></div>
+              <div class="notification-item"><h4>New Recommendation</h4><p>System Design for LLMs matches your target role (Lead AI Engineer).</p><span class="time">2 hours ago</span></div>
+              <div class="notification-item"><h4>Streak Milestone</h4><p>You have maintained a 14-day active learning streak.</p><span class="time">Yesterday</span></div>
+            </div>
+            <div style="padding:8px 12px;text-align:center;border-top:1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size:11.5px;font-weight:700;color:var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="gcetts-hero-section">
+
+        <div class="gcetts-hero-brand">
+          <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="hero-commit-logo">
+          <span class="gcetts-presents-text">Enterprise Skill Intelligence</span>
+        </div>
+
+        <h1 class="gcetts-hero-title">
+          <span class="gcetts-title-white">The All-in-One Platform for</span>
+          <span class="gcetts-title-cyan">Skill Intelligence &amp; AI Engineering Orchestration</span>
+        </h1>
+
+        <p class="gcetts-hero-desc">
+          All the verified assessments, interactive roadmap milestones, and personalized AI recommendations you need to reach Lead AI Architect, all in one place.
+        </p>
+
+        <div class="gcetts-hero-actions">
+          <a href="learning-path.html" class="gcetts-btn-primary">
+            <span>Resume Learning Path</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+          <a href="assessments.html" class="gcetts-btn-secondary">
+            Take Skill Assessment
+          </a>
+        </div>
+
+        <div class="gcetts-hero-notice" id="dash-hero-notice">
+          Career Track: Lead AI Architect • Stage 2 of 4 Active • Q3 Verification Benchmark Ready
+        </div>
+
+        <a href="#dashboard-overview" class="gcetts-scroll-chevron" aria-label="Scroll to dashboard overview">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </a>
+      </section>
+
+      <section id="dashboard-overview" class="dash-section-intro">
+        <div class="dash-section-eyebrow">Enterprise Skill Intelligence</div>
+        <h2>Candidate Performance &amp; Live Skill Metrics</h2>
+        <p>All the verified assessments, interactive roadmap milestones, and personalized AI recommendations you need to reach Lead AI Architect, all in one place.</p>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-indigo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <span class="stat-trend up" id="dash-readiness-trend">↑ +6% this month</span>
+          </div>
+          <div class="stat-value" id="dash-readiness-val">78%</div>
+          <div class="stat-label">Target Role Readiness</div>
+          <div class="progress-bar-container"><div class="progress-bar-fill" id="dash-readiness-bar" style="width: 78%;"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-emerald">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="stat-trend up" id="dash-competencies-trend">↑ Live Benchmarked</span>
+          </div>
+          <div class="stat-value" id="dash-competencies-val">24 <span style="font-size: 16px; font-weight: 600; color: var(--text-muted);">/ 30</span></div>
+          <div class="stat-label">Mastered Competencies</div>
+          <div class="progress-bar-container"><div class="progress-bar-fill emerald" id="dash-competencies-bar" style="width: 80%;"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-amber">🔥</div>
+            <span class="stat-trend up">Active</span>
+          </div>
+          <div class="stat-value" id="dash-streak-val">14 Days</div>
+          <div class="stat-label">Active Learning Streak</div>
+          <div class="progress-bar-container"><div class="progress-bar-fill amber" style="width: 70%;"></div></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-cyan">⚡</div>
+            <span class="stat-trend neutral" id="dash-milestone-stage">Stage 2 of 4</span>
+          </div>
+          <div class="stat-value" id="dash-milestone-val" style="font-size: 24px; white-space: nowrap;">Lead AI</div>
+          <div class="stat-label">Career Track Milestone</div>
+          <div class="progress-bar-container"><div class="progress-bar-fill cyan" id="dash-milestone-bar" style="width: 50%;"></div></div>
+        </div>
+      </section>
+
+      <div class="dash-grid dash-grid-tier1">
+
+        <div class="card dash-learning-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="dash-card-eyebrow" id="dash-stage-eyebrow">Current Milestone &bull; Stage 2</div>
+              <h3 id="dash-stage-title">Deep Learning &amp; Transformer Architectures</h3>
+            </div>
+            <span class="badge badge-cyan" id="dash-stage-badge">65% Complete</span>
+          </div>
+          <p class="dash-card-desc">Master attention mechanisms, BERT/GPT architectures, and production tokenization pipelines for enterprise language models.</p>
+          <div class="progress-bar-container" style="margin-bottom: 18px;">
+            <div class="progress-bar-fill" id="dash-stage-bar" style="width: 65%;"></div>
+          </div>
+          <div class="dash-lesson-row">
+            <div class="dash-lesson-play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </div>
+            <div class="dash-lesson-info" id="dash-next-lesson-info">
+              <strong>Next: Multi-Head Self-Attention in PyTorch</strong>
+              <span>Module 4 of 6 &middot; 35 mins remaining &middot; Hands-on Lab</span>
+            </div>
+            <a href="learning-path.html" class="btn btn-primary btn-sm">Continue Lesson</a>
+          </div>
+        </div>
+
+        <div class="card dash-streak-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Active Learning Streak</h3>
+            </div>
+            <span class="badge badge-amber">🔥 On Fire</span>
+          </div>
+          <div class="dash-streak-big"><span class="dash-streak-num">14</span><span class="dash-streak-unit">Days</span></div>
+          <p class="dash-streak-note">Personal best! 3 days to gold trophy.</p>
+          <div class="dash-week-grid">
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Mon</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Tue</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Wed</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Thu</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Fri</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-active"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Sat</span></div>
+            <div class="dash-day-col"><div class="dash-day-dot dash-day-pending"></div><span>Sun</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid dash-grid-tier2">
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Competency Breakdown</h3>
+              <p>Readiness for Lead AI Engineer</p>
+            </div>
+            <a href="profile.html" class="card-action-link">Details →</a>
+          </div>
+          <div class="dash-skills-list" id="dash-competency-list">
+            <div class="dash-skill-row">
+              <div class="dash-skill-labels"><span>Machine Learning &amp; PyTorch</span><span class="badge badge-emerald">95%</span></div>
+              <div class="progress-bar-container"><div class="progress-bar-fill emerald" style="width:95%;"></div></div>
+            </div>
+            <div class="dash-skill-row">
+              <div class="dash-skill-labels"><span>Deep Learning &amp; Transformers</span><span class="badge badge-cyan">85%</span></div>
+              <div class="progress-bar-container"><div class="progress-bar-fill cyan" style="width:85%;"></div></div>
+            </div>
+            <div class="dash-skill-row">
+              <div class="dash-skill-labels"><span>System Design &amp; Architecture</span><span class="badge badge-indigo">72%</span></div>
+              <div class="progress-bar-container"><div class="progress-bar-fill" style="width:72%;"></div></div>
+            </div>
+            <div class="dash-skill-row">
+              <div class="dash-skill-labels"><span>MLOps &amp; GPU Orchestration</span><span class="badge badge-amber">68%</span></div>
+              <div class="progress-bar-container"><div class="progress-bar-fill amber" style="width:68%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Recommended for Your Skill Gaps</h3>
+              <p>Curated to bridge your System Design and MLOps gaps</p>
+            </div>
+            <a href="recommendations.html" class="card-action-link">View All Recommendations →</a>
+          </div>
+          <div class="dash-courses-grid">
+            <div class="dash-course-card">
+              <div>
+                <div class="dash-course-head">
+                  <span class="dash-course-tag">Machine Learning</span>
+                  <span class="badge badge-purple">✦ 98% Match</span>
+                </div>
+                <h4 class="dash-course-title">System Design for Generative AI Applications</h4>
+                <p class="dash-course-desc">Architecture patterns for vector databases, latency optimization, and semantic caching.</p>
+              </div>
+              <div>
+                <div class="dash-course-meta">
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 14 Hours</span>
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 4.9</span>
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Intermediate</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <a href="courses.html" class="btn btn-primary btn-sm" style="flex:1;">Enroll Now</a>
+                  <button class="btn btn-secondary btn-sm" onclick="window.showToast('Course Saved','Added to your bookmarked list.','🔖');">Bookmark</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-course-card">
+              <div>
+                <div class="dash-course-head">
+                  <span class="dash-course-tag">MLOps &amp; Cloud</span>
+                  <span class="badge badge-emerald">✦ 94% Match</span>
+                </div>
+                <h4 class="dash-course-title">Production Kubernetes for AI Workloads</h4>
+                <p class="dash-course-desc">Deploying scalable PyTorch inference services with GPU orchestration &amp; autoscaling.</p>
+              </div>
+              <div>
+                <div class="dash-course-meta">
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 18 Hours</span>
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 4.8</span>
+                  <span class="dash-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Advanced</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <a href="courses.html" class="btn btn-primary btn-sm" style="flex:1;">Enroll Now</a>
+                  <button class="btn btn-secondary btn-sm" onclick="window.showToast('Course Saved','Added to your bookmarked list.','🔖');">Bookmark</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid dash-grid-tier3">
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Recent Skill Assessments</h3>
+              <p>Verified competency results and industry benchmark percentiles</p>
+            </div>
+            <a href="assessments.html" class="card-action-link">Explore Assessments →</a>
+          </div>
+          <div class="dash-table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr><th>Skill / Topic</th><th>Proficiency Level</th><th>Score</th><th>Date</th><th>Action</th></tr>
+              </thead>
+              <tbody id="dash-assessment-tbody">
+                <tr>
+                  <td><strong>Advanced Python for AI</strong><div class="dash-table-sub">AsyncIO, NumPy Vectorization, Decorators</div></td>
+                  <td><span class="badge badge-emerald">Mastery</span></td>
+                  <td><span class="dash-score dash-score-emerald">94% (Top 5%)</span></td>
+                  <td class="dash-table-muted">Sep 10, 2026</td>
+                  <td><a href="assessments.html" class="btn btn-secondary btn-sm">View Report</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Transformer Architectures</strong><div class="dash-table-sub">Positional Encodings, FlashAttention</div></td>
+                  <td><span class="badge badge-cyan">Advanced</span></td>
+                  <td><span class="dash-score dash-score-cyan">88% (Top 12%)</span></td>
+                  <td class="dash-table-muted">Sep 02, 2026</td>
+                  <td><a href="assessments.html" class="btn btn-secondary btn-sm">View Report</a></td>
+                </tr>
+                <tr>
+                  <td><strong>Distributed MLOps</strong><div class="dash-table-sub">Kubeflow, Ray Train, Triton Server</div></td>
+                  <td><span class="badge badge-amber">Competent</span></td>
+                  <td><span class="dash-score dash-score-amber">76% (Top 25%)</span></td>
+                  <td class="dash-table-muted">Aug 26, 2026</td>
+                  <td><a href="assessments.html" class="btn btn-secondary btn-sm">Retake Test</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Quick Actions</h3>
+              <p>One-click tools &amp; AI mentorship</p>
+            </div>
+          </div>
+          <div class="dash-quick-grid">
+            <a href="assessments.html" class="dash-quick-tile">
+              <div class="dash-q-icon dash-q-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+              <strong>Take Test</strong><span>Skill assessment</span>
+            </a>
+            <a href="ai-assistant.html" class="dash-quick-tile">
+              <div class="dash-q-icon dash-q-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg></div>
+              <strong>Ask Copilot</strong><span>Instant AI mentor</span>
+            </a>
+            <a href="courses.html" class="dash-quick-tile">
+              <div class="dash-q-icon dash-q-cyan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg></div>
+              <strong>Browse Catalog</strong><span>120+ courses</span>
+            </a>
+            <a href="profile.html" class="dash-quick-tile">
+              <div class="dash-q-icon dash-q-emerald"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+              <strong>Skill Matrix</strong><span>View credentials</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function loadLiveDashboard() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getDashboard();
+        if (!res || res.status !== 'success' || !res.data) return;
+        const d = res.data;
+
+        const heroNotice = document.getElementById('dash-hero-notice');
+        if (heroNotice && d.user) {
+          heroNotice.textContent = `Career Track: ${d.user.target_role || 'Lead AI Architect'} • ${d.kpis.career_milestone || 'Stage 2 of 4 Active'} • Q3 Benchmark Ready`;
+        }
+
+        const readVal = document.getElementById('dash-readiness-val');
+        const readBar = document.getElementById('dash-readiness-bar');
+        if (readVal) readVal.textContent = `${d.kpis.readiness_pct}%`;
+        if (readBar) readBar.style.width = `${d.kpis.readiness_pct}%`;
+
+        const compVal = document.getElementById('dash-competencies-val');
+        const compBar = document.getElementById('dash-competencies-bar');
+        if (compVal) compVal.innerHTML = `${d.kpis.mastered_competencies} <span style="font-size: 16px; font-weight: 600; color: var(--text-muted);">/ ${d.kpis.total_competencies}</span>`;
+        if (compBar) compBar.style.width = `${Math.min(100, Math.round((d.kpis.mastered_competencies / d.kpis.total_competencies) * 100))}%`;
+
+        const streakVal = document.getElementById('dash-streak-val');
+        if (streakVal) streakVal.textContent = `${d.kpis.active_streak_days} Days`;
+        const bigStreak = document.querySelector('.dash-streak-num');
+        if (bigStreak) bigStreak.textContent = d.kpis.active_streak_days;
+
+        const trackVal = document.getElementById('dash-milestone-val');
+        if (trackVal) trackVal.textContent = d.user.target_role ? d.user.target_role.replace(' Architect', '').replace(' Engineer', '') : 'Lead AI';
+
+        if (d.current_milestone) {
+          const eyebrow = document.getElementById('dash-stage-eyebrow');
+          if (eyebrow) eyebrow.innerHTML = `Current Milestone &bull; Stage ${d.current_milestone.stage_number}`;
+          const stTitle = document.getElementById('dash-stage-title');
+          if (stTitle) stTitle.textContent = d.current_milestone.stage_title.replace(/^Stage \d+:\s*/, '');
+          const stBadge = document.getElementById('dash-stage-badge');
+          if (stBadge) stBadge.textContent = `${d.current_milestone.progress_pct}% Complete`;
+          const stBar = document.getElementById('dash-stage-bar');
+          if (stBar) stBar.style.width = `${d.current_milestone.progress_pct}%`;
+
+          if (d.current_milestone.next_module) {
+            const nxt = document.getElementById('dash-next-lesson-info');
+            if (nxt) {
+              nxt.innerHTML = `
+                <strong>Next: ${d.current_milestone.next_module.title}</strong>
+                <span>Module &middot; ${d.current_milestone.next_module.duration_mins} mins remaining &middot; Hands-on Lab</span>
+              `;
+            }
+          }
+        }
+
+        const compList = document.getElementById('dash-competency-list');
+        if (compList && d.competencies && d.competencies.length > 0) {
+          compList.innerHTML = d.competencies.slice(0, 4).map(c => `
+            <div class="dash-skill-row">
+              <div class="dash-skill-labels">
+                <span>${c.name}</span>
+                <span class="badge badge-${c.proficiency_pct >= 90 ? 'emerald' : (c.proficiency_pct >= 80 ? 'cyan' : (c.proficiency_pct >= 70 ? 'indigo' : 'amber'))}">${c.proficiency_pct}%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill ${c.proficiency_pct >= 90 ? 'emerald' : (c.proficiency_pct >= 80 ? 'cyan' : (c.proficiency_pct >= 70 ? '' : 'amber'))}" style="width:${c.proficiency_pct}%;"></div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        const assTbody = document.getElementById('dash-assessment-tbody');
+        if (assTbody) {
+          const assRes = await window.api.getAssessments();
+          if (assRes && assRes.status === 'success' && assRes.data.history && assRes.data.history.length > 0) {
+            assTbody.innerHTML = assRes.data.history.slice(0, 3).map(h => `
+              <tr>
+                <td><strong>${h.assessment_title}</strong></td>
+                <td><span class="badge badge-${h.status === 'Passed' ? 'emerald' : 'rose'}">${h.status}</span></td>
+                <td><span class="dash-score dash-score-emerald">${h.score_pct}% (${h.benchmark_percentile})</span></td>
+                <td class="dash-table-muted">${h.time_ago || 'Recent'}</td>
+                <td><a href="assessments.html" class="btn btn-secondary btn-sm">View Details</a></td>
+              </tr>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Dashboard live telemetry fetch error:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadLiveDashboard);
+    window.addEventListener('si:data-changed', loadLiveDashboard);
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

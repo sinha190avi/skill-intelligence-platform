@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+      <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link active">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Engineer).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="profile-hero">
+        <div class="profile-main-info">
+          <div class="profile-avatar-large" id="profile-avatar-large">AM</div>
+          <div class="profile-details">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 id="profile-name-display">Alex Morgan</h1>
+              <span class="badge badge-indigo" id="profile-level-badge">Level 4 AI Specialist</span>
+              <span class="badge badge-emerald" style="font-size: 11px;">✓ Verified Production Engineer</span>
+            </div>
+            
+            <p id="profile-subtitle-display">Senior AI/ML Engineer • Enterprise Cognitive Systems Division • Bengaluru, India</p>
+            
+            <p class="profile-bio-text" id="profile-bio-display">
+              Specialized in high-throughput LLM architectures, transformer kernel optimization (FlashAttention-2), and distributed inference systems. Orchestrating scalable agentic AI clusters with sub-15ms P99 latency SLA.
+            </p>
+
+            <div class="profile-tags-row">
+              <span class="badge badge-cyan">🤖 Large Language Models</span>
+              <span class="badge badge-purple">🐍 PyTorch / CUDA</span>
+              <span class="badge badge-emerald">⚙️ MLOps & Kubernetes</span>
+              <span class="badge badge-amber">📐 System Architecture</span>
+              <span class="badge badge-indigo">⚡ TensorRT-LLM</span>
+            </div>
+
+            <div class="profile-socials-row">
+              <a href="https://github.com" target="_blank" rel="noopener" class="profile-social-badge" title="GitHub Profile">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                <span>github.com/alex-morgan-ai</span>
+              </a>
+              <a href="https://huggingface.co" target="_blank" rel="noopener" class="profile-social-badge" title="HuggingFace Profile">
+                <span>🤗 huggingface.co/alex-cognitive</span>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener" class="profile-social-badge" title="LinkedIn Profile">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <span>linkedin.com/in/alex-morgan-ml</span>
+              </a>
+            </div>
+
+            <div class="profile-hero-actions">
+              <button class="btn btn-primary btn-sm" onclick="runAiProfileAudit()">
+                <span>⚡</span> Run AI Skill Audit
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="openDossierModal()">
+                <span>📄</span> Export AI Dossier
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="window.openEditProfileModal()">
+                <span>✏️</span> Edit Profile
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 16px;">
+          <div class="profile-stat-pills">
+            <div class="profile-stat-item">
+              <div class="number" id="stat-mastered-skills">24</div>
+              <div class="label">Skills Mastered</div>
+            </div>
+            <div class="profile-stat-item">
+              <div class="number" id="stat-benchmark-rank">Top 5%</div>
+              <div class="label">Benchmark Rank</div>
+            </div>
+            <div class="profile-stat-item">
+              <div class="number" id="stat-certs-count">6</div>
+              <div class="label">Certifications</div>
+            </div>
+            <div class="profile-stat-item">
+              <div class="number" id="stat-karma-xp">2,450</div>
+              <div class="label">Karma XP</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="profile-grid">
+        
+
+        <div>
+
+          <div class="card tech-card">
+            <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="card-title-group">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="ai-sparkle-icon">⚙️</span>
+                  <h3>Technical Arsenal & Stack Matrix</h3>
+                </div>
+                <p>Live architectural stack, framework competency, and compute telemetry</p>
+              </div>
+
+              <div class="tech-filter-pills">
+                <button class="tech-filter-btn active" onclick="filterTechStack('all', this)">All (8)</button>
+                <button class="tech-filter-btn" onclick="filterTechStack('dl', this)">Deep Learning</button>
+                <button class="tech-filter-btn" onclick="filterTechStack('inference', this)">Inference & Kernels</button>
+                <button class="tech-filter-btn" onclick="filterTechStack('vectordb', this)">Vector DBs</button>
+                <button class="tech-filter-btn" onclick="filterTechStack('cloud', this)">Cloud / Infra</button>
+              </div>
+            </div>
+
+            <div class="tech-grid" id="tech-grid-items">
+
+              <div class="tech-item" data-cat="dl">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">🔥</span>
+                      <span>PyTorch 2.4</span>
+                    </div>
+                    <span class="tech-meta-badge">Core Engine</span>
+                  </div>
+                  <p class="tech-desc">Distributed Data Parallel (DDP), Autograd, Custom CUDA C++ ops, PyTorch 2 compile graph.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #38bdf8;">96% Mastery</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill" style="width: 96%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="inference">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">⚡</span>
+                      <span>FlashAttention-2</span>
+                    </div>
+                    <span class="tech-meta-badge">Kernel Ops</span>
+                  </div>
+                  <p class="tech-desc">SRAM tile IO scheduling, Triton GPU kernels, sequence parallelism for 128k context windows.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #34d399;">92% Advanced</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill emerald" style="width: 92%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="inference">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">🚀</span>
+                      <span>vLLM & TensorRT</span>
+                    </div>
+                    <span class="tech-meta-badge">Serving</span>
+                  </div>
+                  <p class="tech-desc">PagedAttention, continuous batching, FP8 / INT4 AWQ quantization, speculative decoding.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #38bdf8;">94% Mastery</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill" style="width: 94%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="vectordb">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">🎯</span>
+                      <span>Qdrant & Milvus</span>
+                    </div>
+                    <span class="tech-meta-badge">Retrieval</span>
+                  </div>
+                  <p class="tech-desc">HNSW indexing, payload filtering, hybrid BM25 + dense vector semantic reranking.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #c084fc;">88% Advanced</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill purple" style="width: 88%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="dl">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">🤗</span>
+                      <span>Hugging Face</span>
+                    </div>
+                    <span class="tech-meta-badge">Transformers</span>
+                  </div>
+                  <p class="tech-desc">PEFT / LoRA fine-tuning, TRL reinforcement learning (DPO / PPO), tokenizers & datasets.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #38bdf8;">90% Advanced</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill" style="width: 90%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="cloud">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">☁️</span>
+                      <span>Ray Orchestrator</span>
+                    </div>
+                    <span class="tech-meta-badge">Distributed</span>
+                  </div>
+                  <p class="tech-desc">Actor model scaling, zero-copy memory pipelines, distributed training over multi-node GPU clusters.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #c084fc;">85% Advanced</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill purple" style="width: 85%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="dl">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">🧠</span>
+                      <span>LangGraph Agents</span>
+                    </div>
+                    <span class="tech-meta-badge">Reasoning</span>
+                  </div>
+                  <p class="tech-desc">Stateful multi-agent architectures, cyclic DAGs, human-in-the-loop workflows, Tool Calling.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #38bdf8;">91% Mastery</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill" style="width: 91%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tech-item" data-cat="cloud">
+                <div>
+                  <div class="tech-head">
+                    <div class="tech-title">
+                      <span class="tech-icon">☸️</span>
+                      <span>K8s & GPU Operator</span>
+                    </div>
+                    <span class="tech-meta-badge">Infra</span>
+                  </div>
+                  <p class="tech-desc">Multi-Instance GPU (MIG) slicing, NVIDIA NVLink topologies, Prometheus DCGM metrics.</p>
+                </div>
+                <div class="tech-bar-wrap">
+                  <div class="tech-meta">
+                    <span style="color: var(--text-muted);">Proficiency</span>
+                    <span style="font-weight: 700; color: #34d399;">82% Competent</span>
+                  </div>
+                  <div class="tech-bar-track">
+                    <div class="tech-bar-fill emerald" style="width: 82%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tech-telemetry-bar">
+              <div class="telemetry-stat">
+                <div class="telemetry-val">142B+</div>
+                <div class="telemetry-lbl">Model Params Served</div>
+              </div>
+              <div class="telemetry-stat">
+                <div class="telemetry-val">1,280 hrs</div>
+                <div class="telemetry-lbl">H100/A100 Compute Validated</div>
+              </div>
+              <div class="telemetry-stat">
+                <div class="telemetry-val">12.4ms</div>
+                <div class="telemetry-lbl">P99 Token Latency</div>
+              </div>
+              <div class="telemetry-stat">
+                <div class="telemetry-val">99.98%</div>
+                <div class="telemetry-lbl">Inference Cluster SLA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Verified Skill Matrix</h3>
+                <p>Industry-standard competency evaluation verified through assessments</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="window.location.href='assessments.html'">Assess New Skill</button>
+            </div>
+
+            <div class="tab-header">
+              <button class="tab-btn active" onclick="switchSkillTab('all', this)">All Competencies (12)</button>
+              <button class="tab-btn" onclick="switchSkillTab('aiml', this)">AI & Machine Learning</button>
+              <button class="tab-btn" onclick="switchSkillTab('dev', this)">Software & Systems</button>
+              <button class="tab-btn" onclick="switchSkillTab('cloud', this)">Cloud & MLOps</button>
+            </div>
+
+            <div id="skills-container">
+
+              <div class="skill-matrix-item" data-cat="aiml">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>PyTorch & Deep Neural Networks</h4>
+                    <span class="badge badge-emerald">Mastery (96%)</span>
+                  </div>
+                  <p>Backpropagation, Autograd, custom CUDA extensions, distributed training (DDP).</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill emerald" style="width: 96%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, 'PyTorch')">
+                  <span>👍</span> <span class="count">42</span> Endorse
+                </button>
+              </div>
+
+              <div class="skill-matrix-item" data-cat="aiml">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>Transformer & Attention Architectures</h4>
+                    <span class="badge badge-indigo">Advanced (88%)</span>
+                  </div>
+                  <p>FlashAttention-2, RoPE embeddings, KV-cache optimization, HuggingFace transformers.</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 88%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, 'Transformers')">
+                  <span>👍</span> <span class="count">38</span> Endorse
+                </button>
+              </div>
+
+              <div class="skill-matrix-item" data-cat="dev">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>Advanced Python & Concurrency</h4>
+                    <span class="badge badge-emerald">Mastery (94%)</span>
+                  </div>
+                  <p>AsyncIO, multiprocessing, memory profiling, CPython internals & Cython bindings.</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill emerald" style="width: 94%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, 'Python')">
+                  <span>👍</span> <span class="count">51</span> Endorse
+                </button>
+              </div>
+
+              <div class="skill-matrix-item" data-cat="cloud">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>Production MLOps & Kubernetes</h4>
+                    <span class="badge badge-amber">Competent (74%)</span>
+                  </div>
+                  <p>Kubeflow pipelines, Triton Inference Server, Prometheus monitoring & model drift.</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill amber" style="width: 74%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, 'MLOps')">
+                  <span>👍</span> <span class="count">19</span> Endorse
+                </button>
+              </div>
+
+              <div class="skill-matrix-item" data-cat="dev">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>Vector Databases & Semantic Retrieval</h4>
+                    <span class="badge badge-cyan">Proficient (82%)</span>
+                  </div>
+                  <p>Milvus, Qdrant, HNSW indexing, hybrid BM25 + dense embedding reranking.</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill cyan" style="width: 82%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, 'Vector DB')">
+                  <span>👍</span> <span class="count">27</span> Endorse
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span>📅</span>
+                  <h3>Cognitive Learning & Assessment Activity</h3>
+                </div>
+                <p>112 days of benchmark evaluations, code submissions, and lab completions</p>
+              </div>
+              <div class="heatmap-legend">
+                <span>Less</span>
+                <div class="legend-box l0"></div>
+                <div class="legend-box l1"></div>
+                <div class="legend-box l2"></div>
+                <div class="legend-box l3"></div>
+                <div class="legend-box l4"></div>
+                <span>More</span>
+              </div>
+            </div>
+
+            <div class="heatmap-container">
+              <div class="heatmap-grid" id="profile-heatmap-grid">
+
+              </div>
+            </div>
+
+            <div class="heatmap-summary-row">
+              <div><strong>114</strong> Assessments Completed</div>
+              <div><strong>28 Days</strong> Active Streak 🔥</div>
+              <div><strong>94.2%</strong> Average Accuracy</div>
+              <div><strong>Level 4</strong> Current Tier</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span>🚀</span>
+                  <h3>Production AI Deployments</h3>
+                </div>
+                <p>Architected, benchmarked, and verified production systems</p>
+              </div>
+            </div>
+
+            <div class="projects-grid">
+
+              <div class="project-card">
+                <div>
+                  <div class="project-header">
+                    <h4>Enterprise HyDE Semantic RAG Engine</h4>
+                  </div>
+                  <p class="project-desc">
+                    Hybrid dense-sparse retrieval system indexing 12M+ internal regulatory and technical documents with sub-40ms P95 semantic search latency.
+                  </p>
+                </div>
+                <div>
+                  <div class="project-tags">
+                    <span class="project-tag">Qdrant</span>
+                    <span class="project-tag">BGE-M3</span>
+                    <span class="project-tag">Cohere Rerank</span>
+                    <span class="project-tag">FastAPI</span>
+                  </div>
+                  <div class="project-metric-row">
+                    <span style="color: var(--text-muted);">Throughput</span>
+                    <span class="project-metric-val">3,200 QPS</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div>
+                  <div class="project-header">
+                    <h4>TensorRT-LLM Distributed Inference Node</h4>
+                  </div>
+                  <p class="project-desc">
+                    High-efficiency multi-GPU cluster serving Llama-3-70B with FP8 quantized weights, speculative decoding, and continuous batch scheduling.
+                  </p>
+                </div>
+                <div>
+                  <div class="project-tags">
+                    <span class="project-tag">TensorRT-LLM</span>
+                    <span class="project-tag">Ray Serve</span>
+                    <span class="project-tag">CUDA 12</span>
+                    <span class="project-tag">NVIDIA H100</span>
+                  </div>
+                  <div class="project-metric-row">
+                    <span style="color: var(--text-muted);">Speedup</span>
+                    <span class="project-metric-val">3.8x vs Vanilla vLLM</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div>
+                  <div class="project-header">
+                    <h4>Autonomous LangGraph Ticket Resolution Agent</h4>
+                  </div>
+                  <p class="project-desc">
+                    Self-healing cyclic agent DAG interacting with Git, Jira, and Jenkins to diagnose CI test failures and propose verified code fixes.
+                  </p>
+                </div>
+                <div>
+                  <div class="project-tags">
+                    <span class="project-tag">LangGraph</span>
+                    <span class="project-tag">AsyncIO</span>
+                    <span class="project-tag">Claude 3.5 Sonnet</span>
+                  </div>
+                  <div class="project-metric-row">
+                    <span style="color: var(--text-muted);">Autonomous Resolution</span>
+                    <span class="project-metric-val">84.6% Success Rate</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Career & Learning Milestones</h3>
+                <p>Verified achievements and organizational promotions</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="timeline-item">
+                <div class="timeline-date">August 2026</div>
+                <div class="timeline-title">Mastered Transformer Fine-Tuning Assessment (Score: 94%)</div>
+                <div class="timeline-desc">Ranked top 5% across 4,200 enterprise AI engineers on the National Skill Intelligence benchmark.</div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-date">June 2026</div>
+                <div class="timeline-title">Promoted to Senior AI/ML Engineer</div>
+                <div class="timeline-desc">Assigned lead technical responsibility for Generative AI search pipelines and LLM inference clusters.</div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-date">February 2026</div>
+                <div class="timeline-title">Completed AWS Certified Machine Learning Specialty</div>
+                <div class="timeline-desc">Validated cloud-scale architecture design for enterprise model deployments.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div>
+
+          <div class="card ai-diagnostics-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="ai-sparkle-icon">✨</span>
+                  <h3 style="color: #ffffff;">AI Career Diagnostics</h3>
+                </div>
+                <p style="color: #cbd5e1;">Neural evaluation calibrated against Tier-1 AI job benchmarks</p>
+              </div>
+              <span class="badge badge-purple" style="font-size: 11px;">v4.2 Neural</span>
+            </div>
+
+            <div class="ai-readiness-row">
+              <div class="ai-gauge-box">
+                <div class="ai-gauge-score">82<span class="pct">%</span></div>
+                <div class="ai-gauge-label">READY</div>
+              </div>
+              <div class="ai-forecast-summary">
+                <div class="ai-forecast-title">
+                  <strong>Lead AI Architect</strong>
+                  <span class="ai-eta-badge">ETA: 6-8 Weeks</span>
+                </div>
+                <p class="ai-forecast-text">
+                  Your core Deep Learning and Attention Kernel metrics exceed the 90th percentile. Bridging distributed scheduling will unlock Tier-1 role readiness.
+                </p>
+              </div>
+            </div>
+
+            <div class="ai-analysis-split">
+
+              <div class="ai-split-box">
+                <div class="ai-split-title">
+                  <span>Verified Strengths</span>
+                  <span class="count-tag">3 Mastered</span>
+                </div>
+                <ul class="ai-split-list">
+                  <li>
+                    <span>✓ PyTorch & CUDA Kernels</span>
+                    <strong style="color: #6ee7b7;">96%</strong>
+                  </li>
+                  <li>
+                    <span>✓ Transformer Architectures</span>
+                    <strong style="color: #38bdf8;">88%</strong>
+                  </li>
+                  <li>
+                    <span>✓ Vector Retrieval & HNSW</span>
+                    <strong style="color: #38bdf8;">82%</strong>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="ai-split-box">
+                <div class="ai-split-title">
+                  <span>High-Priority Gaps</span>
+                  <span class="count-tag urgent">2 Required</span>
+                </div>
+                <ul class="ai-split-list">
+                  <li>
+                    <div>
+                      <span>Distributed GPU Scheduling</span>
+                      <div class="gap-delta">Needs +16% competency</div>
+                    </div>
+                    <a href="courses.html" class="gap-action-link">Fix Gap →</a>
+                  </li>
+                  <li>
+                    <div>
+                      <span>Enterprise AI Governance</span>
+                      <div class="gap-delta">Needs +22% competency</div>
+                    </div>
+                    <a href="recommendations.html" class="gap-action-link">Fix Gap →</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ai-prompt-launcher">
+              <div class="ai-launcher-label">⚡ Direct AI Copilot Inquiries</div>
+              <div class="ai-prompt-chips">
+                <button class="ai-prompt-chip" onclick="askAiCopilot('Generate a personalized 4-week study plan for Distributed GPU Scheduling and Ray Train.')">
+                  <span>🤖 Create 4-week GPU scheduling curriculum</span>
+                  <span>→</span>
+                </button>
+                <button class="ai-prompt-chip" onclick="askAiCopilot('How do I optimize FlashAttention-2 kernels for mixed-precision FP8 inference?')">
+                  <span>⚡ Optimize FlashAttention-2 for FP8 inference</span>
+                  <span>→</span>
+                </button>
+                <button class="ai-prompt-chip" onclick="askAiCopilot('Give me 3 realistic system design interview questions for a Lead AI Architect.')">
+                  <span>🎯 System design interview questions for Lead AI</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="ai-diagnostics-footer">
+              <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="runAiProfileAudit()">
+                <span>🔬</span> Full Neural Audit
+              </button>
+              <a href="ai-assistant.html" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">
+                <span>💬</span> Open Copilot
+              </a>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Target Role Match</h3>
+                <p>Lead AI Architect (Role Target)</p>
+              </div>
+              <span class="badge badge-purple">78% Match</span>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <div class="progress-bar-container" style="height: 10px;">
+                <div class="progress-bar-fill" style="width: 78%;"></div>
+              </div>
+            </div>
+
+            <div style="font-size: 12.5px; margin-bottom: 14px;">
+              <div style="color: var(--text-muted); margin-bottom: 8px;">Key Missing Competencies:</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+                <span>• Distributed GPU Scheduling</span>
+                <a href="courses.html" style="font-size: 11px; font-weight: 600;">Fix Gap →</a>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0;">
+                <span>• Enterprise AI Governance</span>
+                <a href="recommendations.html" style="font-size: 11px; font-weight: 600;">Fix Gap →</a>
+              </div>
+            </div>
+
+            <a href="recommendations.html" class="btn btn-primary btn-sm" style="width: 100%;">View Personalized AI Plan</a>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h3>Verified Credentials</h3>
+              </div>
+            </div>
+
+            <div class="cert-card">
+              <div class="cert-icon">📜</div>
+              <div class="cert-info">
+                <h4>AWS Machine Learning Specialty</h4>
+                <p>Amazon Web Services • Verified 2026</p>
+              </div>
+            </div>
+
+            <div class="cert-card">
+              <div class="cert-icon">🧠</div>
+              <div class="cert-info">
+                <h4>Deep Learning Specialization</h4>
+                <p>DeepLearning.AI • Verified 2025</p>
+              </div>
+            </div>
+
+            <div class="cert-card">
+              <div class="cert-icon">☸️</div>
+              <div class="cert-info">
+                <h4>Certified Kubernetes Admin</h4>
+                <p>Cloud Native Computing Foundation</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="edit-profile-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Profile Information</h2>
+        <button class="modal-close-btn" onclick="window.closeEditProfileModal()">✕</button>
+      </div>
+      <form onsubmit="handleSaveProfile(event)">
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px;">Full Name</label>
+          <input type="text" id="input-edit-name" value="Alex Morgan" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-elevated); outline: none; color: #fff;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px;">Professional Role / Track</label>
+          <input type="text" id="input-edit-role" value="Senior AI/ML Engineer" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-elevated); outline: none; color: #fff;">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px;">Target Career Role</label>
+          <select id="input-edit-target-role" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-elevated); outline: none; color: #fff;">
+            <option selected>Lead AI Architect</option>
+            <option>Principal ML Engineer</option>
+            <option>Head of AI Research</option>
+            <option>VP of Machine Intelligence</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px;">Bio / Focus Statement</label>
+          <textarea id="input-edit-bio" rows="3" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-elevated); outline: none; color: #fff; font-family: inherit; font-size: 13px; resize: vertical;">Specialized in high-throughput LLM architectures, transformer kernel optimization (FlashAttention-2), and distributed inference systems. Orchestrating scalable agentic AI clusters with sub-15ms P99 latency SLA.</textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="window.closeEditProfileModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="audit-profile-modal">
+    <div class="modal-content" style="max-width: 640px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">⚡</span>
+          <h2>AI Neural Profile Audit</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeAuditModal()">✕</button>
+      </div>
+
+      <div style="margin-bottom: 12px; font-size: 12.5px; color: var(--text-muted);">
+        Automated scan checking verified skills, kernel proficiencies, benchmark percentile, and role alignment.
+      </div>
+
+      <div class="audit-terminal" id="audit-terminal-body">
+        <div class="audit-log-line info">
+          <span>[SYSTEM]</span>
+          <span>Initiating Deep Competency Evaluation v4.2...</span>
+        </div>
+      </div>
+
+      <div class="audit-result-summary" id="audit-result-summary" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <strong style="color: #6ee7b7; font-size: 13.5px;">✓ Neural Profile Audit Complete</strong>
+          <span class="badge badge-emerald">Rank: Top 5% (Tier-1 Elite)</span>
+        </div>
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0 0 10px;">
+          Audited 24 validated skills and 8 tech stack modules. High specialization in PyTorch, FlashAttention-2, and vLLM detected. Recommended next milestone: complete 1 assessment in Distributed GPU Scheduling to reach 88% Lead Architect readiness.
+        </p>
+        <div style="display: flex; gap: 8px;">
+          <a href="assessments.html" class="btn btn-primary btn-sm">Take GPU Scheduling Assessment</a>
+          <button class="btn btn-secondary btn-sm" onclick="closeAuditModal()">Close Audit</button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 14px;" id="audit-action-footer">
+        <button class="btn btn-secondary" onclick="closeAuditModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="export-dossier-modal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span>📄</span>
+          <h2>Certified AI Engineer Dossier</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeDossierModal()">✕</button>
+      </div>
+
+      <div class="dossier-card-preview" id="dossier-print-content">
+        <div class="dossier-header">
+          <div>
+            <h3 style="color: #ffffff; margin-bottom: 4px;" id="dossier-name">Alex Morgan</h3>
+            <div style="font-size: 13px; color: var(--brand-cyan);" id="dossier-title">Senior AI/ML Engineer • Level 4 Specialist</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Skill Intelligence Verification Platform &bull; Bengaluru, India</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="dossier-watermark">VERIFIED CREDENTIAL</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 4px;">ID: SI-AI-2026-9481X</div>
+          </div>
+        </div>
+
+        <div class="dossier-section">
+          <h5>Executive Capability Summary</h5>
+          <p style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;" id="dossier-bio">
+            Specialized in high-throughput LLM architectures, transformer kernel optimization (FlashAttention-2), and distributed inference systems. Orchestrating scalable agentic AI clusters with sub-15ms P99 latency SLA.
+          </p>
+        </div>
+
+        <div class="dossier-section">
+          <h5>Verified Competency Benchmark</h5>
+          <div class="dossier-meta-grid">
+            <div>• PyTorch & Deep Neural Networks: <strong style="color: #6ee7b7;">96% (Mastery)</strong></div>
+            <div>• Transformers & Attention Kernels: <strong style="color: #38bdf8;">88% (Advanced)</strong></div>
+            <div>• Vector Databases & Semantic Search: <strong style="color: #38bdf8;">82% (Proficient)</strong></div>
+            <div>• Python Concurrency & Systems: <strong style="color: #6ee7b7;">94% (Mastery)</strong></div>
+            <div>• Production MLOps & Kubernetes: <strong style="color: #fbbf24;">74% (Competent)</strong></div>
+            <div>• Benchmark Ranking: <strong style="color: #6ee7b7;">Top 5% Nationwide</strong></div>
+          </div>
+        </div>
+
+        <div class="dossier-section" style="margin-bottom: 0;">
+          <h5>Production Stack & Compute</h5>
+          <div style="font-size: 12px; color: #cbd5e1;">
+            PyTorch 2.4, FlashAttention-2, TensorRT-LLM, vLLM, Qdrant, Milvus, HuggingFace, Ray, Kubernetes.
+            <div style="margin-top: 6px; color: var(--text-muted); font-size: 11px;">Validated with 1,280+ GPU Hours &bull; 142B Parameters Served.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+        <button class="btn btn-secondary" onclick="copyDossier()">📋 Copy Summary</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+
+    async function loadLiveProfile() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getUser();
+        if (res && res.status === 'success' && res.data) {
+          const u = res.data.user;
+          if (u) {
+            const nameEl = document.getElementById('profile-name-display');
+            if (nameEl) nameEl.textContent = u.full_name;
+            const subEl = document.getElementById('profile-subtitle-display');
+            if (subEl) subEl.textContent = `${u.role_title} • ${u.department} • ${u.location}`;
+            const avEl = document.getElementById('profile-avatar-large');
+            if (avEl) avEl.textContent = u.avatar_initials || 'AM';
+
+            const xpEl = document.getElementById('stat-karma-xp');
+            if (xpEl) xpEl.textContent = Number(u.karma_xp).toLocaleString();
+            const rankEl = document.getElementById('stat-benchmark-rank');
+            if (rankEl) rankEl.textContent = u.rank_percentile || 'Top 5%';
+
+            const dosName = document.getElementById('dossier-name');
+            if (dosName) dosName.textContent = u.full_name;
+            const dosTitle = document.getElementById('dossier-title');
+            if (dosTitle) dosTitle.textContent = `${u.role_title} • Level 4 Specialist`;
+
+            const inpName = document.getElementById('input-edit-name');
+            if (inpName) inpName.value = u.full_name;
+            const inpRole = document.getElementById('input-edit-role');
+            if (inpRole) inpRole.value = u.role_title;
+            const inpTarget = document.getElementById('input-edit-target-role');
+            if (inpTarget && u.target_role) inpTarget.value = u.target_role;
+          }
+          if (res.data.mastered_skills_count) {
+            const msEl = document.getElementById('stat-mastered-skills');
+            if (msEl) msEl.textContent = res.data.mastered_skills_count;
+          }
+          if (res.data.certifications_count) {
+            const certEl = document.getElementById('stat-certs-count');
+            if (certEl) certEl.textContent = res.data.certifications_count;
+          }
+        }
+
+        const skillRes = await window.api.getSkills();
+        if (skillRes && skillRes.status === 'success' && skillRes.data && skillRes.data.length > 0) {
+          const container = document.getElementById('skills-container');
+          if (container) {
+            container.innerHTML = skillRes.data.map(s => `
+              <div class="skill-matrix-item" data-cat="${s.category}">
+                <div class="skill-meta-left">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4>${s.name}</h4>
+                    <span class="badge badge-${s.proficiency_pct >= 90 ? 'emerald' : (s.proficiency_pct >= 80 ? 'indigo' : 'cyan')}">${s.level_label} (${s.proficiency_pct}%)</span>
+                  </div>
+                  <p>Benchmark Rank: ${s.benchmark_rank} &middot; Verified via Enterprise Assessment</p>
+                </div>
+                <div class="skill-bar-wrapper">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill ${s.proficiency_pct >= 90 ? 'emerald' : (s.proficiency_pct >= 80 ? '' : 'cyan')}" style="width: ${s.proficiency_pct}%;"></div>
+                  </div>
+                </div>
+                <button class="endorse-btn" onclick="handleEndorse(this, '${s.name}', ${s.id})">
+                  <span>👍</span> <span class="count">${s.endorsements_count}</span> Endorse
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Profile load error:', err);
+      }
+    }
+
+    function filterTechStack(cat, btn) {
+      document.querySelectorAll('.tech-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const items = document.querySelectorAll('.tech-item');
+      items.forEach(item => {
+        if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function switchSkillTab(cat, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const items = document.querySelectorAll('.skill-matrix-item');
+      items.forEach(item => {
+        if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    async function handleEndorse(btn, skillName, skillId = 0) {
+      const countEl = btn.querySelector('.count');
+      let count = parseInt(countEl.textContent, 10);
+      countEl.textContent = count + 1;
+      btn.style.background = 'var(--primary-gradient)';
+      btn.style.color = '#fff';
+
+      if (window.api) {
+        await window.api.endorseSkill(skillId, skillName);
+      }
+      window.showToast('Skill Endorsed!', `You endorsed ${skillName}. Total endorsements: ${count + 1}`, '👍');
+    }
+
+    function renderHeatmap() {
+      const grid = document.getElementById('profile-heatmap-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      
+      const totalCells = 16 * 7;
+      const fragment = document.createDocumentFragment();
+
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        
+
+        const rand = Math.random();
+        let level = 'l0';
+        if (i > 90) {
+          level = rand > 0.3 ? (rand > 0.7 ? 'l4' : 'l3') : 'l2';
+        } else if (rand > 0.8) {
+          level = 'l3';
+        } else if (rand > 0.6) {
+          level = 'l2';
+        } else if (rand > 0.35) {
+          level = 'l1';
+        }
+
+        cell.classList.add(level);
+        const dayNum = i + 1;
+        cell.title = `Day ${dayNum}: ${level === 'l4' ? '4 assessments completed (Top Tier)' : (level === 'l3' ? '2 assessments completed' : (level === 'l2' ? '1 assessment completed' : (level === 'l1' ? 'Course module reviewed' : 'No recorded activity')))}`;
+        fragment.appendChild(cell);
+      }
+
+      grid.appendChild(fragment);
+    }
+
+    let auditRunning = false;
+    function runAiProfileAudit() {
+      const modal = document.getElementById('audit-profile-modal');
+      const terminal = document.getElementById('audit-terminal-body');
+      const summary = document.getElementById('audit-result-summary');
+      modal.classList.add('active');
+      summary.style.display = 'none';
+
+      if (auditRunning) return;
+      auditRunning = true;
+      terminal.innerHTML = '';
+
+      const logs = [
+        { type: 'info', text: 'Initializing Neural Skill Engine v4.2 [CUDA 12.4 enabled]...' },
+        { type: 'info', text: 'Querying authenticated telemetry for user Alex Morgan...' },
+        { type: 'success', text: '✓ 24 Verified Competencies retrieved from Postgres / Vector store' },
+        { type: 'info', text: 'Benchmarking PyTorch & Custom CUDA extensions against 4,200 peer profiles...' },
+        { type: 'success', text: '✓ Attention Kernel proficiency: 96% (Top 1.8% percentile)' },
+        { type: 'info', text: 'Running latency & throughput analysis on LLM serving modules...' },
+        { type: 'success', text: '✓ TensorRT-LLM & vLLM stack validated: sub-15ms P99 latency confirmed' },
+        { type: 'warn', text: '⚠ Gap detected: Distributed GPU Scheduling index at 74% (Benchmark target: 90%)' },
+        { type: 'success', text: '✓ AI Career Diagnostics Score calculated: 82% Readiness for Lead AI Architect' },
+        { type: 'info', text: 'Audit complete. Synthesizing actionable recommendations.' }
+      ];
+
+      logs.forEach((log, index) => {
+        setTimeout(() => {
+          const line = document.createElement('div');
+          line.className = `audit-log-line ${log.type}`;
+          line.innerHTML = `<span>[${log.type.toUpperCase()}]</span> <span>${log.text}</span>`;
+          terminal.appendChild(line);
+          terminal.scrollTop = terminal.scrollHeight;
+
+          if (index === logs.length - 1) {
+            auditRunning = false;
+            summary.style.display = 'block';
+          }
+        }, (index + 1) * 220);
+      });
+    }
+
+    function closeAuditModal() {
+      document.getElementById('audit-profile-modal').classList.remove('active');
+    }
+
+    function openDossierModal() {
+      document.getElementById('export-dossier-modal').classList.add('active');
+    }
+
+    function closeDossierModal() {
+      document.getElementById('export-dossier-modal').classList.remove('active');
+    }
+
+    function copyDossier() {
+      const name = document.getElementById('profile-name-display').textContent;
+      const subtitle = document.getElementById('profile-subtitle-display').textContent;
+      const bio = document.getElementById('profile-bio-display').textContent;
+      
+      const summaryText = `--- CERTIFIED AI ENGINEER DOSSIER ---
+Name: ${name}
+Designation: ${subtitle}
+Verification ID: SI-AI-2026-9481X
+Status: Level 4 AI Specialist (Top 5% Nationwide)
+
+Executive Summary:
+${bio.trim()}
+
+Key Competencies:
+- PyTorch & CUDA Kernels: 96% (Mastery)
+- Transformers & Attention Ops: 88% (Advanced)
+- Advanced Python & Concurrency: 94% (Mastery)
+- Vector Databases & Semantic Search: 82% (Proficient)
+- MLOps & Kubernetes: 74% (Competent)
+
+Verified Stack: PyTorch 2.4, FlashAttention-2, TensorRT-LLM, vLLM, Qdrant, Ray Serve
+Validated Compute: 1,280+ GPU Hours | 142B Parameters Served
+Verified by: Skill Intelligence Platform (Enterprise Cognitive Systems)`;
+
+      navigator.clipboard.writeText(summaryText).then(() => {
+        window.showToast('Dossier Copied!', 'Certified AI profile summary copied to clipboard.', '📋');
+      }).catch(() => {
+        window.showToast('Copied', 'Summary ready for sharing.', '📋');
+      });
+    }
+
+    function askAiCopilot(promptText) {
+      sessionStorage.setItem('si_copilot_prefill', promptText);
+      window.location.href = 'ai-assistant.html';
+    }
+
+    window.openEditProfileModal = function() {
+      document.getElementById('edit-profile-modal').classList.add('active');
+    };
+
+    window.closeEditProfileModal = function() {
+      document.getElementById('edit-profile-modal').classList.remove('active');
+    };
+
+    async function handleSaveProfile(e) {
+      e.preventDefault();
+      const newName = document.getElementById('input-edit-name').value.trim();
+      const newRole = document.getElementById('input-edit-role').value.trim();
+      const newTarget = document.getElementById('input-edit-target-role').value.trim();
+      const newBio = document.getElementById('input-edit-bio').value.trim();
+
+      if (!newName) return;
+
+      if (window.api) {
+        const updateRes = await window.api.updateUser({
+          full_name: newName,
+          role_title: newRole,
+          target_role: newTarget
+        });
+
+        if (updateRes && updateRes.status === 'success') {
+          const nameEl = document.getElementById('profile-name-display');
+          if (nameEl) nameEl.textContent = newName;
+          const subEl = document.getElementById('profile-subtitle-display');
+          if (subEl) subEl.textContent = `${newRole} • Enterprise Cognitive Systems Division • Bengaluru, India`;
+          const bioEl = document.getElementById('profile-bio-display');
+          if (bioEl && newBio) bioEl.textContent = newBio;
+          const dosBio = document.getElementById('dossier-bio');
+          if (dosBio && newBio) dosBio.textContent = newBio;
+          if (window.syncGlobalHeader) window.syncGlobalHeader();
+        }
+      }
+
+      window.closeEditProfileModal();
+      window.showToast('Profile Updated', 'Your profile details and AI dossier have been updated.', '✅');
+    }
+
+    window.addEventListener('si:data-changed', loadLiveProfile);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLiveProfile();
+      renderHeatmap();
+    });
+  </script>
+</body>
+</html>

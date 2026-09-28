@@ -1,0 +1,26 @@
+# Dependencies & Package Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Environment & Sensitive configs
+.env
+.env.*
+*.secret
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Logs & Runtime
+logs/
+*.log
+.system_generated/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

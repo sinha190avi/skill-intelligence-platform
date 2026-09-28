@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Progress & Analytics | Skill Intelligence</title>
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <link rel="stylesheet" href="progress.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+
+    <header class="topbar">
+
+      <a href="dashboard.html" class="nav-brand-pill">
+        <img src="commit_conquer_clean.png" alt="Commit & Conquer" class="nav-brand-logo-img">
+      </a>
+
+            <nav class="top-nav-links">
+        <a href="dashboard.html" class="top-nav-link">Dashboard</a>
+        <a href="profile.html" class="top-nav-link">Profile</a>
+        <a href="assessments.html" class="top-nav-link">Assessments</a>
+        <a href="learning-path.html" class="top-nav-link">Learning Path</a>
+        <a href="courses.html" class="top-nav-link">Courses</a>
+        <a href="recommendations.html" class="top-nav-link">Recommendations</a>
+        <a href="progress.html" class="top-nav-link active">Progress</a>
+        <a href="ai-assistant.html" class="top-nav-link">AI Assistant</a>
+        <a href="leaderboard.html" class="top-nav-link">Leaderboard</a>
+        <a href="career.html" class="top-nav-link">Career</a>
+        <a href="community.html" class="top-nav-link">Community</a>
+        <a href="certifications.html" class="top-nav-link">Certifications</a>
+        <a href="settings.html" class="top-nav-link">Settings</a>
+      </nav>
+
+      <div class="topbar-actions">
+
+        <button class="search-icon-btn search-trigger" role="button" tabindex="0" title="Quick Search (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a href="ai-assistant.html" class="copilot-quick-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <span>Copilot</span>
+        </a>
+
+        <button class="action-btn" onclick="window.toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="theme-toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <div style="position: relative;">
+          <button class="action-btn" id="notif-btn" title="Notifications" aria-label="Notifications">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge-dot"></span>
+          </button>
+          
+          <div class="dropdown-menu" id="notif-dropdown">
+            <div class="dropdown-header">
+              <strong>Notifications (3)</strong>
+              <button onclick="window.clearNotifications(event)" style="background:none; border:none; color:var(--brand-cyan); font-size:11.5px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notification-list">
+              <div class="notification-item">
+                <h4>🎉 Assessment Completed!</h4>
+                <p>You scored 94% on Advanced Python for AI.</p>
+                <span class="time">10 mins ago</span>
+              </div>
+              <div class="notification-item">
+                <h4>✨ New Recommendation</h4>
+                <p>System Design for LLMs matches your target role (Lead AI Architect).</p>
+                <span class="time">2 hours ago</span>
+              </div>
+            </div>
+            <div style="padding: 8px 12px; text-align: center; border-top: 1px solid var(--border-subtle);">
+              <a href="progress.html" style="font-size: 11.5px; font-weight: 700; color: var(--brand-cyan);">View All Activity →</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: relative;">
+          <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
+            <div class="user-avatar">AM</div>
+            <span class="nav-user-name">Alex M.</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="dropdown-menu" id="user-dropdown">
+            <div class="dropdown-header">
+              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+            </div>
+            <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
+            <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
+            <a href="settings.html" class="dropdown-item"><span>⚙</span> Account Settings</a>
+            <div style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:4px;">
+              <a href="#" onclick="SIAuth.logout(); return false;" class="dropdown-item" style="color:var(--brand-rose);"><span>🚪</span> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <section class="hero-banner">
+        <div>
+          <div class="hero-tag">▥ Learning Velocity & Insights</div>
+          <h1>Learning Progress & Skill Analytics</h1>
+          <p>Track your weekly time investment, skill mastery velocity, benchmark rankings, and unlocked gamified engineering credentials.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-white" onclick="window.showToast('Report Exported', 'Full 30-day analytics CSV downloaded.', '📊');">Export Report</button>
+        </div>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-indigo">⏱</div>
+            <span class="stat-trend up">↑ Live Synced</span>
+          </div>
+          <div class="stat-value" id="prog-total-hours">74.2 hrs</div>
+          <div class="stat-label">Total Time Invested</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-amber">🔥</div>
+            <span class="stat-trend up">Active</span>
+          </div>
+          <div class="stat-value" id="prog-active-streak">14 Days</div>
+          <div class="stat-label">Daily Streak Record</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-emerald">🎯</div>
+            <span class="stat-trend up" id="prog-rank-badge">Top 5%</span>
+          </div>
+          <div class="stat-value" id="prog-pass-rate">94.2%</div>
+          <div class="stat-label">Assessment Pass Rate</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon-wrapper stat-icon-cyan">🏆</div>
+            <span class="stat-trend up">+350 XP</span>
+          </div>
+          <div class="stat-value" id="prog-total-xp">2,450 XP</div>
+          <div class="stat-label">Total Karma XP</div>
+        </div>
+      </section>
+
+      <div class="progress-analytics-grid">
+
+        <div class="chart-box">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Study Hours (Past 7 Days)</h3>
+              <p id="prog-weekly-subtitle">Total 18.5 hours logged this week (Goal: 15 hours)</p>
+            </div>
+            <span class="badge badge-emerald">Goal Exceeded</span>
+          </div>
+
+          <div class="weekly-bars" id="prog-weekly-bars">
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 60%;" data-hours="2.5 hrs"></div>
+              <span class="bar-day">Mon</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 75%;" data-hours="3.0 hrs"></div>
+              <span class="bar-day">Tue</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 40%;" data-hours="1.5 hrs"></div>
+              <span class="bar-day">Wed</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 95%;" data-hours="4.0 hrs"></div>
+              <span class="bar-day">Thu</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 55%;" data-hours="2.2 hrs"></div>
+              <span class="bar-day">Fri</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 85%;" data-hours="3.5 hrs"></div>
+              <span class="bar-day">Sat</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar-pill" style="height: 45%;" data-hours="1.8 hrs"></div>
+              <span class="bar-day">Sun</span>
+            </div>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text-muted); text-align: center;">Hover over any bar to inspect daily logged hours</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3>Domain Velocity</h3>
+              <p>Competency gains this month</p>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span>Deep Learning / PyTorch</span>
+              <span style="color: var(--accent-emerald);">+18%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill emerald" style="width: 96%;"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span>Attention & Transformers</span>
+              <span style="color: var(--primary-500);">+14%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: 88%;"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span>MLOps & Kubernetes</span>
+              <span style="color: var(--accent-cyan);">+9%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill cyan" style="width: 74%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h3>Engineering Badges & Achievements</h3>
+            <p>Verified milestones earned across assessments and labs</p>
+          </div>
+          <span class="badge badge-indigo">6 of 8 Unlocked</span>
+        </div>
+
+        <div class="badges-grid">
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">🔥</div>
+            <h4>Streak Champion</h4>
+            <p>Maintained a 14-day continuous learning streak.</p>
+          </div>
+
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">🧠</div>
+            <h4>Transformer Pioneer</h4>
+            <p>Mastered multi-head attention and causal masking in PyTorch.</p>
+          </div>
+
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">⚡</div>
+            <h4>Autograd Master</h4>
+            <p>Built a reverse-mode automatic differentiation engine from scratch.</p>
+          </div>
+
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">🎯</div>
+            <h4>Top 5% Benchmark</h4>
+            <p>Scored in the 95th percentile on the Python AI test.</p>
+          </div>
+
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">☸️</div>
+            <h4>Cluster Navigator</h4>
+            <p>Deployed scalable PyTorch inference workloads on Kubernetes.</p>
+          </div>
+
+          <div class="badge-card unlocked">
+            <div class="badge-icon-lg">🏆</div>
+            <h4>Assessment Ace</h4>
+            <p>Achieved 100% score on a standardized skill assessment.</p>
+          </div>
+
+          <div class="badge-card locked">
+            <div class="badge-icon-lg">🛡️</div>
+            <h4>Governance Sentinel</h4>
+            <p>Complete Enterprise AI Governance & Red Teaming (Locked).</p>
+          </div>
+
+          <div class="badge-card locked">
+            <div class="badge-icon-lg">🌟</div>
+            <h4>Architect Laureate</h4>
+            <p>Reach 90%+ Role Readiness for Lead AI Architect (Locked).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h3>Recent Learning Audit Log</h3>
+            <p>Chronological verification of completed modules, tests, and labs</p>
+          </div>
+        </div>
+
+        <div id="prog-activity-container">
+          <div class="activity-feed-item">
+            <div class="activity-icon-bubble" style="background: var(--accent-emerald-bg); color: var(--accent-emerald);">✓</div>
+            <div style="flex: 1;">
+              <strong style="font-size: 13.5px;">Passed Assessment: Advanced Python for AI</strong>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">Score: 94% • +150 XP earned • Added to Skill Matrix</div>
+              <span style="font-size: 11px; color: var(--text-muted);">Today at 6:45 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function loadLiveProgress() {
+      if (!window.api) return;
+      try {
+        const res = await window.api.getProgress();
+        if (res && res.status === 'success' && res.data) {
+          const kpis = res.data.kpis;
+          const weekly = res.data.weekly_study_hours;
+          const history = res.data.assessment_history;
+
+          const hrsEl = document.getElementById('prog-total-hours');
+          if (hrsEl) hrsEl.textContent = `${kpis.total_hours} hrs`;
+
+          const streakEl = document.getElementById('prog-active-streak');
+          if (streakEl) streakEl.textContent = `${kpis.active_streak_days} Days`;
+
+          const passEl = document.getElementById('prog-pass-rate');
+          if (passEl) passEl.textContent = `${kpis.pass_rate_pct}%`;
+
+          const xpEl = document.getElementById('prog-total-xp');
+          if (xpEl) xpEl.textContent = `${Number(kpis.total_xp).toLocaleString()} XP`;
+
+          const rankEl = document.getElementById('prog-rank-badge');
+          if (rankEl && kpis.benchmark_rank) rankEl.textContent = kpis.benchmark_rank;
+
+          if (weekly && weekly.days && weekly.days.length > 0) {
+            const subEl = document.getElementById('prog-weekly-subtitle');
+            if (subEl) subEl.textContent = `Total ${weekly.total_this_week} hours logged this week (Goal: ${weekly.target_goal} hours)`;
+
+            const barsEl = document.getElementById('prog-weekly-bars');
+            if (barsEl) {
+              const maxHrs = Math.max(...weekly.days.map(d => d.hours), 4.5);
+              barsEl.innerHTML = weekly.days.map(d => {
+                const pct = maxHrs > 0 ? Math.min(100, Math.round((d.hours / maxHrs) * 100)) : 10;
+                return `
+                  <div class="bar-col">
+                    <div class="bar-pill" style="height: ${Math.max(12, pct)}%;" data-hours="${d.hours} hrs" title="${d.day}: ${d.hours} hrs"></div>
+                    <span class="bar-day">${d.day}</span>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+
+          if (history && history.length > 0) {
+            const actCont = document.getElementById('prog-activity-container');
+            if (actCont) {
+              actCont.innerHTML = history.map(h => `
+                <div class="activity-feed-item">
+                  <div class="activity-icon-bubble" style="background: ${h.status === 'Passed' ? 'var(--accent-emerald-bg)' : 'rgba(244,63,94,0.15)'}; color: ${h.status === 'Passed' ? 'var(--accent-emerald)' : 'var(--brand-rose)'};">
+                    ${h.status === 'Passed' ? '✓' : '✕'}
+                  </div>
+                  <div style="flex: 1;">
+                    <strong style="font-size: 13.5px;">Assessment Attempt: ${h.assessment_title}</strong>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">Score: ${h.score_pct}% (${h.status}) &bull; ${h.benchmark_percentile}</div>
+                    <span style="font-size: 11px; color: var(--text-muted);">${h.time_ago || 'Recent'}</span>
+                  </div>
+                </div>
+              `).join('');
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Progress load error:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadLiveProgress);
+    window.addEventListener('si:data-changed', loadLiveProgress);
+  </script>
+</body>
+</html>

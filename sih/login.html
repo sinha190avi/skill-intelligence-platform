@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Skill Intelligence Platform</title>
+  <meta name="description" content="Sign in to your Skill Intelligence account with secure Email OTP or Password.">
+  <link rel="stylesheet" href="common.css">
+  <script src="api-client-extended.js"></script>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px 16px;
+      position: relative;
+      overflow-x: hidden;
+      background-color: #f4f6fa;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(168,85,247,0.04) 0%, transparent 60%);
+      font-family: var(--font-main, 'Inter', sans-serif);
+      color: #0f172a;
+    }
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.15;
+    }
+    .auth-container {
+      width: 100%;
+      max-width: 490px;
+      position: relative;
+      z-index: 10;
+      animation: fadeSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-brand img {
+      height: 46px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 4px 12px rgba(79,70,229,0.25));
+    }
+    .auth-brand h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin-bottom: 6px;
+      font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+    }
+    .auth-brand p {
+      font-size: 13.5px;
+      color: #64748b;
+      letter-spacing: 0.01em;
+      font-weight: 500;
+    }
+    .auth-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 34px 36px;
+      box-shadow: 0 10px 35px -5px rgba(15, 23, 42, 0.07), 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+      position: relative;
+    }
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4f46e5, #06b6d4, transparent);
+      border-radius: 2px;
+    }
+    .auth-tabs {
+      display: flex;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .auth-tab:hover {
+      color: #0f172a;
+    }
+    .auth-tab.active {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+    }
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #475569;
+      margin-bottom: 7px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.15s ease;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .form-input::placeholder { color: #94a3b8; }
+    .input-icon-wrap { position: relative; }
+    .input-icon-wrap .form-input { padding-left: 42px; }
+    .input-icon-wrap .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .btn-auth {
+      width: 100%;
+      padding: 13px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-auth:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+    }
+    .btn-auth:active:not(:disabled) { transform: translateY(0); }
+    .btn-auth:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .otp-digits-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .otp-box {
+      width: 54px;
+      height: 60px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: #0f172a;
+      font-size: 26px;
+      font-weight: 800;
+      font-family: 'Space Grotesk', 'Courier New', monospace;
+      text-align: center;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+    .otp-box:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      background: #ffffff;
+      transform: translateY(-2px);
+    }
+    .otp-box.filled {
+      border-color: #4f46e5;
+      color: #4338ca;
+      background: #eef2ff;
+    }
+
+    .otp-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: #64748b;
+    }
+    .otp-timer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #4f46e5;
+      font-weight: 600;
+    }
+    .resend-btn {
+      background: none;
+      border: none;
+      color: #4f46e5;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .resend-btn:hover:not(:disabled) {
+      color: #3730a3;
+      text-decoration: underline;
+    }
+    .resend-btn:disabled {
+      color: #94a3b8;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
+    .status-banner {
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-top: 14px;
+      line-height: 1.5;
+      display: none;
+      animation: fadeIn 0.18s ease;
+    }
+    .status-banner.error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+    }
+    .status-banner.success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #047857;
+    }
+    .status-banner.info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .email-display-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 20px;
+      font-size: 12.5px;
+      color: #4338ca;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .email-display-chip button {
+      background: none;
+      border: none;
+      color: #6366f1;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .email-display-chip button:hover { color: #1e1b4b; }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-social {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-social:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .forgot-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #4f46e5;
+      transition: color 0.15s;
+      text-decoration: none;
+    }
+    .forgot-link:hover { color: #3730a3; text-decoration: underline; }
+    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+    .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; margin-top: 2px; accent-color: #4f46e5; cursor: pointer; }
+    .checkbox-row label { font-size: 12.5px; color: #64748b; line-height: 1.5; }
+    .checkbox-row a { color: #4f46e5; text-decoration: none; font-weight: 600; }
+    .checkbox-row a:hover { text-decoration: underline; }
+    .role-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .role-option {
+      padding: 12px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      background: #f8fafc;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .role-option:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+    .role-option.selected {
+      border-color: #4f46e5;
+      background: #eef2ff;
+      box-shadow: 0 0 0 2px rgba(79,70,229,0.25);
+    }
+    .role-option .role-emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+    .role-option .role-title { font-size: 12.5px; font-weight: 700; color: #0f172a; display: block; }
+    .role-option.selected .role-title { color: #4338ca; }
+    .role-option .role-sub { font-size: 10.5px; color: #64748b; display: block; margin-top: 2px; }
+    .role-option.selected .role-sub { color: #6366f1; }
+    .pass-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: #94a3b8; cursor: pointer;
+      padding: 0; transition: color 0.15s; display: flex;
+    }
+    .pass-toggle:hover { color: #0f172a; }
+    .trust-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .trust-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      color: #64748b;
+      font-weight: 600;
+      text-align: center;
+    }
+    .trust-badge .badge-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .sbar { flex: 1; height: 3px; border-radius: 4px; background: #e2e8f0; transition: background 0.18s; }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.45s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; }
+      .auth-container { max-width: 100%; }
+      .auth-brand img { height: 38px; }
+      .auth-brand h1 { font-size: 22px; }
+      .auth-brand p { font-size: 12.5px; }
+      .auth-card { padding: 24px 18px; border-radius: 16px; }
+      .auth-tabs { gap: 2px; padding: 3px; }
+      .auth-tab { padding: 8px 6px; font-size: 11.5px; }
+      .otp-digits-container { gap: 6px; justify-content: center; }
+      .otp-box { width: 42px; height: 50px; font-size: 20px; border-radius: 8px; }
+      .trust-badges { gap: 10px; flex-wrap: wrap; }
+      .trust-badge { font-size: 9.5px; }
+      .trust-badge .badge-icon { width: 28px; height: 28px; font-size: 13px; }
+    }
+    @media (max-width: 360px) {
+      .auth-card { padding: 20px 14px; }
+      .otp-digits-container { gap: 4px; }
+      .otp-box { width: 36px; height: 46px; font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="auth-container">
+    <div class="auth-brand">
+      <img src="commit_conquer_clean.png" alt="Commit &amp; Conquer">
+      <h1>Skill Intelligence Platform</h1>
+      <p>Enterprise AI Engineering Assessment &amp; Career Growth</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" id="tab-otp" onclick="switchAuthTab('otp')" role="tab">⚡ Email OTP</button>
+        <button class="auth-tab" id="tab-login" onclick="switchAuthTab('login')" role="tab">🔑 Password</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')" role="tab">✨ Register</button>
+      </div>
+
+      <div class="auth-panel active" id="panel-otp">
+
+        <div id="otp-step-1">
+          <form id="otp-send-form" onsubmit="handleSendOTP(event)">
+            <div class="form-group">
+              <label class="form-label" for="otp-email">Your Email Address</label>
+              <div class="input-icon-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+                </span>
+                <input type="email" class="form-input" id="otp-email" placeholder="name@company.com or your email" autocomplete="email" required autofocus>
+              </div>
+              <p style="font-size:12px;color:var(--text-muted);margin:8px 0 0 2px;">
+                We'll email you a secure 6-digit one-time code. No password required.
+              </p>
+            </div>
+
+            <button type="submit" class="btn-auth" id="btn-send-otp">
+              <span>Send Verification Code</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <div style="margin-top:14px;text-align:center;">
+            <span style="font-size:11.5px;color:var(--text-muted);">Quick demo test: </span>
+            <a href="#" onclick="quickFillEmail('alex.morgan@enterprise.ai'); return false;" style="font-size:11.5px;color:var(--brand-cyan);text-decoration:none;">alex.morgan@enterprise.ai</a>
+          </div>
+        </div>
+
+        <div id="otp-step-2" style="display:none;">
+          <div style="text-align:center;margin-bottom:14px;">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">Verification code sent to:</p>
+            <div class="email-display-chip">
+              <span id="target-email-chip">user@example.com</span>
+              <button onclick="backToStep1()" title="Change Email" aria-label="Change Email">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <form id="otp-verify-form" onsubmit="handleVerifyOTP(event)">
+            <label class="form-label" style="text-align:center;">Enter 6-Digit Code</label>
+            <div class="otp-digits-container" id="otp-inputs">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" id="otp-0">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp-1">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp-2">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp-3">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp-4">
+              <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp-5">
+            </div>
+
+            <div class="otp-meta">
+              <div class="otp-timer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="countdown-text">Expires in 10:00</span>
+              </div>
+              <button type="button" class="resend-btn" id="btn-resend-otp" onclick="resendCode()">
+                Resend Code
+              </button>
+            </div>
+
+            <button type="submit" class="btn-auth" id="btn-verify-otp">
+              <span>Verify &amp; Launch Platform</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+        </div>
+
+        <div id="otp-banner" class="status-banner"></div>
+      </div>
+
+      <div class="auth-panel" id="panel-login">
+        <form id="login-form" onsubmit="handlePasswordLogin(event)" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="login-email">Work Email</label>
+            <div class="input-icon-wrap">
+              <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg></span>
+              <input type="email" class="form-input" id="login-email" placeholder="alex.morgan@enterprise.ai" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
+              <label class="form-label" for="login-password" style="margin-bottom:0;">Password</label>
+              <a href="#" class="forgot-link" onclick="showForgotModal(); return false;">Forgot password?</a>
+            </div>
+            <div class="input-icon-wrap">
+              <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              <input type="password" class="form-input" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+              <button type="button" class="pass-toggle" onclick="togglePassword('login-password', this)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="remember-me" checked>
+            <label for="remember-me">Keep me signed in for 30 days</label>
+          </div>
+          <button type="submit" class="btn-auth" id="btn-login-submit">Sign In with Password</button>
+          <div id="password-banner" class="status-banner"></div>
+          <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
+            Demo account: <strong style="color:var(--brand-cyan);">alex.morgan@enterprise.ai</strong> &nbsp;/ any password
+          </div>
+        </form>
+
+        <div class="auth-divider">or continue with</div>
+        <div class="social-btns">
+          <button class="btn-social" onclick="socialLogin('Google')">
+            <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+          <button class="btn-social" onclick="socialLogin('Microsoft')">
+            <svg width="15" height="15" viewBox="0 0 24 24"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="13" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="13" width="10" height="10" fill="#00a4ef"/><rect x="13" y="13" width="10" height="10" fill="#ffb900"/></svg>
+            Microsoft
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-panel" id="panel-register">
+        <form id="register-form" onsubmit="handleRegister(event)" novalidate>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="reg-firstname">First Name</label>
+              <input type="text" class="form-input" id="reg-firstname" placeholder="Alex" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="reg-lastname">Last Name</label>
+              <input type="text" class="form-input" id="reg-lastname" placeholder="Morgan" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Work Email</label>
+            <div class="input-icon-wrap">
+              <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg></span>
+              <input type="email" class="form-input" id="reg-email" placeholder="you@company.ai" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role Specialization</label>
+            <div class="role-select-grid">
+              <div class="role-option selected" onclick="selectRole('engineer', this)">
+                <span class="role-emoji">👨‍💻</span>
+                <span class="role-title">ML Engineer</span>
+                <span class="role-sub">Building models</span>
+              </div>
+              <div class="role-option" onclick="selectRole('researcher', this)">
+                <span class="role-emoji">🔬</span>
+                <span class="role-title">AI Researcher</span>
+                <span class="role-sub">Advancing science</span>
+              </div>
+              <div class="role-option" onclick="selectRole('architect', this)">
+                <span class="role-emoji">🏗️</span>
+                <span class="role-title">AI Architect</span>
+                <span class="role-sub">System design</span>
+              </div>
+              <div class="role-option" onclick="selectRole('lead', this)">
+                <span class="role-emoji">🚀</span>
+                <span class="role-title">Tech Lead</span>
+                <span class="role-sub">Team leadership</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Create Password</label>
+            <div class="input-icon-wrap">
+              <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              <input type="password" class="form-input" id="reg-password" placeholder="Min 8 chars, 1 uppercase, 1 number" oninput="checkPasswordStrength(this.value)" required>
+              <button type="button" class="pass-toggle" onclick="togglePassword('reg-password', this)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div style="display:flex;gap:4px;margin-top:8px;" id="strength-bar">
+              <div class="sbar"></div><div class="sbar"></div><div class="sbar"></div><div class="sbar"></div>
+            </div>
+            <div id="strength-label" style="font-size:11px;color:var(--text-muted);margin-top:4px;"></div>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="agree-terms" required checked>
+            <label for="agree-terms">I agree to the <a href="#" style="color:var(--brand-cyan);">Terms of Service</a> and Privacy Policy.</label>
+          </div>
+          <button type="submit" class="btn-auth" id="btn-register-submit">Create My Account</button>
+          <div id="register-banner" class="status-banner"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="trust-badges">
+      <div class="trust-badge"><div class="badge-icon" style="background:rgba(16,185,129,0.15);color:#34d399;">🔐</div><span>SOC2 Type II</span></div>
+      <div class="trust-badge"><div class="badge-icon" style="background:rgba(99,102,241,0.15);color:#818cf8;">📧</div><span>Real SMTP OTP</span></div>
+      <div class="trust-badge"><div class="badge-icon" style="background:rgba(56,189,248,0.15);color:#38bdf8;">🌐</div><span>ISO 27001</span></div>
+      <div class="trust-badge"><div class="badge-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24;">⚡</div><span>99.9% Uptime</span></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="forgot-modal" style="z-index:9000;display:none;">
+    <div class="modal-content" style="max-width:420px;">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size:18px;">Reset Password via OTP</h2>
+          <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Enter your email to receive an instant verification code.</p>
+        </div>
+        <button class="modal-close-btn" onclick="hideForgotModal()">✕</button>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" for="forgot-email">Work Email</label>
+        <input type="email" class="form-input" id="forgot-email" placeholder="you@company.ai">
+      </div>
+      <button class="btn-auth" onclick="sendForgotOTP()">Send Code to Email</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    let activeEmail = '';
+    let countdownInterval = null;
+    let resendCooldownInterval = null;
+    let selectedRole = 'engineer';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      setupOtpInputHandlers();
+
+      try {
+        const res = await SIAuth.me();
+        if (res.status === 'success' && res.authenticated) {
+          window.location.href = 'dashboard.html';
+        }
+      } catch (_) {}
+    });
+
+    function switchAuthTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+      hideBanners();
+    }
+
+    function selectRole(role, el) {
+      document.querySelectorAll('.role-option').forEach(r => r.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedRole = role;
+    }
+
+    function quickFillEmail(em) {
+      document.getElementById('otp-email').value = em;
+      document.getElementById('btn-send-otp').focus();
+    }
+
+    function showBanner(bannerId, message, type = 'error') {
+      const banner = document.getElementById(bannerId);
+      if (!banner) return;
+      banner.className = 'status-banner ' + type;
+      banner.innerHTML = message;
+      banner.style.display = 'block';
+    }
+
+    function hideBanners() {
+      document.querySelectorAll('.status-banner').forEach(b => {
+        b.style.display = 'none';
+        b.innerHTML = '';
+      });
+    }
+
+    async function handleSendOTP(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('otp-email');
+      const email = emailInput.value.trim().toLowerCase();
+      const btn = document.getElementById('btn-send-otp');
+
+      if (!email) {
+        showBanner('otp-banner', 'Please enter your email address.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner"></div><span>Sending code to email…</span>';
+      hideBanners();
+
+      try {
+        const res = await SIAuth.sendOTP(email, 'login');
+        if (res.status === 'success') {
+          activeEmail = email;
+          document.getElementById('target-email-chip').textContent = email;
+          document.getElementById('otp-step-1').style.display = 'none';
+          document.getElementById('otp-step-2').style.display = 'block';
+
+          for (let i = 0; i < 6; i++) {
+            const box = document.getElementById('otp-' + i);
+            box.value = '';
+            box.classList.remove('filled');
+          }
+          document.getElementById('otp-0').focus();
+
+          startCountdown(res.expires_in || 600);
+          startResendCooldown(45);
+
+          let note = 'Verification code has been emailed to <strong>' + email + '</strong>.';
+          if (res.mock && res.dev_otp) {
+            note += ' <br><span style="color:#fbbf24;">(Dev Mode OTP: <strong>' + res.dev_otp + '</strong>)</span>';
+          }
+          showBanner('otp-banner', note, 'success');
+        } else {
+          let err = res.message || 'Could not send verification email. Please check address.';
+          if (res.dev_otp) {
+            err += ' <br>Dev Code: ' + res.dev_otp;
+          }
+          showBanner('otp-banner', err, 'error');
+        }
+      } catch (err) {
+        showBanner('otp-banner', 'Connection error: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Send Verification Code</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      }
+    }
+
+    function backToStep1() {
+      document.getElementById('otp-step-2').style.display = 'none';
+      document.getElementById('otp-step-1').style.display = 'block';
+      hideBanners();
+      clearInterval(countdownInterval);
+      clearInterval(resendCooldownInterval);
+    }
+
+    async function handleVerifyOTP(e) {
+      if (e) e.preventDefault();
+      const btn = document.getElementById('btn-verify-otp');
+      const otp = getEnteredOtp();
+
+      if (otp.length !== 6) {
+        showBanner('otp-banner', 'Please enter the complete 6-digit code.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner"></div><span>Verifying code…</span>';
+      hideBanners();
+
+      try {
+        const res = await SIAuth.verifyOTP(activeEmail, otp);
+        if (res.status === 'success') {
+          btn.innerHTML = '<span>✓ Access Granted! Launching…</span>';
+          showBanner('otp-banner', 'Identity verified successfully! Redirecting to dashboard…', 'success');
+          setTimeout(() => {
+            window.location.href = res.redirect || 'dashboard.html';
+          }, 800);
+        } else {
+          showBanner('otp-banner', res.message || 'Invalid verification code. Please check and try again.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Verify &amp; Launch Platform</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+        }
+      } catch (err) {
+        showBanner('otp-banner', 'Verification request failed: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Verify &amp; Launch Platform</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+      }
+    }
+
+    function getEnteredOtp() {
+      let code = '';
+      for (let i = 0; i < 6; i++) {
+        code += (document.getElementById('otp-' + i)?.value || '').trim();
+      }
+      return code;
+    }
+
+    async function resendCode() {
+      const resendBtn = document.getElementById('btn-resend-otp');
+      if (resendBtn.disabled) return;
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Sending…';
+
+      try {
+        const res = await SIAuth.sendOTP(activeEmail, 'login');
+        if (res.status === 'success') {
+          startCountdown(res.expires_in || 600);
+          startResendCooldown(45);
+          let msg = 'New verification code sent to ' + activeEmail + '!';
+          if (res.mock && res.dev_otp) {
+            msg += ' (Dev Code: ' + res.dev_otp + ')';
+          }
+          showBanner('otp-banner', msg, 'success');
+        } else {
+          showBanner('otp-banner', res.message || 'Failed to resend code.', 'error');
+          startResendCooldown(15);
+        }
+      } catch (err) {
+        showBanner('otp-banner', 'Resend error: ' + err.message, 'error');
+        startResendCooldown(15);
+      }
+    }
+
+    function startCountdown(seconds) {
+      clearInterval(countdownInterval);
+      const timerEl = document.getElementById('countdown-text');
+      let remaining = seconds;
+
+      function update() {
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+          timerEl.textContent = 'Code expired';
+          timerEl.style.color = '#f43f5e';
+          return;
+        }
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        timerEl.textContent = `Expires in ${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        remaining--;
+      }
+
+      update();
+      countdownInterval = setInterval(update, 1000);
+    }
+
+    function startResendCooldown(seconds) {
+      clearInterval(resendCooldownInterval);
+      const resendBtn = document.getElementById('btn-resend-otp');
+      let remaining = seconds;
+      resendBtn.disabled = true;
+
+      function update() {
+        if (remaining <= 0) {
+          clearInterval(resendCooldownInterval);
+          resendBtn.disabled = false;
+          resendBtn.textContent = 'Resend Code';
+          return;
+        }
+        resendBtn.textContent = `Resend in ${remaining}s`;
+        remaining--;
+      }
+
+      update();
+      resendCooldownInterval = setInterval(update, 1000);
+    }
+
+    function setupOtpInputHandlers() {
+      const inputs = [0,1,2,3,4,5].map(i => document.getElementById('otp-' + i));
+
+      inputs.forEach((input, idx) => {
+        if (!input) return;
+
+        input.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '');
+          input.value = val ? val[val.length - 1] : '';
+
+          if (input.value) {
+            input.classList.add('filled');
+            if (idx < 5) inputs[idx + 1].focus();
+            else {
+
+              if (getEnteredOtp().length === 6) {
+                handleVerifyOTP();
+              }
+            }
+          } else {
+            input.classList.remove('filled');
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (!input.value && idx > 0) {
+              inputs[idx - 1].focus();
+              inputs[idx - 1].value = '';
+              inputs[idx - 1].classList.remove('filled');
+            }
+          } else if (e.key === 'ArrowLeft' && idx > 0) {
+            inputs[idx - 1].focus();
+          } else if (e.key === 'ArrowRight' && idx < 5) {
+            inputs[idx + 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasted = (e.clipboardData || window.clipboardData).getData('text').trim();
+          const digits = pasted.replace(/[^0-9]/g, '').slice(0, 6);
+          if (!digits) return;
+
+          for (let i = 0; i < 6; i++) {
+            if (i < digits.length) {
+              inputs[i].value = digits[i];
+              inputs[i].classList.add('filled');
+            } else {
+              inputs[i].value = '';
+              inputs[i].classList.remove('filled');
+            }
+          }
+
+          if (digits.length === 6) {
+            inputs[5].focus();
+            handleVerifyOTP();
+          } else if (digits.length > 0 && digits.length < 6) {
+            inputs[digits.length].focus();
+          }
+        });
+      });
+    }
+
+    async function handlePasswordLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-login-submit');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showBanner('password-banner', 'Please enter your email and password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+      hideBanners();
+
+      try {
+        const res = await SIAuth.login(email, password);
+        if (res.status === 'success') {
+          btn.textContent = '✓ Success!';
+          showBanner('password-banner', 'Authenticated! Redirecting to platform…', 'success');
+          setTimeout(() => { window.location.href = res.redirect || 'dashboard.html'; }, 600);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Sign In with Password';
+          showBanner('password-banner', res.message || 'Invalid email or password.', 'error');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Sign In with Password';
+        showBanner('password-banner', 'Login request failed: ' + err.message, 'error');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      if (!document.getElementById('agree-terms').checked) {
+        showBanner('register-banner', 'Please accept the Terms to continue.', 'error');
+        return;
+      }
+      const btn = document.getElementById('btn-register-submit');
+      const firstName = (document.getElementById('reg-firstname')?.value || '').trim();
+      const lastName = (document.getElementById('reg-lastname')?.value || '').trim();
+      const fullName = (firstName + ' ' + lastName).trim();
+      const email = (document.getElementById('reg-email')?.value || '').trim();
+      const password = document.getElementById('reg-password')?.value || '';
+
+      const roleMap = {
+        'engineer': 'ML Engineer',
+        'researcher': 'AI Researcher',
+        'architect': 'AI Architect',
+        'lead': 'Tech Lead'
+      };
+
+      if (!fullName || !email || !password) {
+        showBanner('register-banner', 'Please fill in all required fields.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating Account…';
+      hideBanners();
+
+      try {
+        const res = await SIAuth.register({
+          full_name: fullName,
+          email: email,
+          password: password,
+          role_title: roleMap[selectedRole] || 'ML Engineer'
+        });
+
+        if (res.status === 'success') {
+          btn.textContent = '✓ Account Created!';
+          showBanner('register-banner', 'Account created successfully! Launching dashboard…', 'success');
+          setTimeout(() => { window.location.href = res.redirect || 'dashboard.html'; }, 700);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Create My Account';
+          showBanner('register-banner', res.message || 'Registration failed.', 'error');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Create My Account';
+        showBanner('register-banner', 'Registration failed: ' + err.message, 'error');
+      }
+    }
+
+    function togglePassword(id, btn) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+      } else {
+        inp.type = 'password';
+        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+      }
+    }
+
+    function checkPasswordStrength(val) {
+      const bars = document.querySelectorAll('.sbar');
+      const label = document.getElementById('strength-label');
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^a-zA-Z0-9]/.test(val)) score++;
+      const colors = ['#f43f5e','#f59e0b','#38bdf8','#10b981'];
+      const labels = ['Weak','Fair','Good','Strong'];
+      bars.forEach((b,i) => { b.style.background = i < score ? colors[score-1] : 'var(--border-subtle)'; });
+      label.textContent = val.length > 0 ? (labels[score-1] || '') : '';
+      if (score > 0) label.style.color = colors[score-1];
+    }
+
+    function socialLogin(prov) {
+      window.showToast?.('SSO Redirect', 'Redirecting to ' + prov + ' Single Sign-On…', '🔐');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+    }
+
+    function showForgotModal() { document.getElementById('forgot-modal').style.display = 'flex'; }
+    function hideForgotModal() { document.getElementById('forgot-modal').style.display = 'none'; }
+    function sendForgotOTP() {
+      const em = document.getElementById('forgot-email').value.trim();
+      if (!em) return;
+      hideForgotModal();
+      switchAuthTab('otp');
+      quickFillEmail(em);
+      document.getElementById('btn-send-otp').click();
+    }
+  </script>
+</body>
+</html>
