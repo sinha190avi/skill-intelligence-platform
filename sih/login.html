@@ -6,6 +6,7 @@
   <title>Sign In | Skill Intelligence Platform</title>
   <meta name="description" content="Sign in to your Skill Intelligence account with secure Email OTP or Password.">
   <link rel="stylesheet" href="common.css">
+  <script src="api-client.js"></script>
   <script src="api-client-extended.js"></script>
   <style>
     body {
@@ -564,6 +565,7 @@
           </div>
           <button type="submit" class="btn-auth" id="btn-login-submit">Sign In with Password</button>
           <div id="password-banner" class="status-banner"></div>
+          <button type="button" class="btn-auth" onclick="handleDemoLogin(this)" style="margin-top:12px;background:linear-gradient(135deg,#0284c7,#4f46e5);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(2,132,199,0.25);">⚡ Instant 1-Click Demo Login (Alex Morgan)</button>
           <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
             Demo account: <strong style="color:var(--brand-cyan);">alex.morgan@enterprise.ai</strong> &nbsp;/ any password
           </div>
@@ -684,14 +686,40 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       setupOtpInputHandlers();
+      if (window.location.search.includes('logout=1')) {
+        try { sessionStorage.clear(); localStorage.removeItem('si_auth_user'); localStorage.removeItem('si_platform_db_v2'); sessionStorage.removeItem('si_user'); } catch (_) {}
+        showBanner('password-banner', '✓ You have been safely signed out. Please sign in or register to access the dashboard.', 'success');
+        return;
+      }
+      const _p = new URLSearchParams(window.location.search);
+      if (_p.get('tab') === 'register') switchAuthTab('register');
+      else if (_p.get('tab') === 'otp') switchAuthTab('otp');
 
       try {
         const res = await SIAuth.me();
         if (res.status === 'success' && res.authenticated) {
-          window.location.href = 'dashboard.html';
+          const u = res.data || {};
+          const banner = document.getElementById('password-banner');
+          if (banner) {
+            banner.className = 'status-banner success';
+            banner.innerHTML = '✓ Active session: <strong>' + (u.full_name || u.email || 'Signed In') + '</strong>. <a href="dashboard.html" style="color:inherit;font-weight:700;text-decoration:underline;margin-left:6px;">Go to Dashboard &rarr;</a> &nbsp;|&nbsp; <a href="#" onclick="SIAuth.logout(); return false;" style="color:#f43f5e;font-weight:700;text-decoration:underline;">Sign Out</a>';
+            banner.style.display = 'block';
+          }
         }
       } catch (_) {}
     });
+
+    async function handleDemoLogin(btn) {
+      if (btn) { btn.disabled = true; btn.innerHTML = '<span>⚡ Launching Demo Session…</span>'; }
+      try {
+        const res = await SIAuth.demoLogin();
+        showBanner('password-banner', '✓ Demo session authorized for Alex Morgan! Redirecting…', 'success');
+        setTimeout(() => { window.location.href = res.redirect || 'dashboard.html'; }, 600);
+      } catch (err) {
+        if (btn) { btn.disabled = false; btn.innerHTML = '⚡ Instant 1-Click Demo Login (Alex Morgan)'; }
+        showBanner('password-banner', 'Demo login failed: ' + err.message, 'error');
+      }
+    }
 
     function switchAuthTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));

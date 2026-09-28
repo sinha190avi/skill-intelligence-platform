@@ -37,23 +37,21 @@
 
   function getLocalUser() {
     try {
-      const stored = localStorage.getItem('si_auth_user') || sessionStorage.getItem('si_auth_user');
+      const stored = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
       if (stored) return JSON.parse(stored);
-      const db = JSON.parse(localStorage.getItem('si_platform_db_v2') || '{}');
-      if (db.user) return db.user;
     } catch (_) {}
-    return {
-      id: 1,
-      full_name: 'Alex Morgan',
-      email: 'alex.morgan@enterprise.ai',
-      role_title: 'Senior AI/ML Engineer',
-      target_role: 'Lead AI Architect',
-      department: 'Enterprise Cognitive Systems Division',
-      location: 'Bengaluru, India',
-      avatar_initials: 'AM',
-      karma_xp: 4850,
-      rank_percentile: 'Top 2.4%'
-    };
+    return null;
+  }
+
+  function isUserAuthenticated() {
+    try {
+      const stored = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
+      if (stored) {
+        const u = JSON.parse(stored);
+        if (u && (u.email || u.id)) return true;
+      }
+    } catch (_) {}
+    return false;
   }
 
   function saveLocalUser(u) {
@@ -68,21 +66,67 @@
   }
 
   const Auth = {
+    isAuthenticated() {
+      return isUserAuthenticated();
+    },
+
     async me() {
+      const localAuthed = isUserAuthenticated();
+      const localU = getLocalUser();
+
       try {
         const res = await apiFetch('auth.php?action=me');
-        if (res && res.status === 'success') {
-          if (res.data) saveLocalUser(res.data);
-          return res;
+        if (res && res.status === 'success' && res.data) {
+          saveLocalUser(res.data);
+          return { status: 'success', authenticated: true, data: res.data };
+        } else if (res && (res.status === 'unauthenticated' || res.authenticated === false)) {
+          // Explicit server unauthenticated response - clear local storage
+          sessionStorage.removeItem('si_auth_user');
+          localStorage.removeItem('si_auth_user');
+          return { status: 'unauthenticated', authenticated: false, data: null };
         }
       } catch (_) {}
 
-      const isAuth = !!sessionStorage.getItem('si_auth_user') || !!localStorage.getItem('si_auth_user');
-      const u = getLocalUser();
+      if (localAuthed && localU) {
+        return {
+          status: 'success',
+          authenticated: true,
+          data: localU
+        };
+      }
+
       return {
-        status: isAuth ? 'success' : 'error',
-        authenticated: isAuth,
-        data: isAuth ? u : null
+        status: 'unauthenticated',
+        authenticated: false,
+        data: null
+      };
+    },
+
+    async demoLogin() {
+      const demoUser = {
+        id: 1,
+        full_name: 'Alex Morgan',
+        email: 'alex.morgan@enterprise.ai',
+        role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
+        target_role: 'Lead AI Architect',
+        department: 'Enterprise Cognitive Systems Division',
+        location: 'Bengaluru, India',
+        avatar_initials: 'AM',
+        karma_xp: 4850,
+        rank_percentile: 'Top 2.4%'
+      };
+      saveLocalUser(demoUser);
+      try {
+        await apiFetch('auth.php?action=login', {
+          method: 'POST',
+          body: JSON.stringify({ email: demoUser.email, password: 'demo' })
+        });
+      } catch (_) {}
+      return {
+        status: 'success',
+        message: 'Logged in as Alex Morgan (Demo)',
+        redirect: 'dashboard.html',
+        data: demoUser
       };
     },
     async login(email, password) {
@@ -98,6 +142,20 @@
       } catch (_) {}
 
       let u = getLocalUser();
+      if (!u) {
+        u = {
+          id: Date.now(),
+          full_name: 'Alex Morgan',
+          email: email || 'alex.morgan@enterprise.ai',
+          role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
+          target_role: 'Lead AI Architect',
+          department: 'Enterprise Cognitive Systems Division',
+          location: 'Bengaluru, India',
+          avatar_initials: 'AM',
+          karma_xp: 4850,
+          rank_percentile: 'Top 2.4%'
+        };
+      }
       if (email) {
         u.email = email;
         const namePart = email.split('@')[0].replace(/[._-]/g, ' ');
@@ -185,7 +243,21 @@
 
       if (otp === '482910' || (otp && otp.length === 6)) {
         const em = email || sessionStorage.getItem('si_active_email') || 'alex.morgan@enterprise.ai';
-        const u = getLocalUser();
+        let u = getLocalUser();
+        if (!u) {
+          u = {
+            id: Date.now(),
+            full_name: 'Alex Morgan',
+            email: em,
+            role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
+            target_role: 'Lead AI Architect',
+            department: 'Enterprise Cognitive Systems Division',
+            location: 'Bengaluru, India',
+            avatar_initials: 'AM',
+            karma_xp: 4850,
+            rank_percentile: 'Top 2.4%'
+          };
+        }
         u.email = em;
         saveLocalUser(u);
         return {
@@ -201,7 +273,9 @@
       try { await apiFetch('auth.php?action=logout'); } catch (_) {}
       sessionStorage.clear();
       localStorage.removeItem('si_auth_user');
-      window.location.href = 'login.html';
+      localStorage.removeItem('si_platform_db_v2');
+      sessionStorage.removeItem('si_user');
+      window.location.href = 'login.html?logout=1';
     },
 
     async guard(redirectUrl = 'login.html') {
@@ -371,9 +445,20 @@
   window.SICertifications = Certifications;
 
   async function syncNavbar() {
-    const isLogin = window.location.pathname.toLowerCase().endsWith('login.html') || window.location.pathname.toLowerCase().endsWith('login.php');
+    const rawPath = window.location.pathname.toLowerCase();
+    const page = rawPath.split('/').pop() || 'index.html';
+    const isLogin = page === 'login.html' || page === 'login.php';
+    const isLanding = page === 'landing.html' || page === 'landing.php' || page === 'index.html' || page === '' || page === 'index.php';
+
+    // Landing / index is public; do not enforce login guard
+    if (isLanding) {
+      return;
+    }
+
     const res = await Auth.me();
-    if (res.status !== 'success' || !res.authenticated) {
+    const isAuthed = res && res.status === 'success' && res.authenticated;
+
+    if (!isAuthed) {
       if (!isLogin) {
         window.location.href = 'login.html';
       }
@@ -381,7 +466,9 @@
     }
 
     if (isLogin) {
-      window.location.href = 'dashboard.html';
+      if (!window.location.search.includes('logout') && !window.location.search.includes('stay')) {
+        window.location.href = 'dashboard.html';
+      }
       return;
     }
     const u = res.data;

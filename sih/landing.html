@@ -526,7 +526,384 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
   .sitem { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; }
   .sitem:last-child { border-bottom: none; }
 }
+/* ========================================================
+   PLATFORM OVERVIEW TYPED DIALOGUE BOX (MODAL)
+   ======================================================== */
+.overview-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 15, 30, 0.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s;
+}
+.overview-modal-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+.overview-dialog {
+  background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
+  border: 1px solid rgba(99, 102, 241, 0.38);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 740px;
+  max-height: 86vh;
+  box-shadow: 0 25px 65px -10px rgba(0, 0, 0, 0.7), 0 0 45px rgba(99, 102, 241, 0.22);
+  display: flex;
+  flex-direction: column;
+  color: #f1f5f9;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+}
+.overview-modal-backdrop.show .overview-dialog {
+  transform: translateY(0) scale(1);
+}
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.dialog-window-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.win-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-red { background: #ef4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.4); }
+.dot-amber { background: #f59e0b; box-shadow: 0 0 6px rgba(245, 158, 11, 0.4); }
+.dot-green { background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.4); }
+.dialog-chip {
+  font-family: var(--fm, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+  letter-spacing: 0.08em;
+  margin-left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.chip-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulse 1.4s infinite;
+}
+.dialog-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.dialog-close-btn:hover {
+  background: rgba(244, 63, 94, 0.16);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.35);
+}
+.dialog-body {
+  padding: 24px 26px;
+  overflow-y: auto;
+  flex: 1;
+}
+.dialog-body::-webkit-scrollbar {
+  width: 6px;
+}
+.dialog-body::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+}
+.dialog-body::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 3px;
+}
+.dialog-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.d-tag {
+  font-family: var(--fm, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.d-tag-alt {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.25);
+}
+.skip-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  font-size: 11.5px;
+  font-family: var(--fm, monospace);
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.skip-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.dialog-typing-terminal {
+  background: rgba(10, 15, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #e2e8f0;
+  position: relative;
+  min-height: 240px;
+}
+.typed-text-area h2 {
+  font-family: var(--fh, sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.typed-text-area p {
+  color: #cbd5e1;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+.typed-section-head {
+  font-family: var(--fm, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+  margin: 18px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.typed-section-head::before {
+  content: '';
+  width: 14px;
+  height: 2px;
+  background: #38bdf8;
+}
+.typed-module-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+.typed-module-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+.typed-mod-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.typed-mod-title {
+  font-family: var(--fh, sans-serif);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.typed-mod-num {
+  font-family: var(--fm, monospace);
+  font-size: 10px;
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.typed-mod-desc {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.typed-note-box {
+  background: rgba(234, 88, 12, 0.1);
+  border: 1px solid rgba(234, 88, 12, 0.3);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: #fdba74;
+  line-height: 1.5;
+}
+.typed-cursor-blink {
+  display: inline-block;
+  color: #06b6d4;
+  font-weight: 900;
+  font-size: 16px;
+  animation: blink 0.75s infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.dialog-footer {
+  padding: 16px 22px;
+  background: rgba(15, 23, 42, 0.88);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.sec-status {
+  font-family: var(--fm, monospace);
+  font-size: 11px;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 6px #f59e0b;
+}
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-dialog-primary {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #ffffff;
+  font-family: var(--fh, sans-serif);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  transition: all 0.15s;
+  border: none;
+  cursor: pointer;
+}
+.btn-dialog-primary:hover {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: translateY(-1px);
+}
+.btn-dialog-demo {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #38bdf8;
+  font-family: var(--fh, sans-serif);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-dialog-demo:hover {
+  background: rgba(6, 182, 212, 0.22);
+  border-color: #38bdf8;
+}
+.btn-dialog-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-family: var(--fh, sans-serif);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-dialog-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+@media (max-width: 640px) {
+  .overview-dialog { max-height: 92vh; border-radius: 16px; }
+  .dialog-body { padding: 16px; }
+  .dialog-typing-terminal { padding: 14px; min-height: 220px; font-size: 13px; }
+  .dialog-footer { flex-direction: column; align-items: stretch; }
+  .footer-actions { width: 100%; flex-direction: column; }
+  .footer-actions > * { width: 100%; text-align: center; justify-content: center; }
+}
 </style>
+<script src="api-client.js"></script>
+<script src="api-client-extended.js"></script>
 </head>
 <body>
 <div id="grid-bg-overlay" class="grid-bg-overlay"></div>
@@ -545,7 +922,7 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
     <a href="#faq">FAQ</a>
   </div>
   <div class="nact">
-    <a href="ai-assistant.html" class="npill">AI Copilot</a>
+    <button type="button" class="npill" onclick="openOverviewModal()" style="cursor:pointer;background:rgba(79,70,229,0.08);border:1px solid rgba(79,70,229,0.3);color:#4f46e5;font-family:inherit;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:5px;">✦ Platform Brief</button>
     <a href="login.html" class="nbgh">Log In</a>
     <a href="login.html" class="nbpr">Get Started &rarr;</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -567,7 +944,7 @@ footer{background:#0b1329;color:#f8fafc;border-top:1px solid #1e293b;padding:64p
       <a href="#faq"><span>FAQ</span><span>&rarr;</span></a>
     </div>
     <div class="mobile-actions">
-      <a href="ai-assistant.html" class="m-btn m-btn-copilot">🤖 AI Copilot</a>
+      <button type="button" class="m-btn m-btn-copilot" onclick="openOverviewModal(); document.getElementById('mobile-menu').classList.remove('open'); document.getElementById('nav-toggle').classList.remove('active'); document.body.style.overflow='';" style="cursor:pointer;width:100%;border:none;">✦ Platform Brief &amp; Overview</button>
       <a href="login.html" class="m-btn m-btn-outline">Log In</a>
       <a href="login.html" class="m-btn m-btn-primary">Get Started Free &rarr;</a>
     </div>
@@ -1157,6 +1534,290 @@ document.querySelectorAll('.rv,.sc').forEach(el=>obs.observe(el));
     }
   });
 })();
+/* ========================================================
+   PLATFORM OVERVIEW TYPEWRITER ENGINE
+   ======================================================== */
+let typewriterTimer = null;
+let typewriterSkipped = false;
+let typewriterCompleted = false;
+
+const overviewData = {
+  title: "⚡ Skill Intelligence Platform // Executive Dossier",
+  intro: "Welcome to India's premier AI-powered engineering competency benchmark and adaptive career readiness ecosystem. Built specifically for AI engineers, data scientists, and systems architects to validate real-world capabilities and accelerate mobility into top-tier enterprise roles.",
+  sectionTitle: "Core Platform Capabilities & Modules:",
+  modules: [
+    {
+      num: "01",
+      icon: "🎯",
+      title: "Adaptive AI Competency Assessments",
+      desc: "Rigorous diagnostic benchmarks across LLM fine-tuning, PyTorch, distributed systems, and ML architecture with automated national benchmark percentile scoring."
+    },
+    {
+      num: "02",
+      icon: "🗺️",
+      title: "Personalized Career Learning Paths",
+      desc: "Targeted skill-gap remediation pathways aligned with NSQF, NCVET, and iGOT Karmayogi frameworks to advance from engineer to Lead AI Architect."
+    },
+    {
+      num: "03",
+      icon: "🤖",
+      title: "24/7 AI Engineering Copilot",
+      desc: "Deep-context conversational AI mentor providing real-time code reviews, architecture diagram critiques, and customized lesson recommendations."
+    },
+    {
+      num: "04",
+      icon: "🏆",
+      title: "Peer Community & National Leaderboard",
+      desc: "Dynamic developer forums, peer code reviews, XP karma gamification, and competitive nationwide leaderboards recognizing top engineering talent."
+    },
+    {
+      num: "05",
+      icon: "📜",
+      title: "NSQF Verified Digital Credentials",
+      desc: "Cryptographically verifiable certifications and direct career pipeline integration connecting validated engineers with leading tech enterprises."
+    }
+  ],
+  requirement: "🔒 Access Requirement: First-time authentication (Login or Register) is strictly required before accessing your personal engineering dashboard and telemetry."
+};
+
+function renderFullOverview() {
+  const container = document.getElementById('typed-content');
+  if (!container) return;
+  
+  let html = '<h2 id="modal-title">' + overviewData.title + '</h2>';
+  html += '<p>' + overviewData.intro + '</p>';
+  html += '<div class="typed-section-head">' + overviewData.sectionTitle + '</div>';
+  html += '<div class="typed-modules-grid">';
+  
+  overviewData.modules.forEach(function(m) {
+    html += '<div class="typed-module-card">';
+    html += '  <div class="typed-mod-icon">' + m.icon + '</div>';
+    html += '  <div style="flex:1;">';
+    html += '    <div class="typed-mod-title">';
+    html += '      <span class="typed-mod-num">[' + m.num + ']</span>';
+    html += '      <span>' + m.title + '</span>';
+    html += '    </div>';
+    html += '    <div class="typed-mod-desc">' + m.desc + '</div>';
+    html += '  </div>';
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  html += '<div class="typed-note-box">';
+  html += '  <span style="font-size:16px;">🔐</span>';
+  html += '  <div>' + overviewData.requirement + '</div>';
+  html += '</div>';
+  
+  container.innerHTML = html;
+  const cursor = document.getElementById('typed-cursor');
+  if (cursor) cursor.style.display = 'none';
+  const skipBtn = document.getElementById('btn-skip-typing');
+  if (skipBtn) skipBtn.style.display = 'none';
+  typewriterCompleted = true;
+}
+
+function skipTypewriter() {
+  typewriterSkipped = true;
+  if (typewriterTimer) clearTimeout(typewriterTimer);
+  renderFullOverview();
+}
+
+function startTypewriter() {
+  if (typewriterCompleted || typewriterSkipped) return;
+  const container = document.getElementById('typed-content');
+  const scrollArea = document.getElementById('dialog-body-scroll');
+  const cursor = document.getElementById('typed-cursor');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  if (cursor) cursor.style.display = 'inline-block';
+
+  const h2 = document.createElement('h2');
+  h2.id = 'modal-title';
+  container.appendChild(h2);
+
+  let step = 0;
+  let charIdx = 0;
+  let currentTargetEl = h2;
+  let currentText = overviewData.title;
+
+  let pEl = null;
+  let secHeadEl = null;
+  let modGridEl = null;
+  let modIdx = 0;
+  let currentModCard = null;
+  let currentModDescEl = null;
+  let noteEl = null;
+
+  function typeNext() {
+    if (typewriterSkipped) return;
+
+    if (charIdx < currentText.length) {
+      currentTargetEl.textContent += currentText[charIdx];
+      charIdx++;
+      if (scrollArea && charIdx % 6 === 0) {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
+      }
+      typewriterTimer = setTimeout(typeNext, 11);
+      return;
+    }
+
+    step++;
+    charIdx = 0;
+
+    if (step === 1) {
+      pEl = document.createElement('p');
+      container.appendChild(pEl);
+      currentTargetEl = pEl;
+      currentText = overviewData.intro;
+      typewriterTimer = setTimeout(typeNext, 50);
+    } else if (step === 2) {
+      secHeadEl = document.createElement('div');
+      secHeadEl.className = 'typed-section-head';
+      container.appendChild(secHeadEl);
+      currentTargetEl = secHeadEl;
+      currentText = overviewData.sectionTitle;
+      typewriterTimer = setTimeout(typeNext, 60);
+    } else if (step >= 3 && step < 3 + overviewData.modules.length) {
+      if (!modGridEl) {
+        modGridEl = document.createElement('div');
+        modGridEl.className = 'typed-modules-grid';
+        container.appendChild(modGridEl);
+      }
+      const mod = overviewData.modules[modIdx];
+      currentModCard = document.createElement('div');
+      currentModCard.className = 'typed-module-card';
+      currentModCard.innerHTML = '<div class="typed-mod-icon">' + mod.icon + '</div>' +
+        '<div style="flex:1;">' +
+        '  <div class="typed-mod-title">' +
+        '    <span class="typed-mod-num">[' + mod.num + ']</span>' +
+        '    <span>' + mod.title + '</span>' +
+        '  </div>' +
+        '  <div class="typed-mod-desc" id="mod-desc-' + modIdx + '"></div>' +
+        '</div>';
+      modGridEl.appendChild(currentModCard);
+      currentModDescEl = currentModCard.querySelector('#mod-desc-' + modIdx);
+      currentTargetEl = currentModDescEl;
+      currentText = mod.desc;
+      modIdx++;
+      if (scrollArea) scrollArea.scrollTop = scrollArea.scrollHeight;
+      typewriterTimer = setTimeout(typeNext, 50);
+    } else if (step === 3 + overviewData.modules.length) {
+      noteEl = document.createElement('div');
+      noteEl.className = 'typed-note-box';
+      noteEl.innerHTML = '<span style="font-size:16px;">🔐</span><div id="note-text-content"></div>';
+      container.appendChild(noteEl);
+      currentTargetEl = noteEl.querySelector('#note-text-content');
+      currentText = overviewData.requirement;
+      if (scrollArea) scrollArea.scrollTop = scrollArea.scrollHeight;
+      typewriterTimer = setTimeout(typeNext, 60);
+    } else {
+      if (cursor) cursor.style.display = 'none';
+      const skipBtn = document.getElementById('btn-skip-typing');
+      if (skipBtn) skipBtn.style.display = 'none';
+      typewriterCompleted = true;
+    }
+  }
+
+  typeNext();
+}
+
+function openOverviewModal() {
+  const modal = document.getElementById('overview-modal');
+  if (!modal) return;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  if (!typewriterCompleted && !typewriterSkipped) {
+    setTimeout(startTypewriter, 300);
+  }
+}
+
+function closeOverviewModal() {
+  const modal = document.getElementById('overview-modal');
+  if (!modal) return;
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+async function demoLoginFromModal(btn) {
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⚡ Signing in…';
+  }
+  try {
+    const res = await SIAuth.demoLogin();
+    window.location.href = res.redirect || 'dashboard.html';
+  } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '⚡ 1-Click Demo';
+    }
+    window.location.href = 'login.html';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    openOverviewModal();
+  }, 450);
+
+  const modal = document.getElementById('overview-modal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeOverviewModal();
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
+      closeOverviewModal();
+    }
+  });
+});
 </script>
+<!-- Platform Overview & Summary Typed Dialogue Modal -->
+<div id="overview-modal" class="overview-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="overview-dialog" role="document">
+    <div class="dialog-header">
+      <div class="dialog-window-controls">
+        <span class="win-dot dot-red"></span>
+        <span class="win-dot dot-amber"></span>
+        <span class="win-dot dot-green"></span>
+        <span class="dialog-chip"><span class="chip-pulse"></span> SKILL INTELLIGENCE // PLATFORM OVERVIEW</span>
+      </div>
+      <button class="dialog-close-btn" onclick="closeOverviewModal()" aria-label="Close overview modal">&times;</button>
+    </div>
+
+    <div class="dialog-body" id="dialog-body-scroll">
+      <div class="dialog-badge-row">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="d-tag">AI BENCHMARK PLATFORM</span>
+          <span class="d-tag d-tag-alt">EXECUTIVE SUMMARY</span>
+        </div>
+        <button type="button" class="skip-btn" id="btn-skip-typing" onclick="skipTypewriter()">⏩ Skip Typing</button>
+      </div>
+
+      <div class="dialog-typing-terminal">
+        <div id="typed-content" class="typed-text-area"></div>
+        <span id="typed-cursor" class="typed-cursor-blink">▍</span>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <div class="sec-status">
+        <span class="sec-dot"></span>
+        <span>Auth Guard: First login or registration is strictly required to open Dashboard</span>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="btn-dialog-secondary" onclick="closeOverviewModal()">Explore Landing Page</button>
+        <button type="button" class="btn-dialog-demo" onclick="demoLoginFromModal(this)">⚡ 1-Click Demo</button>
+        <a href="login.html" class="btn-dialog-primary">🚀 Log In / Register Now &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
