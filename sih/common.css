@@ -87,6 +87,9 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -101,6 +104,9 @@ body {
   text-rendering: optimizeLegibility;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
   position: relative;
 }
@@ -359,6 +365,8 @@ button, input, select, textarea {
   position: relative;
   z-index: 1;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: hidden;
 }
 
@@ -985,6 +993,9 @@ button, input, select, textarea {
   box-shadow: var(--shadow-card);
   transition: all var(--transition-normal);
   position: relative;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .card:hover {
@@ -1078,10 +1089,18 @@ table tbody tr:last-child td, .data-table tbody tr:last-child td, .dash-table tb
   border-bottom: none;
 }
 
-.table-responsive, .dash-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.table-responsive, .dash-table-wrap, .table-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.table-responsive table, .dash-table-wrap table, .table-wrapper table {
+  min-width: 580px;
 }
 
 .stat-card {
@@ -1476,7 +1495,8 @@ table tbody tr:last-child td, .data-table tbody tr:last-child td, .dash-table tb
   .top-nav-links { display: none !important; }
   .nav-more-wrapper { display: none !important; }
   .mobile-nav-toggle { display: flex !important; }
-  .mobile-nav-drawer { display: flex !important; }
+  .mobile-nav-drawer { display: none; }
+  .mobile-nav-drawer.open { display: flex !important; }
 
   .topbar {
     top: 10px;
@@ -1727,9 +1747,26 @@ table tbody tr:last-child td, .data-table tbody tr:last-child td, .dash-table tb
   .mobile-nav-drawer .drawer-nav-links a { padding: 11px 14px; font-size: 14px; }
 }
 
-/* Default hidden state for mobile nav elements (overridden at breakpoints) */
-.mobile-nav-toggle { display: none; }
-.mobile-nav-drawer { display: none; }
+/* ========================
+   GLOBAL MOBILE OVERFLOW SAFETY
+   ======================== */
+@media (max-width: 768px) {
+  .topbar {
+    width: calc(100% - 16px) !important;
+    max-width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .topbar-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+  .mobile-nav-toggle {
+    display: flex !important;
+    order: 10 !important;
+  }
+}
 
 /* ==================
    UTILITY RESPONSIVE
