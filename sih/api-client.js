@@ -19,20 +19,19 @@
   })();
 
   function getInitialSeedData() {
+    let activeAuth = null;
+    try {
+      const stored = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.email !== 'alex.morgan@enterprise.ai' && parsed.full_name !== 'Alex Morgan') {
+          activeAuth = parsed;
+        }
+      }
+    } catch (_) {}
+
     return {
-      user: {
-        id: 1,
-        full_name: 'Alex Morgan',
-        email: 'alex.morgan@enterprise.ai',
-        role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
-        target_role: 'Lead AI Architect',
-        department: 'Enterprise Cognitive Systems Division',
-        location: 'Bengaluru, India',
-        avatar_initials: 'AM',
-        karma_xp: 4850,
-        rank_percentile: 'Top 2.4%',
-        bio: 'Senior AI Engineer specializing in distributed PyTorch, LLM inference optimization (vLLM/FlashAttention-2), and high-throughput vector systems.'
-      },
+      user: activeAuth,
       settings: {
         theme_mode: 'dark',
         weekly_hours_target: 15,
@@ -698,7 +697,7 @@
           id: 1,
           sender: 'assistant',
           message_html: `
-            <p>Hello <strong>Alex</strong>! 👋 I am your personalized Skill Intelligence Copilot.</p>
+            <p>Hello <strong>Engineer</strong>! 👋 I am your personalized Skill Intelligence Copilot.</p>
             <p style="margin-top: 8px;">I have full context on your profile (Senior AI/ML Engineer), your target role (<strong>Lead AI Architect</strong>, 78% Readiness), and your active streak (<strong>14 Days</strong> 🔥).</p>
             <p style="margin-top: 8px;">How can I accelerate your learning today? You can ask me to explain algorithms, review code, or design study roadmaps.</p>
           `
@@ -711,7 +710,17 @@
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.user && (parsed.user.email === 'alex.morgan@enterprise.ai' || parsed.user.full_name === 'Alex Morgan')) {
+          let activeAuth = null;
+          try {
+            const raw = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
+            if (raw) activeAuth = JSON.parse(raw);
+          } catch (_) {}
+          parsed.user = activeAuth;
+          saveDb(parsed);
+        }
+        return parsed;
       }
     } catch (e) {
       console.warn('LocalStorage access error, resetting mock DB:', e);
@@ -732,12 +741,22 @@
 
   async function request(endpoint, method = 'GET', data = null) {
     const url = API_BASE + endpoint;
+    const headers = { 'Accept': 'application/json' };
+    try {
+      const authRaw = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
+      if (authRaw) {
+        const authUser = JSON.parse(authRaw);
+        if (authUser && authUser.id) {
+          headers['X-User-Id'] = String(authUser.id);
+          if (authUser.email) headers['X-User-Email'] = authUser.email;
+        }
+      }
+    } catch (_) {}
+
     const options = {
       method: method,
       credentials: 'include',
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: headers
     };
 
     if (data && (method === 'POST' || method === 'PUT')) {
@@ -772,11 +791,16 @@
     if (cleanEndpoint === 'user.php') {
       if (method === 'POST') {
         if (data.action === 'update_profile') {
+          if (!db.user) db.user = {};
           if (data.full_name) db.user.full_name = data.full_name;
           if (data.email) db.user.email = data.email;
           if (data.role_title) db.user.role_title = data.role_title;
           if (data.target_role) db.user.target_role = data.target_role;
           if (data.bio) db.user.bio = data.bio;
+          try {
+            sessionStorage.setItem('si_auth_user', JSON.stringify(db.user));
+            localStorage.setItem('si_auth_user', JSON.stringify(db.user));
+          } catch (_) {}
           saveDb(db);
           return { status: 'success', message: 'Profile updated successfully', data: { user: db.user } };
         } else if (data.action === 'update_settings') {
@@ -1285,7 +1309,7 @@
           el.textContent = user.avatar_initials || 'AM';
         });
 
-        const parts = (user.full_name || 'Alex Morgan').split(' ');
+        const parts = (user.full_name || 'User').split(' ');
         const shortName = parts.length > 1 ? `${parts[0]} ${parts[1][0]}.` : parts[0];
         document.querySelectorAll('.nav-user-name').forEach(el => {
           el.textContent = shortName;

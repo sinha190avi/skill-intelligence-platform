@@ -13,12 +13,16 @@ if (session_status() === PHP_SESSION_NONE) {
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-User-Id, X-User-Email');
 header('Content-Type: application/json; charset=UTF-8');
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     http_response_code(200);
     exit;
+}
+
+if (empty($_SESSION['user_id']) && !empty($_SERVER['HTTP_X_USER_ID'])) {
+    $_SESSION['user_id'] = (int)$_SERVER['HTTP_X_USER_ID'];
 }
 
 $db_host = 'localhost';

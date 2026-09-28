@@ -3,7 +3,10 @@
 require_once __DIR__ . '/config.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
-$userId = $_SESSION['user_id'] ?? 1;
+$userId = (int)($_SESSION['user_id'] ?? ($_SERVER['HTTP_X_USER_ID'] ?? 0));
+if ($userId <= 0) {
+    jsonError('Unauthenticated. Please sign in.', 401);
+}
 
 if ($method === 'GET') {
     $stmt = $pdo->prepare("SELECT * FROM `users` WHERE `id` = ?");

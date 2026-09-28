@@ -489,10 +489,7 @@
             </button>
           </form>
 
-          <div style="margin-top:14px;text-align:center;">
-            <span style="font-size:11.5px;color:var(--text-muted);">Quick demo test: </span>
-            <a href="#" onclick="quickFillEmail('alex.morgan@enterprise.ai'); return false;" style="font-size:11.5px;color:var(--brand-cyan);text-decoration:none;">alex.morgan@enterprise.ai</a>
-          </div>
+          
         </div>
 
         <div id="otp-step-2" style="display:none;">
@@ -543,7 +540,7 @@
             <label class="form-label" for="login-email">Work Email</label>
             <div class="input-icon-wrap">
               <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg></span>
-              <input type="email" class="form-input" id="login-email" placeholder="alex.morgan@enterprise.ai" autocomplete="email" required>
+              <input type="email" class="form-input" id="login-email" placeholder="name@company.com" autocomplete="email" required>
             </div>
           </div>
           <div class="form-group">
@@ -565,10 +562,7 @@
           </div>
           <button type="submit" class="btn-auth" id="btn-login-submit">Sign In with Password</button>
           <div id="password-banner" class="status-banner"></div>
-          <button type="button" class="btn-auth" onclick="handleDemoLogin(this)" style="margin-top:12px;background:linear-gradient(135deg,#0284c7,#4f46e5);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(2,132,199,0.25);">⚡ Instant 1-Click Demo Login (Alex Morgan)</button>
-          <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
-            Demo account: <strong style="color:var(--brand-cyan);">alex.morgan@enterprise.ai</strong> &nbsp;/ any password
-          </div>
+          
         </form>
 
         <div class="auth-divider">or continue with</div>
@@ -589,11 +583,11 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="reg-firstname">First Name</label>
-              <input type="text" class="form-input" id="reg-firstname" placeholder="Alex" required>
+              <input type="text" class="form-input" id="reg-firstname" placeholder="First Name" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label" for="reg-lastname">Last Name</label>
-              <input type="text" class="form-input" id="reg-lastname" placeholder="Morgan" required>
+              <input type="text" class="form-input" id="reg-lastname" placeholder="Last Name" required>
             </div>
           </div>
           <div class="form-group">
@@ -710,15 +704,7 @@
     });
 
     async function handleDemoLogin(btn) {
-      if (btn) { btn.disabled = true; btn.innerHTML = '<span>⚡ Launching Demo Session…</span>'; }
-      try {
-        const res = await SIAuth.demoLogin();
-        showBanner('password-banner', '✓ Demo session authorized for Alex Morgan! Redirecting…', 'success');
-        setTimeout(() => { window.location.href = res.redirect || 'dashboard.html'; }, 600);
-      } catch (err) {
-        if (btn) { btn.disabled = false; btn.innerHTML = '⚡ Instant 1-Click Demo Login (Alex Morgan)'; }
-        showBanner('password-banner', 'Demo login failed: ' + err.message, 'error');
-      }
+      showBanner('password-banner', 'Demo logins are disabled. Please register your account and log in.', 'error');
     }
 
     function switchAuthTab(tab) {
@@ -1062,9 +1048,18 @@
         });
 
         if (res.status === 'success') {
-          btn.textContent = '✓ Account Created!';
-          showBanner('register-banner', 'Account created successfully! Launching dashboard…', 'success');
-          setTimeout(() => { window.location.href = res.redirect || 'dashboard.html'; }, 700);
+          btn.disabled = false;
+          btn.textContent = 'Create My Account';
+          // User must register first, then log in:
+          switchAuthTab('login');
+          const loginEmail = document.getElementById('login-email');
+          if (loginEmail) loginEmail.value = email;
+          const loginPass = document.getElementById('login-password');
+          if (loginPass) {
+            loginPass.value = '';
+            loginPass.focus();
+          }
+          showBanner('password-banner', '✓ Account registered for ' + fullName + '! Please enter your password to sign in.', 'success');
         } else {
           btn.disabled = false;
           btn.textContent = 'Create My Account';
@@ -1104,8 +1099,8 @@
     }
 
     function socialLogin(prov) {
-      window.showToast?.('SSO Redirect', 'Redirecting to ' + prov + ' Single Sign-On…', '🔐');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+      window.showToast?.('SSO Notice', prov + ' SSO is reserved for enterprise corporate domains.', '🔐');
+      showBanner('password-banner', prov + ' SSO is reserved for enterprise domains. Please register or sign in with your email below.', 'error');
     }
 
     function showForgotModal() { document.getElementById('forgot-modal').style.display = 'flex'; }

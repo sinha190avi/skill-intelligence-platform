@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/config.php';
 
-$userId = $_SESSION['user_id'] ?? 1;
+$userId = (int)($_SESSION['user_id'] ?? ($_SERVER['HTTP_X_USER_ID'] ?? 0));
+if ($userId <= 0) {
+    jsonError('Unauthenticated. Please sign in.', 401);
+}
 
 $uStmt = $pdo->prepare("SELECT `id`, `full_name`, `email`, `role_title`, `target_role`, `avatar_initials`, `karma_xp`, `rank_percentile` FROM `users` WHERE `id` = ?");
 $uStmt->execute([$userId]);

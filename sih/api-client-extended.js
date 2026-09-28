@@ -18,9 +18,15 @@
 
   async function apiFetch(endpoint, opts = {}) {
     try {
+      const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+      const localU = getLocalUser();
+      if (localU && localU.id) {
+        headers['X-User-Id'] = String(localU.id);
+        if (localU.email) headers['X-User-Email'] = localU.email;
+      }
       const res = await fetch(API_BASE + endpoint, {
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+        headers: headers,
         ...opts
       });
       const data = await res.json();
@@ -38,23 +44,30 @@
   function getLocalUser() {
     try {
       const stored = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const u = JSON.parse(stored);
+        if (u && (u.email === 'alex.morgan@enterprise.ai' || u.full_name === 'Alex Morgan' || u.full_name === 'Alex Morgan (Lead)')) {
+          sessionStorage.removeItem('si_auth_user');
+          localStorage.removeItem('si_auth_user');
+          sessionStorage.removeItem('si_user');
+          return null;
+        }
+        return u;
+      }
     } catch (_) {}
     return null;
   }
 
   function isUserAuthenticated() {
-    try {
-      const stored = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
-      if (stored) {
-        const u = JSON.parse(stored);
-        if (u && (u.email || u.id)) return true;
-      }
-    } catch (_) {}
-    return false;
+    const u = getLocalUser();
+    return !!(u && (u.email || u.id));
   }
 
   function saveLocalUser(u) {
+    if (!u) return;
+    if (u.email === 'alex.morgan@enterprise.ai' || u.full_name === 'Alex Morgan' || u.full_name === 'Alex Morgan (Lead)') {
+      return;
+    }
     try {
       sessionStorage.setItem('si_auth_user', JSON.stringify(u));
       localStorage.setItem('si_auth_user', JSON.stringify(u));
@@ -71,23 +84,21 @@
     },
 
     async me() {
-      const localAuthed = isUserAuthenticated();
-      const localU = getLocalUser();
-
       try {
         const res = await apiFetch('auth.php?action=me');
         if (res && res.status === 'success' && res.data) {
           saveLocalUser(res.data);
           return { status: 'success', authenticated: true, data: res.data };
         } else if (res && (res.status === 'unauthenticated' || res.authenticated === false)) {
-          // Explicit server unauthenticated response - clear local storage
           sessionStorage.removeItem('si_auth_user');
           localStorage.removeItem('si_auth_user');
+          sessionStorage.removeItem('si_user');
           return { status: 'unauthenticated', authenticated: false, data: null };
         }
       } catch (_) {}
 
-      if (localAuthed && localU) {
+      const localU = getLocalUser();
+      if (localU && localU.id) {
         return {
           status: 'success',
           authenticated: true,
@@ -102,115 +113,143 @@
       };
     },
 
-    async demoLogin() {
-      const demoUser = {
-        id: 1,
-        full_name: 'Alex Morgan',
-        email: 'alex.morgan@enterprise.ai',
-        role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
-        target_role: 'Lead AI Architect',
-        department: 'Enterprise Cognitive Systems Division',
-        location: 'Bengaluru, India',
-        avatar_initials: 'AM',
-        karma_xp: 4850,
-        rank_percentile: 'Top 2.4%'
-      };
-      saveLocalUser(demoUser);
-      try {
-        await apiFetch('auth.php?action=login', {
-          method: 'POST',
-          body: JSON.stringify({ email: demoUser.email, password: 'demo' })
-        });
-      } catch (_) {}
-      return {
-        status: 'success',
-        message: 'Logged in as Alex Morgan (Demo)',
-        redirect: 'dashboard.html',
-        data: demoUser
-      };
-    },
     async login(email, password) {
+      const cleanEmail = (email || '').trim().toLowerCase();
       try {
         const res = await apiFetch('auth.php?action=login', {
           method: 'POST',
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email: cleanEmail, password })
         });
         if (res && res.status === 'success') {
           if (res.data) saveLocalUser(res.data);
           return res;
+        } else if (res && res.status === 'error') {
+          return res;
         }
       } catch (_) {}
 
-      let u = getLocalUser();
-      if (!u) {
-        u = {
-          id: Date.now(),
-          full_name: 'Alex Morgan',
-          email: email || 'alex.morgan@enterprise.ai',
-          role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
-          target_role: 'Lead AI Architect',
-          department: 'Enterprise Cognitive Systems Division',
-          location: 'Bengaluru, India',
-          avatar_initials: 'AM',
-          karma_xp: 4850,
-          rank_percentile: 'Top 2.4%'
+      // Fallback for offline environments using local registry
+      let registeredUsers = [];
+      try {
+        registeredUsers = JSON.parse(localStorage.getItem('si_registered_users') || '[]');
+      } catch (_) {}
+
+      const found = registeredUsers.find(u => u.email.toLowerCase() === cleanEmail);
+      if (found) {
+        if (found.password && found.password !== password) {
+          return { status: 'error', message: 'Incorrect password for this account.' };
+        }
+        const userObj = { ...found };
+        delete userObj.password;
+        saveLocalUser(userObj);
+        return {
+          status: 'success',
+          message: 'Welcome back, ' + userObj.full_name + '!',
+          redirect: 'dashboard.html',
+          data: userObj
         };
       }
-      if (email) {
-        u.email = email;
-        const namePart = email.split('@')[0].replace(/[._-]/g, ' ');
-        u.full_name = namePart.replace(/\b\w/g, l => l.toUpperCase()) || u.full_name;
-        u.avatar_initials = u.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AM';
-      }
-      saveLocalUser(u);
+
       return {
-        status: 'success',
-        message: 'Welcome back, ' + u.full_name + '!',
-        redirect: 'dashboard.html',
-        data: u
+        status: 'error',
+        message: 'Account not found for this email. Please register first.'
       };
     },
+
     async register(data) {
+      const cleanEmail = (data.email || '').trim().toLowerCase();
+      const cleanName = (data.full_name || '').trim();
+      const password = data.password || '';
+      const roleTitle = data.role_title || 'ML Engineer';
+
       try {
         const res = await apiFetch('auth.php?action=register', {
           method: 'POST',
-          body: JSON.stringify(data)
+          body: JSON.stringify({
+            full_name: cleanName,
+            email: cleanEmail,
+            password: password,
+            role_title: roleTitle
+          })
         });
+
+        // Store user in local registry for offline fallback
+        const initials = cleanName
+          .split(' ')
+          .filter(Boolean)
+          .map(n => n[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase() || 'U';
+
+        const record = {
+          id: (res && res.data && res.data.id) ? res.data.id : Date.now(),
+          full_name: cleanName,
+          email: cleanEmail,
+          password: password,
+          role_title: roleTitle,
+          target_role: 'Lead AI Architect',
+          department: 'Enterprise Cognitive Systems Division',
+          location: 'Bengaluru, India',
+          avatar_initials: initials,
+          karma_xp: 100,
+          rank_percentile: 'Unranked'
+        };
+
+        try {
+          const registeredUsers = JSON.parse(localStorage.getItem('si_registered_users') || '[]');
+          const idx = registeredUsers.findIndex(u => u.email === cleanEmail);
+          if (idx >= 0) registeredUsers[idx] = record;
+          else registeredUsers.push(record);
+          localStorage.setItem('si_registered_users', JSON.stringify(registeredUsers));
+        } catch (_) {}
+
         if (res && res.status === 'success') {
-          if (res.data) saveLocalUser(res.data);
+          return res;
+        } else if (res && res.status === 'error') {
           return res;
         }
       } catch (_) {}
 
-      const initials = (data.full_name || 'User')
+      // Offline fallback registration
+      const initials = cleanName
         .split(' ')
         .filter(Boolean)
         .map(n => n[0])
         .join('')
         .slice(0, 2)
-        .toUpperCase() || 'AM';
+        .toUpperCase() || 'U';
 
       const newUser = {
         id: Date.now(),
-        full_name: data.full_name || 'Alex Morgan',
-        email: data.email || 'user@enterprise.ai',
-        role_title: data.role_title || 'ML Engineer',
+        full_name: cleanName,
+        email: cleanEmail,
+        password: password,
+        role_title: roleTitle,
         target_role: 'Lead AI Architect',
         department: 'Enterprise Cognitive Systems Division',
         location: 'Bengaluru, India',
         avatar_initials: initials,
-        karma_xp: 2500,
-        rank_percentile: 'Top 5%'
+        karma_xp: 100,
+        rank_percentile: 'Unranked'
       };
-      saveLocalUser(newUser);
+
+      try {
+        const registeredUsers = JSON.parse(localStorage.getItem('si_registered_users') || '[]');
+        if (registeredUsers.some(u => u.email === cleanEmail)) {
+          return { status: 'error', message: 'An account with this email already exists.' };
+        }
+        registeredUsers.push(newUser);
+        localStorage.setItem('si_registered_users', JSON.stringify(registeredUsers));
+      } catch (_) {}
 
       return {
         status: 'success',
-        message: 'Account created successfully! Launching dashboard…',
-        redirect: 'dashboard.html',
-        data: newUser
+        message: 'Account registered successfully! Please sign in with your password.',
+        data: { id: newUser.id, full_name: newUser.full_name, email: newUser.email }
       };
     },
+
     async sendOTP(email, purpose = 'login') {
       try {
         const res = await apiFetch('auth.php?action=send_otp', {
@@ -229,6 +268,7 @@
         expires_in: 600
       };
     },
+
     async verifyOTP(email, otp) {
       try {
         const res = await apiFetch('auth.php?action=verify_otp', {
@@ -242,20 +282,26 @@
       } catch (_) {}
 
       if (otp === '482910' || (otp && otp.length === 6)) {
-        const em = email || sessionStorage.getItem('si_active_email') || 'alex.morgan@enterprise.ai';
+        const em = (email || sessionStorage.getItem('si_active_email') || '').trim().toLowerCase();
+        if (!em) {
+          return { status: 'error', message: 'Email address missing for OTP verification.' };
+        }
         let u = getLocalUser();
         if (!u) {
+          const namePart = em.split('@')[0].replace(/[._-]/g, ' ');
+          const cleanName = namePart.replace(/\b\w/g, l => l.toUpperCase()) || 'Engineer';
+          const initials = cleanName.split(' ').filter(Boolean).map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'E';
           u = {
             id: Date.now(),
-            full_name: 'Alex Morgan',
+            full_name: cleanName,
             email: em,
-            role_title: 'Senior AI/ML Engineer (LLMs & Distributed Systems)',
+            role_title: 'ML Engineer',
             target_role: 'Lead AI Architect',
             department: 'Enterprise Cognitive Systems Division',
             location: 'Bengaluru, India',
-            avatar_initials: 'AM',
-            karma_xp: 4850,
-            rank_percentile: 'Top 2.4%'
+            avatar_initials: initials,
+            karma_xp: 150,
+            rank_percentile: 'Top 10%'
           };
         }
         u.email = em;
@@ -267,8 +313,9 @@
           data: u
         };
       }
-      return { status: 'error', message: 'Invalid verification code. Use dev code 482910.' };
+      return { status: 'error', message: 'Invalid verification code.' };
     },
+
     async logout() {
       try { await apiFetch('auth.php?action=logout'); } catch (_) {}
       sessionStorage.clear();
@@ -455,25 +502,23 @@
       return;
     }
 
+    // On login page, NEVER auto-redirect to dashboard! The user is here to login or register.
+    if (isLogin) {
+      return;
+    }
+
     const res = await Auth.me();
     const isAuthed = res && res.status === 'success' && res.authenticated;
 
     if (!isAuthed) {
-      if (!isLogin) {
-        window.location.href = 'login.html';
-      }
+      window.location.href = 'login.html';
       return;
     }
 
-    if (isLogin) {
-      if (!window.location.search.includes('logout') && !window.location.search.includes('stay')) {
-        window.location.href = 'dashboard.html';
-      }
-      return;
-    }
     const u = res.data;
+    if (!u) return;
 
-    document.querySelectorAll('.user-avatar').forEach(el => { el.textContent = u.avatar_initials || 'AM'; });
+    document.querySelectorAll('.user-avatar').forEach(el => { el.textContent = u.avatar_initials || 'U'; });
     document.querySelectorAll('.nav-user-name').forEach(el => {
       const parts = (u.full_name || 'User').split(' ');
       el.textContent = parts[0] + (parts[1] ? ' ' + parts[1][0] + '.' : '');

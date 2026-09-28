@@ -256,14 +256,10 @@ if ($action === 'register') {
     $pdo->prepare("INSERT INTO notifications (user_id, title, message, time_ago, type) VALUES (?, 'Welcome!', 'Your Skill Intelligence account is ready. Start your first assessment!', 'Just now', 'success')")->execute([$newId]);
     $pdo->prepare("INSERT IGNORE INTO leaderboard_scores (user_id, xp_points, xp_weekly, xp_monthly, xp_quarterly, streak_days, readiness_pct, specialty, trend, change_label) VALUES (?, 100, 100, 100, 100, 1, 10, 'General AI', 'new', '+100')")->execute([$newId]);
 
-    $_SESSION['user_id']    = $newId;
-    $_SESSION['user_name']  = $full_name;
-    $_SESSION['user_email'] = $email;
-
+    // User must register first, then log in with their credentials
     jsonResponse([
         'status'   => 'success',
-        'message'  => 'Account created successfully',
-        'redirect' => 'dashboard.html',
+        'message'  => 'Account registered successfully! Please sign in with your email and password.',
         'data'     => ['id' => $newId, 'full_name' => $full_name, 'email' => $email, 'karma_xp' => 100]
     ], 201);
 }

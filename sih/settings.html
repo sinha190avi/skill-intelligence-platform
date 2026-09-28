@@ -108,14 +108,14 @@
 
         <div style="position: relative;">
           <div class="user-menu-trigger" id="user-menu-btn" role="button" tabindex="0">
-            <div class="user-avatar">AM</div>
-            <span class="nav-user-name">Alex M.</span>
+            <div class="user-avatar">--</div>
+            <span class="nav-user-name">Account</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
 
           <div class="dropdown-menu" id="user-dropdown">
             <div class="dropdown-header">
-              <div><strong>Alex Morgan</strong><div style="font-size:11px;color:var(--text-muted);">alex.morgan@enterprise.ai</div></div>
+              <div><strong class="user-display-name">My Account</strong><div style="font-size:11px;color:var(--text-muted);" class="user-display-email">Active Session</div></div>
             </div>
             <a href="profile.html" class="dropdown-item"><span>👤</span> My Profile</a>
             <a href="progress.html" class="dropdown-item"><span>▥</span> Learning Analytics</a>
@@ -168,11 +168,11 @@
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group">
                   <label>Full Name</label>
-                  <input type="text" id="settings-full-name" class="form-control" value="Alex Morgan">
+                  <input type="text" id="settings-full-name" class="form-control" value="" placeholder="Your Full Name">
                 </div>
                 <div class="form-group">
                   <label>Enterprise Email</label>
-                  <input type="email" id="settings-email" class="form-control" value="alex.morgan@enterprise.ai">
+                  <input type="email" id="settings-email" class="form-control" value="" placeholder="your.name@company.com">
                 </div>
               </div>
 
@@ -310,7 +310,42 @@
   <script src="api-client.js"></script>
   <script src="app.js"></script>
   <script>
+    function applyUserSettings(u) {
+      if (!u) return;
+      if (u.full_name) {
+        const n = document.getElementById('settings-full-name');
+        if (n) n.value = u.full_name;
+        document.querySelectorAll('.user-display-name').forEach(el => el.textContent = u.full_name);
+        document.querySelectorAll('.nav-user-name').forEach(el => el.textContent = u.full_name.split(' ')[0]);
+      }
+      if (u.email) {
+        const em = document.getElementById('settings-email');
+        if (em) em.value = u.email;
+        document.querySelectorAll('.user-display-email').forEach(el => el.textContent = u.email);
+      }
+      if (u.role_title) {
+        const r = document.getElementById('settings-role-title');
+        if (r) r.value = u.role_title;
+      }
+      if (u.target_role) {
+        const t = document.getElementById('settings-target-role');
+        if (t) t.value = u.target_role;
+      }
+      const initials = u.avatar_initials || (u.full_name ? u.full_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : 'U');
+      document.querySelectorAll('.user-avatar').forEach(el => el.textContent = initials);
+    }
+
     async function loadLiveSettings() {
+      try {
+        const cached = sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.full_name && parsed.full_name !== 'Alex Morgan') {
+            applyUserSettings(parsed);
+          }
+        }
+      } catch (_) {}
+
       if (!window.api) return;
       try {
         const res = await window.api.getUser();
@@ -319,14 +354,7 @@
           const s = res.data.settings;
 
           if (u) {
-            const n = document.getElementById('settings-full-name');
-            if (n) n.value = u.full_name;
-            const em = document.getElementById('settings-email');
-            if (em) em.value = u.email;
-            const r = document.getElementById('settings-role-title');
-            if (r) r.value = u.role_title;
-            const t = document.getElementById('settings-target-role');
-            if (t && u.target_role) t.value = u.target_role;
+            applyUserSettings(u);
           }
 
           if (s) {
@@ -388,13 +416,17 @@
 
       if (!newName) return;
 
+      const updatedData = { full_name: newName, email: newEmail, role_title: newRole, target_role: newTarget };
+      try {
+        const cached = JSON.parse(sessionStorage.getItem('si_auth_user') || localStorage.getItem('si_auth_user') || '{}');
+        Object.assign(cached, updatedData);
+        sessionStorage.setItem('si_auth_user', JSON.stringify(cached));
+        localStorage.setItem('si_auth_user', JSON.stringify(cached));
+      } catch (_) {}
+      applyUserSettings(updatedData);
+
       if (window.api) {
-        const res = await window.api.updateUser({
-          full_name: newName,
-          email: newEmail,
-          role_title: newRole,
-          target_role: newTarget
-        });
+        const res = await window.api.updateUser(updatedData);
         if (res && res.status === 'success') {
           if (window.syncGlobalHeader) window.syncGlobalHeader();
         }
