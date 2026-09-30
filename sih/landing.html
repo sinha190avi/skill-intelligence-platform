@@ -1733,9 +1733,7 @@ function openOverviewModal() {
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
-  if (!typewriterCompleted && !typewriterSkipped) {
-    setTimeout(startTypewriter, 150);
-  }
+  typewriterCompleted = true;
 }
 
 function closeOverviewModal() {
@@ -1748,19 +1746,6 @@ function closeOverviewModal() {
   modal.style.pointerEvents = 'none';
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
-}
-
-
-  try {
-    const res = await SIAuth.demoLogin();
-    window.location.href = res.redirect || 'dashboard.html';
-  } catch (err) {
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = '⚡ 1-Click Demo';
-    }
-    window.location.href = 'login.html';
-  }
 }
 
 function initOverviewAutoPopup() {
@@ -1800,7 +1785,7 @@ function initOverviewAutoPopup() {
   });
 
   // Auto popup overview dialog immediately on landing page load:
-  setTimeout(openOverviewModal, 100);
+  openOverviewModal();
 }
 
 if (document.readyState === 'loading') {
@@ -1810,7 +1795,7 @@ if (document.readyState === 'loading') {
 }
 </script>
 <!-- Platform Overview & Summary Typed Dialogue Modal -->
-<div id="overview-modal" class="overview-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<div id="overview-modal" class="overview-modal-backdrop show" aria-hidden="false" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:flex;opacity:1;visibility:visible;pointer-events:auto;">
   <div class="overview-dialog" role="document">
     <div class="dialog-header">
       <div class="dialog-window-controls">
@@ -1828,12 +1813,72 @@ if (document.readyState === 'loading') {
           <span class="d-tag">AI BENCHMARK PLATFORM</span>
           <span class="d-tag d-tag-alt">EXECUTIVE SUMMARY</span>
         </div>
-        <button type="button" class="skip-btn" id="btn-skip-typing" onclick="skipTypewriter()">⏩ Skip Typing</button>
+        <button type="button" class="skip-btn" id="btn-skip-typing" onclick="skipTypewriter()" style="display:none;">⏩ Skip</button>
       </div>
 
       <div class="dialog-typing-terminal">
-        <div id="typed-content" class="typed-text-area"></div>
-        <span id="typed-cursor" class="typed-cursor-blink">▍</span>
+        <div id="typed-content" class="typed-text-area">
+          <h2 id="modal-title">⚡ Skill Intelligence Platform // Executive Dossier</h2>
+          <p>Welcome to India's premier AI-powered engineering competency benchmark and adaptive career readiness ecosystem. Built specifically for AI engineers, data scientists, and systems architects to validate real-world capabilities and accelerate mobility into top-tier enterprise roles.</p>
+          <div class="typed-section-head">Core Platform Capabilities &amp; Modules:</div>
+          <div class="typed-modules-grid">
+            <div class="typed-module-card">
+              <div class="typed-mod-icon">🎯</div>
+              <div style="flex:1;">
+                <div class="typed-mod-title">
+                  <span class="typed-mod-num">[01]</span>
+                  <span>Adaptive AI Competency Assessments</span>
+                </div>
+                <div class="typed-mod-desc">Rigorous diagnostic benchmarks across LLM fine-tuning, PyTorch, distributed systems, and ML architecture with automated national benchmark percentile scoring.</div>
+              </div>
+            </div>
+            <div class="typed-module-card">
+              <div class="typed-mod-icon">🗺️</div>
+              <div style="flex:1;">
+                <div class="typed-mod-title">
+                  <span class="typed-mod-num">[02]</span>
+                  <span>Personalized Career Learning Paths</span>
+                </div>
+                <div class="typed-mod-desc">Targeted skill-gap remediation pathways aligned with NSQF, NCVET, and iGOT Karmayogi frameworks to advance from engineer to Lead AI Architect.</div>
+              </div>
+            </div>
+            <div class="typed-module-card">
+              <div class="typed-mod-icon">🤖</div>
+              <div style="flex:1;">
+                <div class="typed-mod-title">
+                  <span class="typed-mod-num">[03]</span>
+                  <span>24/7 AI Engineering Copilot</span>
+                </div>
+                <div class="typed-mod-desc">Deep-context conversational AI mentor providing real-time code reviews, architecture diagram critiques, and customized lesson recommendations.</div>
+              </div>
+            </div>
+            <div class="typed-module-card">
+              <div class="typed-mod-icon">🏆</div>
+              <div style="flex:1;">
+                <div class="typed-mod-title">
+                  <span class="typed-mod-num">[04]</span>
+                  <span>Peer Community &amp; National Leaderboard</span>
+                </div>
+                <div class="typed-mod-desc">Dynamic developer forums, peer code reviews, XP karma gamification, and competitive nationwide leaderboards recognizing top engineering talent.</div>
+              </div>
+            </div>
+            <div class="typed-module-card">
+              <div class="typed-mod-icon">📜</div>
+              <div style="flex:1;">
+                <div class="typed-mod-title">
+                  <span class="typed-mod-num">[05]</span>
+                  <span>NSQF Verified Digital Credentials</span>
+                </div>
+                <div class="typed-mod-desc">Cryptographically verifiable certifications and direct career pipeline integration connecting validated engineers with leading tech enterprises.</div>
+              </div>
+            </div>
+          </div>
+          <div class="typed-note-box">
+            <span style="font-size:16px;">🔐</span>
+            <div>🔒 Access Requirement: First-time authentication (Login or Register) is strictly required before accessing your personal engineering dashboard and telemetry.</div>
+          </div>
+        </div>
+        <span id="typed-cursor" class="typed-cursor-blink" style="display:none;">▍</span>
       </div>
     </div>
 
@@ -1849,5 +1894,12 @@ if (document.readyState === 'loading') {
     </div>
   </div>
 </div>
+<script>
+  // Ensure dialog shows immediately at first load
+  document.body.style.overflow = 'hidden';
+  if (typeof openOverviewModal === 'function') {
+    openOverviewModal();
+  }
+</script>
 </body>
 </html>

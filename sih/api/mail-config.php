@@ -74,6 +74,13 @@ function sendOtpMail($recipientEmail, $recipientName, $otpCode, $purpose = 'logi
         $mail->Port       = (int)SMTP_PORT;
         $mail->CharSet    = 'UTF-8';
         $mail->Timeout    = 15;
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer'       => false,
+                'verify_peer_name'  => false,
+                'allow_self_signed' => true
+            ]
+        ];
 
         
         $fromEmail = !empty(SMTP_FROM_EMAIL) ? SMTP_FROM_EMAIL : SMTP_USER;

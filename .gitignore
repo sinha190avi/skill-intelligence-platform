@@ -7,6 +7,7 @@
 .env
 .env.*
 *.secret
+*mail-local.php
 
 # Python cache & artifacts
 __pycache__/

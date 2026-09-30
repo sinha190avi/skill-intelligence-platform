@@ -511,7 +511,7 @@
     const isAuthed = res && res.status === 'success' && res.authenticated;
 
     if (!isAuthed) {
-      window.location.href = 'login.html';
+      window.location.href = 'landing.html';
       return;
     }
 
